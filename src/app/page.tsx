@@ -66,7 +66,7 @@ export default function Home() {
   return (
     <>
       <div
-        className="h-screen flex justify-center items-center grid grid-cols-12 gap-4 lg:px-40 px-8"
+        className="h-screen flex justify-center items-center grid grid-cols-12 gap-4 md:px-40 px-8"
         style={{ height: "calc(100vh - 104px)" }}
       >
         <div className="relative z-20 col-span-12 lg:col-span-6">
@@ -114,7 +114,7 @@ export default function Home() {
           <h1 className="text-4xl md:text-6xl font-extrabold md:text-center lg:text-left">
             EMPOWER YOUR COMMUNITY
           </h1>
-          <p className="text-sm text-center lg:text-left text-gray-500 mt-4">
+          <p className="text-sm md:text-center lg:text-left text-gray-500 mt-4">
             Connect, engage, and grow your community with Rise, the modern
             community relationship management platform for creators.
           </p>
