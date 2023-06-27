@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import NavBar from "@/components/nav-bar";
+import { Footer } from "@/components/footer";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <div>
               <NavBar />
               {children}
+              <Footer />
             </div>
           </ThemeProvider>
         </body>

@@ -25,6 +25,9 @@ import {
   User,
   X,
   type Icon as LucideIcon,
+  HeartHandshake,
+  ChevronsDown,
+  ArrowLeft,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -32,47 +35,73 @@ export type Icon = LucideIcon;
 export const Icons = {
   logo: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+      <defs>
+        <linearGradient id="gradient">
+          <stop offset="0%" stopColor="#8b5cf6" />
+          <stop offset="100%" stopColor="#06b6d4" />
+        </linearGradient>
+      </defs>
       <path
         d="M12 3L10.088 8.813C9.99015 9.11051 9.82379 9.38088 9.60234 9.60234C9.38088 9.82379 9.11051 9.99015 8.813 10.088L3 12L8.813 13.912C9.11051 14.0099 9.38088 14.1762 9.60234 14.3977C9.82379 14.6191 9.99015 14.8895 10.088 15.187L12 21L13.912 15.187C14.0099 14.8895 14.1762 14.6191 14.3977 14.3977C14.6191 14.1762 14.8895 14.0099 15.187 13.912L21 12L15.187 10.088C14.8895 9.99015 14.6191 9.82379 14.3977 9.60234C14.1762 9.38088 14.0099 9.11051 13.912 8.813L12 3Z"
-        stroke="currentColor"
+        stroke="url(#gradient)"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M19 17V21"
-        stroke="currentColor"
+        stroke="url(#gradient)"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M17 19H21"
-        stroke="currentColor"
+        stroke="url(#gradient)"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M7 3.5L4.5 1L2 3.5"
-        stroke="currentColor"
+        stroke="url(#gradient)"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
       <path
         d="M7 7L4.5 4.5L2 7"
-        stroke="currentColor"
+        stroke="url(#gradient)"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
     </svg>
   ),
+  discord: (props: LucideProps) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+      <path
+        d="M18.9419 5.29661C17.6473 4.69088 16.263 4.25066 14.8157 4C14.638 4.32134 14.4304 4.75355 14.2872 5.09738C12.7487 4.86601 11.2245 4.86601 9.7143 5.09738C9.57116 4.75355 9.3588 4.32134 9.17947 4C7.73067 4.25066 6.3448 4.6925 5.05016 5.29982C2.43887 9.24582 1.73099 13.0938 2.08493 16.8872C3.81688 18.1805 5.49534 18.9662 7.14548 19.4804C7.55291 18.9196 7.91628 18.3235 8.22931 17.6953C7.63313 17.4688 7.06211 17.1892 6.52256 16.8647C6.6657 16.7586 6.80571 16.6478 6.94098 16.5337C10.2318 18.0729 13.8074 18.0729 17.0589 16.5337C17.1958 16.6478 17.3358 16.7586 17.4774 16.8647C16.9362 17.1908 16.3637 17.4704 15.7675 17.697C16.0805 18.3235 16.4423 18.9212 16.8513 19.4819C18.503 18.9678 20.183 18.1822 21.915 16.8872C22.3303 12.4897 21.2056 8.67705 18.9419 5.29661ZM8.67765 14.5543C7.68977 14.5543 6.87963 13.632 6.87963 12.509C6.87963 11.3859 7.67247 10.4621 8.67765 10.4621C9.68285 10.4621 10.493 11.3843 10.4757 12.509C10.4772 13.632 9.68285 14.5543 8.67765 14.5543ZM15.3223 14.5543C14.3344 14.5543 13.5243 13.632 13.5243 12.509C13.5243 11.3859 14.3171 10.4621 15.3223 10.4621C16.3275 10.4621 17.1376 11.3843 17.1203 12.509C17.1203 13.632 16.3275 14.5543 15.3223 14.5543Z"
+        fill="#fff"
+      />
+    </svg>
+  ),
+  twitter: (props: LucideProps) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M7.548 21.5998C16.6044 21.5998 21.558 14.2121 21.558 7.80622C21.558 7.59592 21.558 7.38721 21.5436 7.17927C22.5072 6.49402 23.3388 5.64321 24 4.6697C23.1024 5.06194 22.1484 5.31918 21.1728 5.43259C22.2 4.82651 22.9692 3.87431 23.3376 2.75075C22.3704 3.31549 21.3132 3.71405 20.2104 3.9279C18.3456 1.97614 15.2268 1.88158 13.2432 3.71755C11.9652 4.90136 11.4216 6.66641 11.8188 8.34997C7.86 8.15386 4.1712 6.31319 1.6704 3.28513C0.3636 5.50034 1.032 8.33317 3.1956 9.75564C2.412 9.73319 1.6452 9.52547 0.96 9.14978V9.2113C0.9612 11.5187 2.6136 13.5055 4.9104 13.9627C4.1856 14.1576 3.4248 14.1859 2.688 14.0453C3.3324 16.0207 5.1816 17.3737 7.2876 17.4127C5.544 18.7619 3.39 19.4945 1.1724 19.4922C0.7812 19.491 0.39 19.4685 0 19.4224C2.2524 20.8449 4.872 21.5998 7.548 21.5963"
+        fill="#fff"
+      />
+    </svg>
+  ),
+  community: HeartHandshake,
   close: X,
   spinner: Loader2,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
+  chevronsDown: ChevronsDown,
   trash: Trash,
   post: FileText,
   page: File,
@@ -84,9 +113,9 @@ export const Icons = {
   warning: AlertTriangle,
   user: User,
   arrowRight: ArrowRight,
+  arrowLeft: ArrowLeft,
   help: HelpCircle,
   pizza: Pizza,
-  twitter: Twitter,
   check: Check,
   copy: Copy,
   copyDone: ClipboardCheck,

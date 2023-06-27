@@ -52,7 +52,6 @@ export default function NavBar() {
         <Link href={"/"}>
           <div className="gap-1 flex">
             <span className="font-extrabold">RISE</span>
-            <span>CRM</span>
           </div>
         </Link>
         <Badge>Beta</Badge>
