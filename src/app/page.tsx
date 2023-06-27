@@ -15,6 +15,17 @@ import {
 
 const communities = [
   {
+    name: "Mazk Gang",
+    banner_url:
+      "https://i.seadn.io/gcs/files/cdecc2857d452866eeebc87d96a7e33d.jpg?auto=format&dpr=1&w=1920",
+    profile_url:
+      "https://i.seadn.io/gcs/files/9a3eca819213540351ae773d384d4383.gif?auto=format&dpr=1&w=256",
+    condition: {
+      type: "Token Gated",
+      value: "Hold at least 1 token",
+    },
+  },
+  {
     name: "0N1 Force",
     banner_url:
       "https://i.seadn.io/gcs/files/7c09241857d176d479e2fdab337d4304.png?auto=format&dpr=1&w=1920",
@@ -58,6 +69,28 @@ const communities = [
     condition: {
       type: "Token Gated",
       value: "Hold at least 1 token",
+    },
+  },
+  {
+    name: "Gangster All Star",
+    banner_url:
+      "https://i.seadn.io/gcs/files/d87a1701a53d2c6ea1436a75c0a5e8bb.png?auto=format&dpr=1&w=1920",
+    profile_url:
+      "https://i.seadn.io/gcs/files/640e4a327df090f03560e6ff7ed47c94.png?auto=format&dpr=1&w=256",
+    condition: {
+      type: "Token Gated",
+      value: "Hold at least 1 token",
+    },
+  },
+  {
+    name: "OTHERspace",
+    banner_url:
+      "https://pbs.twimg.com/profile_banners/1520693714225549312/1681327352/600x200",
+    profile_url:
+      "https://pbs.twimg.com/profile_images/1671372965617991682/klZfvbEg_400x400.jpg",
+    condition: {
+      type: "Discord Gated",
+      value: "Be member of discord",
     },
   },
 ];

@@ -4,6 +4,17 @@ import Sort from "@/components/sort";
 
 const communities = [
   {
+    name: "Mazk Gang",
+    banner_url:
+      "https://i.seadn.io/gcs/files/cdecc2857d452866eeebc87d96a7e33d.jpg?auto=format&dpr=1&w=1920",
+    profile_url:
+      "https://i.seadn.io/gcs/files/9a3eca819213540351ae773d384d4383.gif?auto=format&dpr=1&w=256",
+    condition: {
+      type: "Token Gated",
+      value: "Hold at least 1 token",
+    },
+  },
+  {
     name: "0N1 Force",
     banner_url:
       "https://i.seadn.io/gcs/files/7c09241857d176d479e2fdab337d4304.png?auto=format&dpr=1&w=1920",
@@ -44,17 +55,6 @@ const communities = [
       "https://pbs.twimg.com/profile_banners/1521585633445122048/1653085201/600x200",
     profile_url:
       "https://pbs.twimg.com/profile_images/1527685328835858433/vIKgyrun_400x400.jpg",
-    condition: {
-      type: "Token Gated",
-      value: "Hold at least 1 token",
-    },
-  },
-  {
-    name: "Mazk Gang",
-    banner_url:
-      "https://i.seadn.io/gcs/files/cdecc2857d452866eeebc87d96a7e33d.jpg?auto=format&dpr=1&w=1920",
-    profile_url:
-      "https://i.seadn.io/gcs/files/9a3eca819213540351ae773d384d4383.gif?auto=format&dpr=1&w=256",
     condition: {
       type: "Token Gated",
       value: "Hold at least 1 token",
