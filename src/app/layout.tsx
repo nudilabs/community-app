@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import NavBar from "@/components/nav-bar";
 import { Footer } from "@/components/footer";
+import { QuestBoard } from "@/components/quest-board";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -18,6 +19,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <NavBar />
               {children}
               <Footer />
+              <div className="fixed bottom-10 right-10">
+                <QuestBoard />
+              </div>
             </div>
           </ThemeProvider>
         </body>

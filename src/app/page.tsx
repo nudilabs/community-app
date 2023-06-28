@@ -205,11 +205,13 @@ export default function Home() {
               Connect
             </h1>
             <h1 className="md:text-6xl text-4xl font-extrabold">
-              Bond with your community
+              Building Deeper Connections
             </h1>
             <p className="text-md text-center text-gray-500 max-w-screen-sm mx-auto">
-              Engage with your communities on a deeper level by creating
-              token-gated curated Twitter lists, and more.
+              Foster meaningful connections with your community through curated
+              Twitter lists and interactive initiatives. Enhance engagement,
+              nurture relationships, and create a thriving community ecosystem
+              that fosters collaboration, support, and growth.
             </p>
           </div>
           <div className="w-full grid grid-cols-12 gap-4 mt-24">
@@ -219,12 +221,13 @@ export default function Home() {
                   <Icons.add />
                 </div>
                 <h1 className="text-2xl font-bold">
-                  Join token gated curated Twitter lists
+                  Experience Token-Gated Curated Twitter Lists
                 </h1>
                 <p className="text-md text-gray-500 mt-4">
-                  Token gated lists through twitter lets you discover and stay
-                  connected with your communities natively through Twitter that
-                  we all love.
+                  Discover and stay connected with your beloved communities on
+                  Twitter through our innovative token-gated lists. Immerse
+                  yourself in the platform you love while seamlessly exploring
+                  curated content and fostering meaningful connections.
                 </p>
               </div>
               <div>
@@ -232,13 +235,14 @@ export default function Home() {
                   <Icons.community />
                 </div>
                 <h1 className="text-2xl font-bold">
-                  Seemlessly interact with your community natively through
-                  Twitter
+                  Seamlessly Engage with Your Community on Twitter
                 </h1>
                 <p className="text-md text-gray-500 mt-4">
-                  With token gated lists you do not need to worry about which
-                  accounts are real holders. We take care of that for you.
-                  Scroll through curated timelines with ease.
+                  Interact effortlessly with your community directly on Twitter
+                  using our token-gated lists. Leave the worry of identifying
+                  real holders to us as we ensure authenticity. Explore curated
+                  timelines effortlessly, scrolling through carefully selected
+                  content that resonates with your interests.
                 </p>
               </div>
             </div>

@@ -28,6 +28,7 @@ import {
   HeartHandshake,
   ChevronsDown,
   ArrowLeft,
+  ScrollText,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -96,6 +97,7 @@ export const Icons = {
       />
     </svg>
   ),
+  quest: ScrollText,
   community: HeartHandshake,
   close: X,
   spinner: Loader2,
