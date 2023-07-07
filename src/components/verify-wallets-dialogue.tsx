@@ -5,12 +5,11 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "./ui/label";
+import { ConnectKitButton } from "connectkit";
 
 import {
   Table,
@@ -22,6 +21,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { truncatedAddr } from "@/lib/utils";
+import { useState } from "react";
+import { ConnectButton } from "./connect-button";
 
 export function VerifyWalletsDialogue({
   open,
@@ -44,7 +45,11 @@ export function VerifyWalletsDialogue({
           <TableDemo />
           <div className="flex flex-col gap-2">
             <Label htmlFor="area">Step 1.</Label>
-            <Button className="w-full">Connect Wallet</Button>
+            {/* <Button className="w-full">Connect Wallet</Button> */}
+            <div className="w-full">
+              {/* <ConnectKitButton /> */}
+              <ConnectButton />
+            </div>
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="area">Step 2.</Label>
@@ -58,13 +63,17 @@ export function VerifyWalletsDialogue({
   );
 }
 
-const wallets = [
+const walletsData = [
   {
     address: "0x29Ca6B793498007876Fb68D0f044797f1C395283",
   },
 ];
 
 export function TableDemo() {
+  const [wallets, setWallets] = useState(walletsData);
+  const handleRemoveWallet = (address: string) => {
+    setWallets(wallets.filter((wallet) => wallet.address !== address));
+  };
   return (
     <Table>
       <TableCaption>A list of your bound wallets</TableCaption>
@@ -80,7 +89,11 @@ export function TableDemo() {
               {truncatedAddr(wallet.address)}
             </TableCell>
             <TableCell className="text-right">
-              <Button variant="destructive" size="sm">
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => handleRemoveWallet(wallet.address)}
+              >
                 Remove
               </Button>
             </TableCell>

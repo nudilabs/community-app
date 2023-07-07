@@ -2,8 +2,9 @@ import "@/styles/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import NavBar from "@/components/nav-bar";
 import { Footer } from "@/components/footer";
-import { QuestBoard } from "@/components/quest-board";
+
 import { ClerkProvider } from "@clerk/nextjs";
+import ClientLayout from "./Web3Provider";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -27,14 +28,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 },
               }}
             >
-              <div>
-                <NavBar />
-                {children}
-                <Footer />
-                {/* <div className="fixed bottom-10 right-10">
-                <QuestBoard />
-              </div> */}
-              </div>
+              <ClientLayout>
+                <div>
+                  <NavBar />
+                  {children}
+                  <Footer />
+                </div>
+              </ClientLayout>
             </ClerkProvider>
           </ThemeProvider>
         </body>
