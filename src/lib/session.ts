@@ -3,13 +3,15 @@ import { sealData, unsealData } from "iron-session";
 
 import { COOKIE_NAME } from "./consts";
 
-if (!process.env.SESSION_SECRET) {
+import { env } from "@/env.mjs";
+
+if (!env.SESSION_SECRET) {
   throw new Error("SESSION_SECRET cannot be empty.");
 }
 
 const SESSION_OPTIONS = {
   ttl: 60 * 60 * 24 * 30, // 30 days
-  password: process.env.SESSION_SECRET!,
+  password: env.SESSION_SECRET!,
 };
 
 export type ISession = {

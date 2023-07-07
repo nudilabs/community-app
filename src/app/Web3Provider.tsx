@@ -10,13 +10,14 @@ import {
 import { SiweMessage } from "siwe";
 import { WagmiConfig, createConfig } from "wagmi";
 
-import { APP_NAME, ENV } from "@/lib/consts";
+import { APP_NAME } from "@/lib/consts";
+import { env } from "@/env.mjs";
 
 const config = createConfig(
   getDefaultConfig({
     appName: APP_NAME,
-    infuraId: ENV.NEXT_PUBLIC_INFURA_ID,
-    walletConnectProjectId: ENV.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
+    infuraId: env.NEXT_PUBLIC_INFURA_ID,
+    walletConnectProjectId: env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
   })
 );
 
