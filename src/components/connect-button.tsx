@@ -8,11 +8,11 @@ export const ConnectButton = () => {
         return (
           <>
             {isConnected ? (
-              <Button onClick={show} className="w-full" variant="outline">
+              <Button className='w-full' variant='outline'>
                 {address}
               </Button>
             ) : (
-              <Button onClick={show} className="w-full">
+              <Button onClick={show} className='w-full'>
                 {"Connect"}
               </Button>
             )}
