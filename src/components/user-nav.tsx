@@ -19,22 +19,21 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
 import { VerifyWalletsDialogue } from "./verify-wallets-dialogue";
 import { useState } from "react";
+import { useSession, useUser } from "@clerk/clerk-react";
 
 export function UserNav() {
   const [verifyWalletsOpen, setVerifyWalletsOpen] = useState(false);
+  const { isLoaded, session } = useSession();
+  const { isSignedIn, user } = useUser();
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarImage
-                src="https://pbs.twimg.com/profile_images/1664246945282674688/5npajd8q_400x400.jpg"
-                alt="@shadcn"
-              />
+              <AvatarImage src={user?.imageUrl} alt={`@${user?.username}`} />
               <AvatarFallback>SC</AvatarFallback>
             </Avatar>
           </Button>
@@ -42,9 +41,11 @@ export function UserNav() {
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">ayvee 🐌</p>
+              <p className="text-sm font-medium leading-none">
+                {user?.fullName}
+              </p>
               <p className="text-xs leading-none text-muted-foreground">
-                @ayvee_dev
+                @{user?.username}
               </p>
             </div>
           </DropdownMenuLabel>
@@ -56,7 +57,7 @@ export function UserNav() {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => session?.end()}>
             <LogOut className="mr-2 h-4 w-4 text-red-500" />
             <span className="text-red-500">Log out</span>
           </DropdownMenuItem>
