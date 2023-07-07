@@ -9,6 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Icons } from "./icons";
+import { FilterDialogue } from "./filter-dialogue";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -60,9 +62,12 @@ export function CommunityCard({
           </div>
         </div>
       </CardContent>
-      <CardFooter className="flex gap-2">
-        <Button variant="outline">Follow</Button>
-        <Button>Join</Button>
+      <CardFooter className="flex gap-2 justify-between">
+        <div className="gap-2 flex">
+          <Button variant="outline">Follow</Button>
+          <Button>Join</Button>
+        </div>
+        <FilterDialogue community={community} />
       </CardFooter>
     </Card>
   );

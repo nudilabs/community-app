@@ -1,3 +1,4 @@
+import { CalendarCheck, CircleDashed } from "lucide-react";
 import {
   AlertTriangle,
   ArrowRight,
@@ -29,6 +30,9 @@ import {
   ChevronsDown,
   ArrowLeft,
   ScrollText,
+  Search,
+  Filter,
+  ListFilterIcon,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -79,6 +83,9 @@ export const Icons = {
       />
     </svg>
   ),
+  none: CircleDashed,
+  event: CalendarCheck,
+  filter: ListFilterIcon,
   discord: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
       <path
@@ -93,7 +100,7 @@ export const Icons = {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M7.548 21.5998C16.6044 21.5998 21.558 14.2121 21.558 7.80622C21.558 7.59592 21.558 7.38721 21.5436 7.17927C22.5072 6.49402 23.3388 5.64321 24 4.6697C23.1024 5.06194 22.1484 5.31918 21.1728 5.43259C22.2 4.82651 22.9692 3.87431 23.3376 2.75075C22.3704 3.31549 21.3132 3.71405 20.2104 3.9279C18.3456 1.97614 15.2268 1.88158 13.2432 3.71755C11.9652 4.90136 11.4216 6.66641 11.8188 8.34997C7.86 8.15386 4.1712 6.31319 1.6704 3.28513C0.3636 5.50034 1.032 8.33317 3.1956 9.75564C2.412 9.73319 1.6452 9.52547 0.96 9.14978V9.2113C0.9612 11.5187 2.6136 13.5055 4.9104 13.9627C4.1856 14.1576 3.4248 14.1859 2.688 14.0453C3.3324 16.0207 5.1816 17.3737 7.2876 17.4127C5.544 18.7619 3.39 19.4945 1.1724 19.4922C0.7812 19.491 0.39 19.4685 0 19.4224C2.2524 20.8449 4.872 21.5998 7.548 21.5963"
-        fill="#fff"
+        fill="currentColor"
       />
     </svg>
   ),

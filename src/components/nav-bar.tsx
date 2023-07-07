@@ -36,10 +36,6 @@ const navItems: { title: string; href: string }[] = [
     title: "Communities",
     href: "/community",
   },
-  {
-    title: "Quests",
-    href: "/quest",
-  },
 ];
 
 export default function NavBar() {
@@ -99,9 +95,9 @@ export default function NavBar() {
                   >
                     See which communities are the most active.
                   </ListItem>
-                  <ListItem href="/leaderboard/users" title="User Rankings">
+                  {/* <ListItem href="/leaderboard/users" title="User Rankings">
                     See which users are the most active in their communities.
-                  </ListItem>
+                  </ListItem> */}
                 </ul>
               </NavigationMenuContent>
             </NavigationMenuItem>
