@@ -166,26 +166,28 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="col-span-12 lg:col-span-6 hidden lg:inline-block">
+            <div className="col-span-12 lg:col-span-6 hidden lg:inline-block relative">
               <motion.div
-                initial={{ opacity: 0, y: 0, x: 0 }} // Initial animation properties
-                whileInView={{ opacity: 1, x: 70, rotateZ: 5, scale: 1.25 }} // Animation properties to animate to
+                initial={{ opacity: 0, y: 0, x: 0 }}
+                whileInView={{ opacity: 1, x: 70, rotateZ: 5, scale: 1.25 }}
                 transition={{ duration: 1, delay: 0.25 }}
+                style={{ width: "50%" }} // Add a width style to limit the container width
               >
                 <img
                   src="/landing/create-list.png"
-                  className="w-1/2 border rounded-xl"
+                  className="w-full border rounded-xl absolute" // Change w-1/2 to w-full
                 />
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, y: -150, x: 200 }} // Initial animation properties
-                whileInView={{ opacity: 1, rotateZ: -5, scale: 1.25 }} // Animation properties to animate to
-                transition={{ duration: 1, delay: 0.5 }} // Animation duration and delay
+                initial={{ opacity: 0, y: 0, x: 200 }}
+                whileInView={{ opacity: 1, rotateZ: -5, scale: 1.25 }}
+                transition={{ duration: 1, delay: 0.5 }}
+                style={{ width: "50%" }} // Add a width style to limit the container width
               >
                 <img
                   src="/landing/list.png"
-                  className="w-1/2 border rounded-xl"
+                  className="w-full border rounded-xl absolute" // Change w-1/2 to w-full
                 />
               </motion.div>
             </div>

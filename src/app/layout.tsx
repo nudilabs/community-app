@@ -12,11 +12,20 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
-      <html lang='en' suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning>
         <head />
         <body>
-          <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
-            <ClerkProvider>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+            <ClerkProvider
+              appearance={{
+                variables: {
+                  colorPrimary: "#a855f7",
+                  colorText: "white",
+                  colorBackground: "#27272a",
+                  colorAlphaShade: "white",
+                },
+              }}
+            >
               <div>
                 <NavBar />
                 {children}

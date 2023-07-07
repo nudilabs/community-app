@@ -31,6 +31,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Signin } from "./signin-button";
+import { UserButton, useAuth } from "@clerk/nextjs";
 
 const navItems: { title: string; href: string }[] = [
   {
@@ -44,7 +45,8 @@ export default function NavBar() {
   const isPathActive = (url: string) => {
     return pathName === url;
   };
-  const signedIn = false;
+  const { isLoaded, userId, sessionId, getToken } = useAuth();
+  const signedIn = isLoaded && userId && sessionId;
 
   return (
     <div className="py-8 px-8 lg:px-40 flex items-center">
@@ -114,7 +116,7 @@ export default function NavBar() {
             Contact
           </span>
         </Link>
-        {!signedIn ? <Signin /> : <UserNav />}
+        {!signedIn ? <Signin /> : <UserButton />}
       </div>
     </div>
   );

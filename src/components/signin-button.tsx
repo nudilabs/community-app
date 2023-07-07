@@ -1,13 +1,14 @@
+import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
-const handleClick = () => {
-  console.log("test");
-};
-
 export function Signin() {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push("/sign-in");
+  };
   return (
     <div>
-      <Button size='sm' onClick={handleClick}>
+      <Button size="sm" onClick={handleClick}>
         Sign In
       </Button>
     </div>
