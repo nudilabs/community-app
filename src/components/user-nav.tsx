@@ -19,12 +19,13 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
 import { VerifyWalletsDialogue } from "./verify-wallets-dialogue";
 import { useState } from "react";
+import { useSession } from "@clerk/clerk-react";
 
 export function UserNav() {
   const [verifyWalletsOpen, setVerifyWalletsOpen] = useState(false);
+  const { isLoaded, session } = useSession();
   return (
     <>
       <DropdownMenu>
@@ -56,7 +57,7 @@ export function UserNav() {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => session?.end()}>
             <LogOut className="mr-2 h-4 w-4 text-red-500" />
             <span className="text-red-500">Log out</span>
           </DropdownMenuItem>
