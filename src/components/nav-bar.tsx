@@ -44,7 +44,7 @@ export default function NavBar() {
   const isPathActive = (url: string) => {
     return pathName === url;
   };
-  const signedIn = false;
+  const signedIn = true;
 
   return (
     <div className="py-8 px-8 lg:px-40 flex items-center">
