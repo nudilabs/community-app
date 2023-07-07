@@ -1,3 +1,4 @@
+import "./src/env.mjs";
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // config images
@@ -11,4 +12,5 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+// module.exports = nextConfig;
+export default nextConfig;

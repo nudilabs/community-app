@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import NavBar from "@/components/nav-bar";
 import { Footer } from "@/components/footer";
 import { QuestBoard } from "@/components/quest-board";
+import { ClerkProvider } from "@clerk/nextjs";
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -11,18 +12,20 @@ type RootLayoutProps = {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
-      <html lang="en" suppressHydrationWarning>
+      <html lang='en' suppressHydrationWarning>
         <head />
         <body>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <div>
-              <NavBar />
-              {children}
-              <Footer />
-              {/* <div className="fixed bottom-10 right-10">
+          <ThemeProvider attribute='class' defaultTheme='dark' enableSystem>
+            <ClerkProvider>
+              <div>
+                <NavBar />
+                {children}
+                <Footer />
+                {/* <div className="fixed bottom-10 right-10">
                 <QuestBoard />
               </div> */}
-            </div>
+              </div>
+            </ClerkProvider>
           </ThemeProvider>
         </body>
       </html>
