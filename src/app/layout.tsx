@@ -23,6 +23,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                   colorText: "white",
                   colorBackground: "#27272a",
                   colorAlphaShade: "white",
+                  borderRadius: "6px",
                 },
               }}
             >

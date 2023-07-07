@@ -116,7 +116,7 @@ export default function NavBar() {
             Contact
           </span>
         </Link>
-        {!signedIn ? <Signin /> : <UserButton />}
+        {!signedIn ? <Signin /> : <UserNav />}
       </div>
     </div>
   );
