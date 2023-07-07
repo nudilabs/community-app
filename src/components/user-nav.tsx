@@ -24,7 +24,6 @@ import { VerifyWalletsDialogue } from "./verify-wallets-dialogue";
 import { useState } from "react";
 
 export function UserNav() {
-  const router = useRouter();
   const [verifyWalletsOpen, setVerifyWalletsOpen] = useState(false);
   return (
     <>

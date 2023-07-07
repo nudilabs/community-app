@@ -43,6 +43,8 @@ export default function NavBar() {
   const isPathActive = (url: string) => {
     return pathName === url;
   };
+  const signedIn = false;
+
   return (
     <div className="py-8 px-8 lg:px-40 flex items-center">
       <div className="flex gap-2 items-center w-full">
@@ -111,7 +113,7 @@ export default function NavBar() {
             Contact
           </span>
         </Link>
-        <UserNav />
+        {!signedIn ? <Button size="sm">Sign In</Button> : <UserNav />}
       </div>
     </div>
   );
