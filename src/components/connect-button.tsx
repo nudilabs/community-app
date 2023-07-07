@@ -8,7 +8,7 @@ export const ConnectButton = () => {
         return (
           <>
             {isConnected ? (
-              <Button className='w-full' variant='outline'>
+              <Button onClick={show} className='w-full' variant='outline'>
                 {address}
               </Button>
             ) : (
