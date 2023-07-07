@@ -30,6 +30,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Signin } from "./signin-button";
 
 const navItems: { title: string; href: string }[] = [
   {
@@ -113,7 +114,7 @@ export default function NavBar() {
             Contact
           </span>
         </Link>
-        {!signedIn ? <Button size="sm">Sign In</Button> : <UserNav />}
+        {!signedIn ? <Signin /> : <UserNav />}
       </div>
     </div>
   );
