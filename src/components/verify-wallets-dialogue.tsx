@@ -1,36 +1,47 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "./ui/label";
+} from '@/components/ui/dialog';
+import { Label } from './ui/label';
 
-import { useSignMessage } from "wagmi";
-import { useAccount } from "wagmi";
-import { useUser } from "@clerk/nextjs";
+import { useSignMessage } from 'wagmi';
+import { useAccount } from 'wagmi';
+import { useUser } from '@clerk/nextjs';
 
 export function VerifyWalletsDialogue({
   open,
   setOpen,
+  setBindWallet,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
+  setBindWallet: (bindWallet: string) => void;
 }) {
   const { user } = useUser();
   const { address } = useAccount();
-  const { data, isError, isSuccess, signMessage } = useSignMessage({
-    message: `Binding wallet with ID: ${user?.externalAccounts[0].providerUserId}`,
+  const twitterAcc = user?.externalAccounts.find(
+    (acc) => acc.provider === 'twitter'
+  );
+  const { signMessage } = useSignMessage({
+    message: `Binding wallet with ID: ${twitterAcc?.providerUserId}`,
+    onSuccess: async (data) => {
+      const res = await fetch(`/api/binding/twitter`, {
+        method: 'POST',
+        body: JSON.stringify({ signature: data }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const { bindWallet } = await res.json();
+      setBindWallet(bindWallet);
+      setOpen(false);
+    },
   });
 
-  const handleSignMessage = async () => {
-    await signMessage();
-    setOpen(false);
-  };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[440px]">
@@ -55,21 +66,13 @@ export function VerifyWalletsDialogue({
             <Button
               variant="default"
               className="w-full"
-              onClick={handleSignMessage}
+              onClick={() => signMessage()}
             >
               Sign message
             </Button>
           </div>
         </div>
-        {isError && <div>Error signing message</div>}
-        {isSuccess && <div className="overflow-scroll">Signature: {data}</div>}
       </DialogContent>
     </Dialog>
   );
 }
-
-// const walletsData = [
-//   {
-//     address: "0x29Ca6B793498007876Fb68D0f044797f1C395283",
-//   },
-// ];

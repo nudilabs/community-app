@@ -1,7 +1,16 @@
-import { CreditCard, LogOut, PlusCircle, Settings, User, Wallet, RefreshCcw } from "lucide-react";
+import {
+  CreditCard,
+  LogOut,
+  PlusCircle,
+  Settings,
+  Link2Off,
+  Link2,
+  Wallet,
+  RefreshCcw,
+} from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,14 +20,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { VerifyWalletsDialogue } from "./verify-wallets-dialogue";
-import { useState } from "react";
-import { useSession, useUser } from "@clerk/clerk-react";
+} from '@/components/ui/dropdown-menu';
+import { VerifyWalletsDialogue } from './verify-wallets-dialogue';
+import { useEffect, useState } from 'react';
+// import { useSession, useUser } from "@clerk/clerk-react";
+import { useUser, useSession } from '@clerk/nextjs';
 // import { ConnectButton } from "./connect-button";
-import { useModal } from "connectkit";
-import { useAccount } from "wagmi";
-import { truncatedAddr } from "@/lib/utils";
+import { useModal } from 'connectkit';
+import { useAccount } from 'wagmi';
+import { truncatedAddr } from '@/lib/utils';
 
 export function UserNav() {
   const [verifyWalletsOpen, setVerifyWalletsOpen] = useState(false);
@@ -28,29 +38,56 @@ export function UserNav() {
       setVerifyWalletsOpen(true);
     },
   });
-  const { isLoaded, session } = useSession();
-  const { isSignedIn, user } = useUser();
+  const { session } = useSession();
+  const { isLoaded, user } = useUser();
+  // const bindWallet = user?.publicMetadata.bindWallet as string;
+  const [bindWallet, setBindWallet] = useState('');
+  // if (isLoaded) {
+  //   setBindWallet(user?.publicMetadata.bindWallet as string);
+  // }
+
+  useEffect(() => {
+    // console.log("user", user?.publicMetadata.bindWallet);
+    if (isLoaded) {
+      setBindWallet(user?.publicMetadata.bindWallet as string);
+    }
+  }, [isLoaded]);
+
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
-            <Avatar className='h-8 w-8'>
+          <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+            <Avatar className="h-8 w-8">
               <AvatarImage src={user?.imageUrl} alt={`@${user?.username}`} />
               <AvatarFallback>RS</AvatarFallback>
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className='w-56' align='end' forceMount>
-          <DropdownMenuLabel className='font-normal'>
-            <div className='flex flex-col space-y-1'>
+        <DropdownMenuContent className="w-56" align="end" forceMount>
+          <DropdownMenuLabel className="font-normal">
+            <div className="flex flex-col space-y-1">
               {/* <p className='text-sm font-medium leading-none'>{user?.fullName}</p> */}
-              <p className='text-sm font-normal leading-none'>@{user?.username}</p>
+              <p className="text-sm font-normal leading-none">
+                @{user?.username}
+              </p>
               {/* <p className='text-[11px] leading-none text-muted-foreground'>{address}</p> */}
               {isConnected && (
-                <p className='text-[11px] leading-none text-muted-foreground'>
-                  {truncatedAddr(String(address))}
-                </p>
+                <div className="flex flex-row items-center">
+                  <p className="text-[11px] leading-none text-muted-foreground">
+                    {truncatedAddr(String(address))}
+                  </p>
+                  {bindWallet === String(address) ? (
+                    <Link2 className="ml-1 h-3 w-3" color="#94949c" />
+                  ) : (
+                    <Link2Off
+                      className="ml-1 h-3 w-3 text-red-400"
+                      onClick={() => {
+                        setVerifyWalletsOpen(true);
+                      }}
+                    />
+                  )}
+                </div>
               )}
             </div>
           </DropdownMenuLabel>
@@ -59,12 +96,12 @@ export function UserNav() {
             <DropdownMenuItem onClick={openProfile}>
               {isConnected ? (
                 <>
-                  <RefreshCcw className='mr-2 h-4 w-4' />
+                  <RefreshCcw className="mr-2 h-4 w-4" />
                   <span>Switch Wallet</span>
                 </>
               ) : (
                 <>
-                  <Wallet className='mr-2 h-4 w-4' />
+                  <Wallet className="mr-2 h-4 w-4" />
                   <span>Verify Wallet</span>
                 </>
               )}
@@ -75,12 +112,16 @@ export function UserNav() {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => session?.end()}>
-            <LogOut className='mr-2 h-4 w-4 text-red-500' />
-            <span className='text-red-500'>Log out</span>
+            <LogOut className="mr-2 h-4 w-4 text-red-500" />
+            <span className="text-red-500">Log out</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <VerifyWalletsDialogue open={verifyWalletsOpen} setOpen={setVerifyWalletsOpen} />
+      <VerifyWalletsDialogue
+        open={verifyWalletsOpen}
+        setOpen={setVerifyWalletsOpen}
+        setBindWallet={setBindWallet}
+      />
     </>
   );
 }

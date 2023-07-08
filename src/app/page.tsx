@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { CommunityCard } from "@/components/community-card";
-import { Icons } from "@/components/icons";
-import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
+import { CommunityCard } from '@/components/community-card';
+import { Icons } from '@/components/icons';
+import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 
-import Spline from "@splinetool/react-spline";
+import Spline from '@splinetool/react-spline';
 
-import { communities } from "@/config/communities";
+import { communities } from '@/config/communities';
 
 export default function Home() {
   return (
     <>
       <div
         className="h-screen flex justify-center items-center grid grid-cols-12 gap-4 md:px-40 px-8"
-        style={{ height: "calc(100vh - 104px)" }}
+        style={{ height: 'calc(100vh - 104px)' }}
       >
         <div className="relative z-20 col-span-12 lg:col-span-6">
           <div className="flex gap-4 items-center mb-4 md:justify-center lg:justify-normal">
@@ -171,7 +171,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 0, x: 0 }}
                 whileInView={{ opacity: 1, x: 70, rotateZ: 5, scale: 1.25 }}
                 transition={{ duration: 1, delay: 0.25 }}
-                style={{ width: "50%" }} // Add a width style to limit the container width
+                style={{ width: '50%' }} // Add a width style to limit the container width
               >
                 <img
                   src="/landing/create-list.png"
@@ -183,7 +183,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 0, x: 200 }}
                 whileInView={{ opacity: 1, rotateZ: -5, scale: 1.25 }}
                 transition={{ duration: 1, delay: 0.5 }}
-                style={{ width: "50%" }} // Add a width style to limit the container width
+                style={{ width: '50%' }} // Add a width style to limit the container width
               >
                 <img
                   src="/landing/list.png"

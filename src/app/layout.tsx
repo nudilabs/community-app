@@ -1,10 +1,9 @@
-import "@/styles/globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import NavBar from "@/components/nav-bar";
-import { Footer } from "@/components/footer";
-
-import { ClerkProvider } from "@clerk/nextjs";
-import ClientLayout from "./Web3Provider";
+import '@/styles/globals.css';
+import { ThemeProvider } from '@/components/theme-provider';
+import NavBar from '@/components/nav-bar';
+import { Footer } from '@/components/footer';
+import { ClerkProvider } from '@clerk/nextjs';
+import ClientLayout from './Web3Provider';
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -20,11 +19,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <ClerkProvider
               appearance={{
                 variables: {
-                  colorPrimary: "#a855f7",
-                  colorText: "white",
-                  colorBackground: "#27272a",
-                  colorAlphaShade: "white",
-                  borderRadius: "6px",
+                  colorPrimary: '#a855f7',
+                  colorText: 'white',
+                  colorBackground: '#27272a',
+                  colorAlphaShade: 'white',
+                  borderRadius: '6px',
                 },
               }}
             >
