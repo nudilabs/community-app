@@ -14,5 +14,5 @@ export const tap = async <T>(
 };
 
 export function truncatedAddr(address: string) {
-  return `${address.slice(0, 6)}...${address.slice(-4)}`;
+  return `${address.slice(0, 6)}...${address.slice(-6)}`;
 }
