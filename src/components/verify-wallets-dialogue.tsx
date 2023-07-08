@@ -17,15 +17,30 @@ import { useUser } from "@clerk/nextjs";
 export function VerifyWalletsDialogue({
   open,
   setOpen,
+  setBindWallet,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
+  setBindWallet: (bindWallet: string) => void;
 }) {
   const { user } = useUser();
   const { address } = useAccount();
-  const { data, isError, isSuccess, signMessage } = useSignMessage({
-    message: `Binding wallet with ID: ${user?.externalAccounts[0].providerUserId}`,
+  const twitterAcc = user?.externalAccounts.find((acc) => acc.provider === "twitter");
+  const { signMessage } = useSignMessage({
+    message: `Binding wallet with ID: ${twitterAcc?.providerUserId}`,
+    onSuccess: async (data) => {
+      // console.log("Signed message: ", data);
+      const res = await fetch(`/api/binding/twitter`, {
+        method: "POST",
+        body: JSON.stringify({ signature: data }),
+        headers: { "Content-Type": "application/json" },
+      });
+      const { bindWallet } = await res.json();
+      setBindWallet(bindWallet);
+      setOpen(false);
+    },
   });
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className='sm:max-w-[440px]'>
@@ -54,8 +69,8 @@ export function VerifyWalletsDialogue({
             </Button>
           </div>
         </div>
-        {isError && <div>Error signing message</div>}
-        {isSuccess && <div>Signature: {data}</div>}
+        {/* {isError && <div>Error signing message</div>}
+        {isSuccess && <div>Signature: {data}</div>} */}
       </DialogContent>
     </Dialog>
   );

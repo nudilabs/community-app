@@ -37,15 +37,16 @@ export function FilterDialogue({
       type: string;
       value?: string | number;
     };
-    events: {
-      id: string;
-      title: string;
-      hashtags: string[];
-      date: {
-        from: string;
-        to: string;
-      };
-    }[];
+    events?:
+      | {
+          id: string;
+          title: string;
+          hashtags: string[];
+          date: {
+            from: string;
+            to: string;
+          };
+        }[];
   };
 }) {
   const [searchUrl, setSearchUrl] = useState("");
@@ -93,8 +94,7 @@ export function FilterDialogue({
   useEffect(() => {
     const selectedEvent = community?.events?.find((e) => e.id === event);
 
-    const hashtags =
-      selectedEvent?.hashtags.join("%20").replace("#", "%23") || "";
+    const hashtags = selectedEvent?.hashtags.join("%20").replace("#", "%23") || "";
 
     const sorted = sort ? "" : "&f=live";
 
@@ -113,33 +113,29 @@ export function FilterDialogue({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          <Button size="icon" variant="ghost">
-            <Icons.filter className="w-4 h-4" />
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
+          <Button size='icon' variant='ghost'>
+            <Icons.filter className='w-4 h-4' />
           </Button>
         </motion.div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
           <DialogTitle>{community.name}</DialogTitle>
           <DialogDescription>Curated timelines</DialogDescription>
         </DialogHeader>
-        <div className="flex flex-col gap-8">
+        <div className='flex flex-col gap-8'>
           <RadioGroup
             defaultValue={event}
-            className="grid grid-cols-3 gap-4"
+            className='grid grid-cols-3 gap-4'
             onValueChange={handleEventChange}
           >
             <Label
-              htmlFor="none"
-              className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary"
+              htmlFor='none'
+              className='flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary'
             >
-              <RadioGroupItem value="none" id="none" className="sr-only" />
-              <Icons.none className="mb-3 h-6 w-6" />
+              <RadioGroupItem value='none' id='none' className='sr-only' />
+              <Icons.none className='mb-3 h-6 w-6' />
               None
             </Label>
             {community.events &&
@@ -147,68 +143,60 @@ export function FilterDialogue({
               community.events.map((event, index) => (
                 <Label
                   htmlFor={event.id}
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary"
+                  className='flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary'
                   key={index}
                 >
-                  <RadioGroupItem
-                    value={event.id}
-                    id={event.id}
-                    className="sr-only"
-                  />
-                  <Icons.event className="mb-3 h-6 w-6" />
+                  <RadioGroupItem value={event.id} id={event.id} className='sr-only' />
+                  <Icons.event className='mb-3 h-6 w-6' />
                   {event.title}
                 </Label>
               ))}
           </RadioGroup>
           <Separator />
-          <div className="grid gap-2">
-            <Label htmlFor="area">Date</Label>
+          <div className='grid gap-2'>
+            <Label htmlFor='area'>Date</Label>
             {/* <DatePickerWithRange date={date} setDate={setDate} /> */}
             <RadioGroup
-              defaultValue="all"
-              className="grid grid-cols-3 gap-4"
+              defaultValue='all'
+              className='grid grid-cols-3 gap-4'
               onValueChange={handleDateChange}
             >
               <Label
-                htmlFor="all"
-                className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary"
+                htmlFor='all'
+                className='flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary'
               >
-                <RadioGroupItem value="all" id="all" className="sr-only" />
+                <RadioGroupItem value='all' id='all' className='sr-only' />
                 All
               </Label>
               <Label
-                htmlFor="today"
-                className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary"
+                htmlFor='today'
+                className='flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary'
               >
-                <RadioGroupItem value="today" id="today" className="sr-only" />
+                <RadioGroupItem value='today' id='today' className='sr-only' />
                 Today
               </Label>
               <Label
-                htmlFor="yesterday"
-                className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary"
+                htmlFor='yesterday'
+                className='flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary'
               >
-                <RadioGroupItem
-                  value="yesterday"
-                  id="yesterday"
-                  className="sr-only"
-                />
+                <RadioGroupItem value='yesterday' id='yesterday' className='sr-only' />
                 Yesterday
               </Label>
             </RadioGroup>
           </div>
-          <div className="flex items-center justify-between space-x-2">
-            <Label htmlFor="necessary" className="flex flex-col space-y-1">
+          <div className='flex items-center justify-between space-x-2'>
+            <Label htmlFor='necessary' className='flex flex-col space-y-1'>
               <span>Top Tweets</span>
-              <span className="font-normal leading-snug text-muted-foreground">
+              <span className='font-normal leading-snug text-muted-foreground'>
                 Sort by top tweets to see the most relevant tweets first
               </span>
             </Label>
-            <Switch id="necessary" onCheckedChange={handleSortChange} />
+            <Switch id='necessary' onCheckedChange={handleSortChange} />
           </div>
         </div>
         <DialogFooter>
-          <Link href={searchUrl} target="_blank" className="w-full">
-            <Button variant="outline" className="w-full">
+          <Link href={searchUrl} target='_blank' className='w-full'>
+            <Button variant='outline' className='w-full'>
               Search
             </Button>
           </Link>

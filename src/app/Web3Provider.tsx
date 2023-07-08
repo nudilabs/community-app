@@ -2,7 +2,7 @@
 
 import { FC, PropsWithChildren } from "react";
 import { ConnectKitProvider, SIWEConfig, SIWEProvider, getDefaultConfig } from "connectkit";
-import { SiweMessage } from "siwe";
+// import { SiweMessage } from "siwe";
 import { WagmiConfig, createConfig } from "wagmi";
 
 import { APP_NAME } from "@/lib/consts";
@@ -11,7 +11,8 @@ import { env } from "@/env.mjs";
 const config = createConfig(
   getDefaultConfig({
     appName: APP_NAME,
-    infuraId: env.NEXT_PUBLIC_INFURA_ID,
+    // infuraId: env.NEXT_PUBLIC_INFURA_ID,
+    alchemyId: env.NEXT_PUBLIC_ALCHEMY_ID,
     walletConnectProjectId: env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
   })
 );

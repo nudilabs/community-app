@@ -1,4 +1,13 @@
-import { CreditCard, LogOut, PlusCircle, Settings, User, Wallet, RefreshCcw } from "lucide-react";
+import {
+  CreditCard,
+  LogOut,
+  PlusCircle,
+  Settings,
+  Link2Off,
+  Link2,
+  Wallet,
+  RefreshCcw,
+} from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -13,8 +22,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { VerifyWalletsDialogue } from "./verify-wallets-dialogue";
-import { useState } from "react";
-import { useSession, useUser } from "@clerk/clerk-react";
+import { useEffect, useState } from "react";
+// import { useSession, useUser } from "@clerk/clerk-react";
+import { useUser, useSession } from "@clerk/nextjs";
 // import { ConnectButton } from "./connect-button";
 import { useModal } from "connectkit";
 import { useAccount } from "wagmi";
@@ -28,8 +38,21 @@ export function UserNav() {
       setVerifyWalletsOpen(true);
     },
   });
-  const { isLoaded, session } = useSession();
-  const { isSignedIn, user } = useUser();
+  const { session } = useSession();
+  const { isLoaded, user } = useUser();
+  // const bindWallet = user?.publicMetadata.bindWallet as string;
+  const [bindWallet, setBindWallet] = useState("");
+  // if (isLoaded) {
+  //   setBindWallet(user?.publicMetadata.bindWallet as string);
+  // }
+
+  useEffect(() => {
+    // console.log("user", user?.publicMetadata.bindWallet);
+    if (isLoaded) {
+      setBindWallet(user?.publicMetadata.bindWallet as string);
+    }
+  }, [isLoaded]);
+
   return (
     <>
       <DropdownMenu>
@@ -48,9 +71,21 @@ export function UserNav() {
               <p className='text-sm font-normal leading-none'>@{user?.username}</p>
               {/* <p className='text-[11px] leading-none text-muted-foreground'>{address}</p> */}
               {isConnected && (
-                <p className='text-[11px] leading-none text-muted-foreground'>
-                  {truncatedAddr(String(address))}
-                </p>
+                <div className='flex flex-row items-center'>
+                  <p className='text-[11px] leading-none text-muted-foreground'>
+                    {truncatedAddr(String(address))}
+                  </p>
+                  {bindWallet === String(address) ? (
+                    <Link2 className='ml-1 h-3 w-3' color='#94949c' />
+                  ) : (
+                    <Link2Off
+                      className='ml-1 h-3 w-3 text-red-400'
+                      onClick={() => {
+                        setVerifyWalletsOpen(true);
+                      }}
+                    />
+                  )}
+                </div>
               )}
             </div>
           </DropdownMenuLabel>
@@ -80,7 +115,11 @@ export function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <VerifyWalletsDialogue open={verifyWalletsOpen} setOpen={setVerifyWalletsOpen} />
+      <VerifyWalletsDialogue
+        open={verifyWalletsOpen}
+        setOpen={setVerifyWalletsOpen}
+        setBindWallet={setBindWallet}
+      />
     </>
   );
 }

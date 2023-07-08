@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import NavBar from "@/components/nav-bar";
 import { Footer } from "@/components/footer";
-
 import { ClerkProvider } from "@clerk/nextjs";
 import ClientLayout from "./Web3Provider";
 
