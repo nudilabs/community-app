@@ -26,36 +26,43 @@ export function VerifyWalletsDialogue({
   const { data, isError, isSuccess, signMessage } = useSignMessage({
     message: `Binding wallet with ID: ${user?.externalAccounts[0].providerUserId}`,
   });
+
+  const handleSignMessage = async () => {
+    await signMessage();
+    setOpen(false);
+  };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className='sm:max-w-[440px]'>
+      <DialogContent className="sm:max-w-[440px]">
         <DialogHeader>
           <DialogTitle>Verify Wallets</DialogTitle>
           <DialogDescription>
-            Connect your wallets that you would like to use to access the token gated lists with.
+            Connect your wallets that you would like to use to access the token
+            gated lists with.
           </DialogDescription>
         </DialogHeader>
-        <div className='flex flex-col gap-4'>
-          {/* <TableDemo /> */}
-          <div className='flex flex-col gap-2'>
-            <Label htmlFor='area'>Your Wallet</Label>
-            {/* <Button className="w-full">Connect Wallet</Button> */}
-            <div className='w-full'>
-              {/* <ConnectKitButton /> */}
-              <Button className='w-full' variant='outline' disabled>
-                <p className='text-sm font-normal leading-none'>{address} </p>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="area">Your Wallet</Label>
+
+            <div className="w-full">
+              <Button className="w-full" variant="outline" disabled>
+                <p className="text-sm font-normal leading-none">{address} </p>
               </Button>
-              {/* <ConnectButton /> */}
             </div>
           </div>
-          <div className='flex flex-col gap-2'>
-            <Button variant='default' className='w-full' onClick={() => signMessage()}>
+          <div className="flex flex-col gap-2">
+            <Button
+              variant="default"
+              className="w-full"
+              onClick={handleSignMessage}
+            >
               Sign message
             </Button>
           </div>
         </div>
         {isError && <div>Error signing message</div>}
-        {isSuccess && <div>Signature: {data}</div>}
+        {isSuccess && <div className="overflow-scroll">Signature: {data}</div>}
       </DialogContent>
     </Dialog>
   );
