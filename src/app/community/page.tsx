@@ -1,8 +1,8 @@
-import { CommunityCard } from "@/components/community-card";
-import { Search } from "@/components/search";
-import Sort from "@/components/sort";
+import { CommunityCard } from '@/components/community-card';
+import { Search } from '@/components/search';
+import Sort from '@/components/sort';
 
-import { communities } from "@/config/communities";
+import { communities } from '@/config/communities';
 
 export default function Community() {
   return (

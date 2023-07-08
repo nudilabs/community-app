@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,47 +9,24 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
-import { Label } from "@/components/ui/label";
-import { Icons } from "./icons";
-import { motion } from "framer-motion";
+import { Label } from '@/components/ui/label';
+import { Icons } from './icons';
+import { motion } from 'framer-motion';
 
-import { Switch } from "./ui/switch";
-import { Separator } from "./ui/separator";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
-import { useEffect, useState } from "react";
-import { DateRange } from "react-day-picker";
-import { addDays, format } from "date-fns";
-import Link from "next/link";
+import { Switch } from './ui/switch';
+import { Separator } from './ui/separator';
+import { RadioGroup, RadioGroupItem } from './ui/radio-group';
+import { useEffect, useState } from 'react';
+import { DateRange } from 'react-day-picker';
+import { addDays, format } from 'date-fns';
+import Link from 'next/link';
+import { Community } from '@/types/community';
 
-export function FilterDialogue({
-  community,
-}: {
-  community: {
-    id: string;
-    name: string;
-    list: string;
-    banner_url: string;
-    profile_url: string;
-    token?: { symbol: string };
-    condition: {
-      type: string;
-      value?: string | number;
-    };
-    events: {
-      id: string;
-      title: string;
-      hashtags: string[];
-      date: {
-        from: string;
-        to: string;
-      };
-    }[];
-  };
-}) {
-  const [searchUrl, setSearchUrl] = useState("");
-  const [event, setEvent] = useState("none");
+export function FilterDialogue({ community }: { community: Community }) {
+  const [searchUrl, setSearchUrl] = useState('');
+  const [event, setEvent] = useState('none');
   const [sort, setSort] = useState(false);
 
   const today = new Date();
@@ -63,9 +40,9 @@ export function FilterDialogue({
   };
 
   const handleDateChange = (event: string) => {
-    if (event === "today") {
+    if (event === 'today') {
       handleToday();
-    } else if (event === "yesterday") {
+    } else if (event === 'yesterday') {
       handleYesterday();
     } else {
       setDate(undefined);
@@ -94,17 +71,17 @@ export function FilterDialogue({
     const selectedEvent = community?.events?.find((e) => e.id === event);
 
     const hashtags =
-      selectedEvent?.hashtags.join("%20").replace("#", "%23") || "";
+      selectedEvent?.hashtags.join('%20').replace('#', '%23') || '';
 
-    const sorted = sort ? "" : "&f=live";
+    const sorted = sort ? '' : '&f=live';
 
-    const since = date?.from ? format(date.from, "yyyy-MM-dd") : "";
-    const until = date?.to ? format(date.to, "yyyy-MM-dd") : "";
+    const since = date?.from ? format(date.from, 'yyyy-MM-dd') : '';
+    const until = date?.to ? format(date.to, 'yyyy-MM-dd') : '';
     const dates = selectedEvent
       ? `since%3A${selectedEvent.date.from}%20until%3A${selectedEvent.date.to}`
       : date
       ? `since%3A${since}%20until%3A${until}`
-      : "";
+      : '';
 
     const url = `https://twitter.com/search?q=list%3A${community.list}%20${hashtags}%20-filter%3Aretweets%20${dates}&src=typed_query${sorted}`;
     setSearchUrl(url);

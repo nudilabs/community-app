@@ -1,6 +1,6 @@
-import { BellRing, Check, LogIn } from "lucide-react";
+import { BellRing, Check, LogIn } from 'lucide-react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -8,9 +8,10 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Icons } from "./icons";
-import { FilterDialogue } from "./filter-dialogue";
+} from '@/components/ui/card';
+import { Icons } from './icons';
+import { FilterDialogue } from './filter-dialogue';
+import { Community } from '@/types/community';
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -19,16 +20,7 @@ export function CommunityCard({
   community,
   ...props
 }: CardProps & {
-  community: {
-    name: string;
-    banner_url: string;
-    profile_url: string;
-    token?: { symbol: string };
-    condition: {
-      type: string;
-      value?: string | number;
-    };
-  };
+  community: Community;
 }) {
   return (
     <Card {...props}>
@@ -36,11 +28,12 @@ export function CommunityCard({
         <div className="flex relative mt-6">
           <div
             className="overflow-hidden rounded-md border"
-            style={{ height: "50px", width: "100%" }}
+            style={{ height: '50px', width: '100%' }}
           >
             <img
               src={community.banner_url}
               className="w-full h-full object-cover"
+              alt={community.name}
             />
           </div>
           <img
