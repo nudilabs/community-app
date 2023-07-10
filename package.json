@@ -49,6 +49,7 @@
     "lokijs": "^1.5.12",
     "lucide-react": "^0.252.0",
     "next": "13.4.7",
+    "next-auth": "^4.22.1",
     "next-themes": "^0.2.1",
     "pino-pretty": "^10.0.0",
     "postcss": "8.4.24",

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import * as React from 'react';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,12 +13,12 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { UserNav } from "./user-nav";
-import { Icons } from "./icons";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
-import { Menu } from "lucide-react";
+} from '@/components/ui/navigation-menu';
+import { UserNav } from './user-nav';
+import { Icons } from './icons';
+import { Badge } from './ui/badge';
+import { Button } from './ui/button';
+import { Menu } from 'lucide-react';
 
 import {
   Sheet,
@@ -29,14 +29,15 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import { Signin } from "./signin-button";
-import { UserButton, useAuth } from "@clerk/nextjs";
+} from '@/components/ui/sheet';
+import { Signin } from './signin-button';
+// import { UserButton, useAuth } from "@clerk/nextjs";
+import { useSession } from 'next-auth/react';
 
 const navItems: { title: string; href: string }[] = [
   {
-    title: "Communities",
-    href: "/community",
+    title: 'Communities',
+    href: '/community',
   },
 ];
 
@@ -45,14 +46,14 @@ export default function NavBar() {
   const isPathActive = (url: string) => {
     return pathName === url;
   };
-  const { isLoaded, userId, sessionId, getToken } = useAuth();
-  const signedIn = isLoaded && userId && sessionId;
+  const { data: session } = useSession();
+  // const { isLoaded, userId, sessionId, getToken } = useAuth();
 
   return (
     <div className="py-8 px-8 lg:px-40 flex items-center">
       <div className="flex gap-2 items-center w-full">
         <Icons.logo className="h-8 w-8" />
-        <Link href={"/"}>
+        <Link href={'/'}>
           <div className="gap-1 flex">
             <span className="font-extrabold">RISE</span>
           </div>
@@ -111,12 +112,12 @@ export default function NavBar() {
       </div>
       <div className="w-full flex justify-end gap-4 items-center">
         <MobileNav />
-        <Link href={"/contact"} legacyBehavior passHref>
+        <Link href={'/contact'} legacyBehavior passHref>
           <span className="font-medium cursor-pointer text-sm hidden lg:block">
             Contact
           </span>
         </Link>
-        {!signedIn ? <Signin /> : <UserNav />}
+        {!session ? <Signin /> : <UserNav />}
       </div>
     </div>
   );
@@ -125,7 +126,7 @@ export default function NavBar() {
 const MobileNav = () => {
   const router = useRouter();
   const handleMobileClick = () => {
-    router.push("/community");
+    router.push('/community');
   };
   return (
     <Sheet>
@@ -139,7 +140,7 @@ const MobileNav = () => {
           <SheetTitle>
             <div className="flex gap-2 items-center w-full">
               <Icons.logo className="h-8 w-8" />
-              <Link href={"/"}>
+              <Link href={'/'}>
                 <div className="gap-1 flex">
                   <span className="font-extrabold">RISE</span>
                   <span>CRM</span>
@@ -167,8 +168,8 @@ const MobileNav = () => {
 };
 
 const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
+  React.ElementRef<'a'>,
+  React.ComponentPropsWithoutRef<'a'>
 >(({ className, title, children, ...props }, ref) => {
   return (
     <li>
@@ -176,7 +177,7 @@ const ListItem = React.forwardRef<
         <a
           ref={ref}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
             className
           )}
           {...props}
@@ -190,4 +191,4 @@ const ListItem = React.forwardRef<
     </li>
   );
 });
-ListItem.displayName = "ListItem";
+ListItem.displayName = 'ListItem';

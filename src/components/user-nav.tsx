@@ -1,13 +1,4 @@
-import {
-  CreditCard,
-  LogOut,
-  PlusCircle,
-  Settings,
-  Link2Off,
-  Link2,
-  Wallet,
-  RefreshCcw,
-} from 'lucide-react';
+import { LogOut, Link2Off, Link2, Wallet, RefreshCcw } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -23,9 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { VerifyWalletsDialogue } from './verify-wallets-dialogue';
 import { useEffect, useState } from 'react';
-// import { useSession, useUser } from "@clerk/clerk-react";
-import { useUser, useSession } from '@clerk/nextjs';
-// import { ConnectButton } from "./connect-button";
+import { useSession, signOut } from 'next-auth/react';
 import { useModal } from 'connectkit';
 import { useAccount } from 'wagmi';
 import { truncatedAddr } from '@/lib/utils';
@@ -38,13 +27,11 @@ export function UserNav() {
       setVerifyWalletsOpen(true);
     },
   });
-  const { session } = useSession();
-  const { isLoaded, user } = useUser();
-  // const bindWallet = user?.publicMetadata.bindWallet as string;
+  const { data: session } = useSession();
+  // const { session } = useSession();
+  // const { isLoaded, user } = useUser();
+
   const [bindWallet, setBindWallet] = useState('');
-  // if (isLoaded) {
-  //   setBindWallet(user?.publicMetadata.bindWallet as string);
-  // }
 
   useEffect(() => {
     // console.log("user", user?.publicMetadata.bindWallet);

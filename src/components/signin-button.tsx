@@ -1,14 +1,10 @@
-import { useRouter } from "next/navigation";
-import { Button } from "./ui/button";
+import { signIn } from 'next-auth/react';
+import { Button } from './ui/button';
 
 export function Signin() {
-  const router = useRouter();
-  const handleClick = () => {
-    router.push("/sign-in");
-  };
   return (
     <div>
-      <Button size="sm" onClick={handleClick}>
+      <Button size="sm" onClick={() => signIn()}>
         Sign In
       </Button>
     </div>
