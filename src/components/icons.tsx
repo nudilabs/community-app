@@ -1,4 +1,4 @@
-import { CalendarCheck, CircleDashed } from "lucide-react";
+import { CalendarCheck, CircleDashed, Coins, Diamond, Gem } from 'lucide-react';
 import {
   AlertTriangle,
   ArrowRight,
@@ -33,7 +33,7 @@ import {
   Search,
   Filter,
   ListFilterIcon,
-} from "lucide-react";
+} from 'lucide-react';
 
 export type Icon = LucideIcon;
 
@@ -104,6 +104,35 @@ export const Icons = {
       />
     </svg>
   ),
+  eth: (props: LucideProps) => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
+      <path
+        d="M12.3663 0L12.2053 0.546928V16.4161L12.3663 16.5767L19.7325 12.2225L12.3663 0Z"
+        fill="currentColor"
+      />
+      <path
+        d="M12.3663 0L5 12.2225L12.3663 16.5767V8.87428V0Z"
+        fill="currentColor"
+      />
+      <path
+        d="M12.3663 17.9714L12.2756 18.0821V23.7349L12.3663 23.9998L19.737 13.6195L12.3663 17.9714Z"
+        fill="currentColor"
+      />
+      <path
+        d="M12.3663 23.9998V17.9714L5 13.6195L12.3663 23.9998Z"
+        fill="currentColor"
+      />
+      <path
+        d="M12.3663 16.5767L19.7325 12.2225L12.3663 8.87428V16.5767Z"
+        fill="currentColor"
+      />
+      <path
+        d="M5 12.2225L12.3663 16.5767V8.87428L5 12.2225Z"
+        fill="currentColor"
+      />
+    </svg>
+  ),
+  holder: Gem,
   quest: ScrollText,
   community: HeartHandshake,
   close: X,
