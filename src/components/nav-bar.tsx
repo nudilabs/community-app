@@ -1,5 +1,4 @@
 'use client';
-
 import * as React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -31,7 +30,6 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Signin } from './signin-button';
-// import { UserButton, useAuth } from "@clerk/nextjs";
 import { useSession } from 'next-auth/react';
 
 const navItems: { title: string; href: string }[] = [
@@ -118,6 +116,7 @@ export default function NavBar() {
           </span>
         </Link>
         {!session ? <Signin /> : <UserNav />}
+        {/* <Signin /> */}
       </div>
     </div>
   );

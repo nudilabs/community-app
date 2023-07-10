@@ -28,17 +28,16 @@ export function UserNav() {
     },
   });
   const { data: session } = useSession();
-  // const { session } = useSession();
-  // const { isLoaded, user } = useUser();
 
   const [bindWallet, setBindWallet] = useState('');
+  console.log('session', session);
 
-  useEffect(() => {
-    // console.log("user", user?.publicMetadata.bindWallet);
-    if (isLoaded) {
-      setBindWallet(user?.publicMetadata.bindWallet as string);
-    }
-  }, [isLoaded]);
+  // useEffect(() => {
+  //   // console.log("user", user?.publicMetadata.bindWallet);
+  //   if (isLoaded) {
+  //     setBindWallet(user?.publicMetadata.bindWallet as string);
+  //   }
+  // }, [isLoaded]);
 
   return (
     <>
@@ -46,7 +45,10 @@ export function UserNav() {
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={user?.imageUrl} alt={`@${user?.username}`} />
+              <AvatarImage
+                src={String(session?.user?.image)}
+                alt={`@${session?.user?.name}`}
+              />
               <AvatarFallback>RS</AvatarFallback>
             </Avatar>
           </Button>
@@ -56,7 +58,7 @@ export function UserNav() {
             <div className="flex flex-col space-y-1">
               {/* <p className='text-sm font-medium leading-none'>{user?.fullName}</p> */}
               <p className="text-sm font-normal leading-none">
-                @{user?.username}
+                {session?.user?.name}
               </p>
               {/* <p className='text-[11px] leading-none text-muted-foreground'>{address}</p> */}
               {isConnected && (
@@ -98,7 +100,7 @@ export function UserNav() {
             </DropdownMenuItem> */}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => session?.end()}>
+          <DropdownMenuItem onClick={() => signOut()}>
             <LogOut className="mr-2 h-4 w-4 text-red-500" />
             <span className="text-red-500">Log out</span>
           </DropdownMenuItem>

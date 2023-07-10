@@ -12,8 +12,8 @@ import { Label } from './ui/label';
 
 import { useSignMessage } from 'wagmi';
 import { useAccount } from 'wagmi';
-import { useUser } from '@clerk/nextjs';
 
+// import { useSession } from 'next-auth/react';
 export function VerifyWalletsDialogue({
   open,
   setOpen,
@@ -23,13 +23,14 @@ export function VerifyWalletsDialogue({
   setOpen: (open: boolean) => void;
   setBindWallet: (bindWallet: string) => void;
 }) {
-  const { user } = useUser();
+  // const { user } = useUser();
+  // const { data: session } = useSession();
   const { address } = useAccount();
-  const twitterAcc = user?.externalAccounts.find(
-    (acc) => acc.provider === 'twitter'
-  );
+  // const twitterAcc = user?.externalAccounts.find(
+  //   (acc) => acc.provider === 'twitter'
+  // );
   const { signMessage } = useSignMessage({
-    message: `Binding wallet with ID: ${twitterAcc?.providerUserId}`,
+    message: `Binding wallet with ID: "{WALLET}"`,
     onSuccess: async (data) => {
       const res = await fetch(`/api/binding/twitter`, {
         method: 'POST',
