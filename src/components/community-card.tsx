@@ -12,6 +12,7 @@ import {
 import { Icons } from './icons';
 import { FilterDialogue } from './filter-dialogue';
 import { Community } from '@/types/community';
+import { CollectionDialogue } from './collection-dialogue';
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -41,9 +42,20 @@ export function CommunityCard({
             className="w-14 h-14 rounded-lg absolute top-4 left-2 border"
           />
         </div>
-
-        <div className="mt-4 font-bold">{community.name}</div>
-        <div className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0">
+        <div className="mt-4 flex justify-between items-center">
+          <div className="font-bold">{community.name}</div>
+          <div className="flex gap-2">
+            <div className="flex items-center text-xs">
+              <Icons.user className="mr-1 h-3 w-3" />
+              1k
+            </div>
+            <div className="flex items-center text-xs">
+              <Icons.eth className="mr-1 h-3 w-3" />
+              1.14
+            </div>
+          </div>
+        </div>
+        <div className="grid grid-cols-[25px_1fr] items-start last:mb-0 last:pb-0">
           <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
           <div className="space-y-1">
             <p className="text-sm font-medium leading-none">
@@ -57,8 +69,7 @@ export function CommunityCard({
       </CardContent>
       <CardFooter className="flex gap-2 justify-between">
         <div className="gap-2 flex">
-          <Button variant="outline">Follow</Button>
-          <Button>Join</Button>
+          <CollectionDialogue community={community} />
         </div>
         <FilterDialogue community={community} />
       </CardFooter>

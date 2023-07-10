@@ -90,15 +90,9 @@ export function FilterDialogue({ community }: { community: Community }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          <Button size="icon" variant="ghost">
-            <Icons.filter className="w-4 h-4" />
-          </Button>
-        </motion.div>
+        <Button size="icon" variant="ghost">
+          <Icons.filter className="w-4 h-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
