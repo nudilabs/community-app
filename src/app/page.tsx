@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import Spline from '@splinetool/react-spline';
 
 import { communities } from '@/config/communities';
+import { FeaturedBanner } from '@/components/featured-banner';
 
 export default function Home() {
   return (
@@ -68,7 +69,7 @@ export default function Home() {
             EMPOWER YOUR COMMUNITY
           </h1>
           <p className="text-sm md:text-center lg:text-left text-gray-500 mt-4">
-            Connect, engage, and grow your community with Rise, the modern
+            Connect, engage, and grow your community with RIS3, the modern
             community relationship management platform for creators.
           </p>
           <div className="flex justify-center lg:justify-normal mt-8 gap-4">
@@ -194,6 +195,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <FeaturedBanner />
     </>
   );
 }

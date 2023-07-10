@@ -54,7 +54,7 @@ export default function NavBar() {
         <Icons.logo className="h-8 w-8" />
         <Link href={'/'}>
           <div className="gap-1 flex">
-            <span className="font-extrabold">RISE</span>
+            <span className="font-extrabold">RIS3</span>
           </div>
         </Link>
         <Badge>Beta</Badge>
@@ -86,7 +86,7 @@ export default function NavBar() {
                       >
                         <Icons.logo className="h-6 w-6" />
                         <div className="mb-2 mt-4 text-lg font-medium">
-                          RISE
+                          RIS3
                         </div>
                         <p className="text-sm leading-tight text-muted-foreground">
                           Track your most loyal community members
@@ -136,7 +136,7 @@ const MobileNav = () => {
               <Icons.logo className="h-8 w-8" />
               <Link href={'/'}>
                 <div className="gap-1 flex">
-                  <span className="font-extrabold">RISE</span>
+                  <span className="font-extrabold">RIS3</span>
                   <span>CRM</span>
                 </div>
               </Link>

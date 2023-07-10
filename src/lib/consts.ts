@@ -1,2 +1,2 @@
-export const APP_NAME = "RISE";
-export const COOKIE_NAME = "rise";
+export const APP_NAME = 'RIS3';
+export const COOKIE_NAME = 'ris3';

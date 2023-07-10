@@ -4,7 +4,7 @@ export const communities: Community[] = [
   {
     id: 'mazkgang',
     name: 'Mazk Gang',
-    list: '1673726979466747906',
+    list: '1677692605482815489',
     banner_url:
       'https://i.seadn.io/gcs/files/cdecc2857d452866eeebc87d96a7e33d.jpg?auto=format&dpr=1&w=1920',
     profile_url:
@@ -13,22 +13,12 @@ export const communities: Community[] = [
       type: 'Token Gated',
       value: 'Hold at least 1 token',
     },
-    events: [
-      {
-        id: 'mazkgang',
-        title: 'MGBKK',
-        hashtags: ['#mazkgang'],
-        date: {
-          from: '2023-05-10',
-          to: '2023-06-06',
-        },
-      },
-    ],
+    events: [],
   },
   {
     id: '0n1force',
     name: '0N1 Force',
-    list: '1673726979466747906',
+    list: '1677692164376248321',
     banner_url:
       'https://i.seadn.io/gcs/files/7c09241857d176d479e2fdab337d4304.png?auto=format&dpr=1&w=1920',
     profile_url:
@@ -38,6 +28,16 @@ export const communities: Community[] = [
       type: 'Token Gated',
       value: 'Hold at least 1 token',
     },
-    events: [],
+    events: [
+      {
+        id: '0n1forcesdcc2023',
+        title: '0N1 Force SDCC 2023',
+        hashtags: ['#SDCC2023'],
+        date: {
+          from: '2023-07-01',
+          to: '2023-07-09',
+        },
+      },
+    ],
   },
 ];
