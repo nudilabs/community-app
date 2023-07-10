@@ -45,15 +45,21 @@ export function CollectionDialogue({ community }: { community: Community }) {
               className="w-16 h-16 rounded-lg absolute top-16 left-2 border"
             />
             <div className="flex absolute top-16 right-2 gap-2">
-              <Card className="hidden md:inline-block">
+              <Card>
                 <div className="px-4 py-2 flex flex-col">
-                  <div>7.7k</div>
-                  <div className="text-xs text-gray-500">Supply</div>
+                  <div className="flex items-center">
+                    <Icons.user className="mr-1 h-3 w-3" />
+                    2k
+                  </div>
+                  <div className="text-xs text-gray-500">Members</div>
                 </div>
               </Card>
-              <Card className="hidden md:inline-block">
+              <Card>
                 <div className="px-4 py-2 flex flex-col">
-                  <div>2.5k</div>
+                  <div className="flex items-center">
+                    <Icons.holder className="mr-1 h-3 w-3" />
+                    3k
+                  </div>
                   <div className="text-xs text-gray-500">Holders</div>
                 </div>
               </Card>
@@ -70,7 +76,7 @@ export function CollectionDialogue({ community }: { community: Community }) {
           </div>
           <DialogTitle className="text-left">{community.name}</DialogTitle>
           <DialogDescription className="text-left">
-            Token-gated list
+            Join this token-gated list to empower the community.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-8 justify-between">
@@ -181,9 +187,7 @@ export function CollectionDialogue({ community }: { community: Community }) {
         </div>
         <DialogFooter>
           <div className="flex gap-2 w-full">
-            <Button variant="outline" className="w-full">
-              Follow
-            </Button>
+            <Button variant="outline">Follow</Button>
             <Button className="w-full">Join</Button>
           </div>
         </DialogFooter>

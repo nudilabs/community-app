@@ -1,10 +1,21 @@
+'use client';
 import { CommunityCard } from '@/components/community-card';
 import { Search } from '@/components/search';
 import Sort from '@/components/sort';
 
 import { communities } from '@/config/communities';
+import { useEffect, useState } from 'react';
 
 export default function Community() {
+  const [search, setSearch] = useState('');
+  const [filteredCommunities, setCommunities] = useState(communities);
+  useEffect(() => {
+    setCommunities(
+      communities.filter((community) =>
+        community.name.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search]);
   return (
     <div className="min-w:h-screen flex flex-col lg:px-40 px-8 py-4 gap-24">
       <div className="flex flex-col">
@@ -18,12 +29,12 @@ export default function Community() {
               <Sort />
             </div>
             <div className="w-full md:w-auto">
-              <Search />
+              <Search setSearch={setSearch} />
             </div>
           </div>
         </div>
         <div className="grid grid-cols-12 gap-4 mt-8">
-          {communities.map((community, index) => (
+          {filteredCommunities.map((community, index) => (
             <div className="col-span-12 lg:col-span-3" key={index}>
               <CommunityCard community={community} />
             </div>

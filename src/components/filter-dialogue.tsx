@@ -97,10 +97,10 @@ export function FilterDialogue({ community }: { community: Community }) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{community.name}</DialogTitle>
-          <DialogDescription>Curated timelines</DialogDescription>
+          <DialogDescription>Advanced Timelines</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-8">
-          <RadioGroup
+          {/* <RadioGroup
             defaultValue={event}
             className="grid grid-cols-3 gap-4"
             onValueChange={handleEventChange}
@@ -131,7 +131,7 @@ export function FilterDialogue({ community }: { community: Community }) {
                 </Label>
               ))}
           </RadioGroup>
-          <Separator />
+          <Separator /> */}
           <div className="grid gap-2">
             <Label htmlFor="area">Date</Label>
             {/* <DatePickerWithRange date={date} setDate={setDate} /> */}
@@ -179,9 +179,7 @@ export function FilterDialogue({ community }: { community: Community }) {
         </div>
         <DialogFooter>
           <Link href={searchUrl} target="_blank" className="w-full">
-            <Button variant="outline" className="w-full">
-              Search
-            </Button>
+            <Button className="w-full">Search</Button>
           </Link>
         </DialogFooter>
       </DialogContent>
