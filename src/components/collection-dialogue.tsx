@@ -91,7 +91,10 @@ export function CollectionDialogue({ community }: { community: Community }) {
                 Events
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="members" className="h-[240px] overflow-scroll">
+            <TabsContent
+              value="members"
+              className="h-[240px] overflow-scroll mt-4"
+            >
               <div className="grid grid-cols-2 gap-4">
                 {membersMock.map((member, index) => (
                   <div
@@ -145,7 +148,7 @@ export function CollectionDialogue({ community }: { community: Community }) {
             </TabsContent>
             <TabsContent
               value="events"
-              className="min-h-[240px] overflow-scroll"
+              className="min-h-[240px] overflow-scroll mt-4"
             >
               <div className="grid grid-cols-2 gap-4">
                 {community.events.map((event, index) => (

@@ -45,13 +45,9 @@ export function CommunityCard({
         <div className="mt-4 flex justify-between items-center">
           <div className="font-bold">{community.name}</div>
           <div className="flex gap-2">
-            <div className="flex items-center text-xs">
-              <Icons.user className="mr-1 h-3 w-3" />
+            <div className="flex items-center text-sm">
+              <Icons.user className="mr-1 h-4 w-4" />
               1k
-            </div>
-            <div className="flex items-center text-xs">
-              <Icons.eth className="mr-1 h-3 w-3" />
-              1.14
             </div>
           </div>
         </div>
