@@ -31,7 +31,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Signin } from './signin-button';
-import { UserButton, useAuth } from '@clerk/nextjs';
+import { useSession } from 'next-auth/react';
 
 const navItems: { title: string; href: string }[] = [
   {
@@ -45,8 +45,8 @@ export default function NavBar() {
   const isPathActive = (url: string) => {
     return pathName === url;
   };
-  const { isLoaded, userId, sessionId, getToken } = useAuth();
-  const signedIn = isLoaded && userId && sessionId;
+  const { data: session } = useSession();
+  // const { isLoaded, userId, sessionId, getToken } = useAuth();
 
   return (
     <div className="py-8 px-8 lg:px-40 flex items-center">
@@ -111,7 +111,13 @@ export default function NavBar() {
       </div>
       <div className="w-full flex justify-end gap-4 items-center">
         <MobileNav />
-        {!signedIn ? <Signin /> : <UserNav />}
+        <Link href={'/contact'} legacyBehavior passHref>
+          <span className="font-medium cursor-pointer text-sm hidden lg:block">
+            Contact
+          </span>
+        </Link>
+        {!session ? <Signin /> : <UserNav />}
+        {/* <Signin /> */}
       </div>
     </div>
   );
