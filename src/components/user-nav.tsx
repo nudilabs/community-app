@@ -27,17 +27,16 @@ export function UserNav() {
       setVerifyWalletsOpen(true);
     },
   });
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   const [bindWallet, setBindWallet] = useState('');
   console.log('session', session);
 
-  // useEffect(() => {
-  //   // console.log("user", user?.publicMetadata.bindWallet);
-  //   if (isLoaded) {
-  //     setBindWallet(user?.publicMetadata.bindWallet as string);
-  //   }
-  // }, [isLoaded]);
+  useEffect(() => {
+    if (status === 'authenticated') {
+      setBindWallet(session?.user?.bindWallet);
+    }
+  }, [status]);
 
   return (
     <>

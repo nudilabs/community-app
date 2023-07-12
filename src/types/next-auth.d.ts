@@ -8,17 +8,24 @@ declare module 'next-auth' {
     access_token: string;
     expires_at: number;
     refresh_token: string;
-    // user?: {
-    //   name?: string | null;
-    //   email?: string | null;
-    //   image?: string | null;
-    // };
+    user: {
+      id: string;
+      name: string;
+      image: string;
+      bindWallet: string;
+    };
     error?: string;
   }
 }
 
 declare module 'next-auth/jwt' {
   interface JWT {
+    user: {
+      id: string;
+      name: string;
+      image: string;
+      bindWallet: string;
+    };
     accessToken: string;
     accessTokenExpires: number;
     refreshToken: string;

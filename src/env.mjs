@@ -3,9 +3,13 @@ import { z } from 'zod';
 
 export const env = createEnv({
   server: {
+    DB_HOST: z.string().min(1),
+    DB_USERNAME: z.string().min(1),
+    DB_PASSWORD: z.string().min(1),
     TWITTER_CLIENT_ID: z.string().min(1),
     TWITTER_CLIENT_SECRET: z.string().min(1),
     NEXTAUTH_URL: z.string().min(1),
+    NEXTAUTH_SECRET: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_PUBLISHABLE_KEY: z.string().min(1),

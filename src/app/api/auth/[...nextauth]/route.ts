@@ -1,12 +1,10 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import TwitterProvider from 'next-auth/providers/twitter';
-// import axios from 'axios';
-// import ENV from '@/utils/ENV';
 import { env } from '@/env.mjs';
+import * as AccountModel from '@/models/Accounts';
 
 // Helper to obtain a new access_token from a refresh token.
 async function refreshAccessToken(token: any) {
-  console.log('refreshAccessToken', token);
   try {
     const queryParams = new URLSearchParams({
       client_id: env.TWITTER_CLIENT_ID,
@@ -31,8 +29,8 @@ async function refreshAccessToken(token: any) {
     return {
       ...token,
       accessToken: refreshedTokens.access_token,
-      accessTokenExpires: Date.now() + refreshedTokens.expires_in * 1000,
-      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
+      accessTokenExpires: refreshedTokens.expires_at,
+      refreshToken: refreshedTokens.refresh_token ?? token.refresh_token, // Fall back to old refresh token
     };
   } catch (error) {
     console.log(error);
@@ -59,15 +57,18 @@ const authOptions: NextAuthOptions = {
     async jwt({ token, account }) {
       // Initial sign in
       if (account && account.expires_at) {
-        // console.log('jwt', { token, account });
+        const accountInfo = await AccountModel.getAccountInfo(
+          account.providerAccountId
+        );
         const user = {
           id: account.providerAccountId,
           name: token.name,
           image: token.picture,
+          bindWallet: accountInfo ? accountInfo.address : null,
         };
         return {
           access_token: account.access_token,
-          expires_at: Math.floor(Date.now() / 1000 + account.expires_at),
+          expires_at: account.expires_at,
           refresh_token: account.refresh_token,
           user,
         };
@@ -75,8 +76,17 @@ const authOptions: NextAuthOptions = {
 
       // Return previous token if the access token has not expired yet
       if (token && Date.now() < Number(token.expires_at) * 1000) {
-        // console.log('not refresh token');
-        return token;
+        const accountInfo = await AccountModel.getAccountInfo(token.user?.id);
+        console.log('jwt', { accountInfo });
+        // console.log('jwt', { token });
+        if (accountInfo) {
+          return {
+            ...token,
+            user: { ...token.user, bindWallet: accountInfo.address },
+          };
+        } else {
+          return token;
+        }
       }
 
       // Access token has expired, try to update it

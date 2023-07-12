@@ -1,45 +1,39 @@
-// import { NextResponse, NextRequest } from 'next/server';
-// import { recoverMessageAddress } from 'viem';
-// import * as z from 'zod';
+import { NextResponse, NextRequest } from 'next/server';
+import { recoverMessageAddress } from 'viem';
+import { getToken } from 'next-auth/jwt';
+import * as AccountsModel from '@/models/Accounts';
+import { env } from '@/env.mjs';
+import * as z from 'zod';
 
-// export const runtime = 'edge';
+const schema = z.object({
+  signature: z.string(),
+});
 
-// export async function POST(req: NextRequest): Promise<NextResponse> {
-//   console.log('POST bilding twitter');
-//   // console.log("req", await req.json());
-//   const schema = z.object({
-//     signature: z.string().min(1),
-//   });
-//   try {
-//     const { userId } = auth();
-//     if (!userId) return NextResponse.redirect('/sign-in');
-//     const body = await req.json();
-//     const { signature } = schema.parse(body);
-//     const userData = await clerkClient.users.getUser(userId);
-//     const twitterId = userData.externalAccounts.find(
-//       (account) => account.provider === 'oauth_twitter'
-//     )?.externalId;
-//     const address = await recoverMessageAddress({
-//       message: `Binding wallet with ID: ${twitterId}`,
-//       signature: `0x${signature.slice(2)}`,
-//     });
-//     console.log('twitterId', twitterId);
-//     console.log('signature', signature);
-//     console.log('address', address);
+export const runtime = 'edge';
 
-//     const param = {
-//       publicMetadata: {
-//         bindWallet: address,
-//       },
-//     };
-//     const user = await clerkClient.users.updateUser(userId, param);
-//     // console.log("Wallet address updated:", user.publicMetadata);
+export async function POST(req: NextRequest): Promise<NextResponse> {
+  // console.log('POST bilding twitter');
+  try {
+    const token = await getToken({ req, secret: env.NEXTAUTH_SECRET });
+    if (!token) return NextResponse.redirect('/sign-in');
+    const { user } = token;
+    const body = await req.json();
+    const { signature } = schema.parse(body);
+    const address = await recoverMessageAddress({
+      message: `Binding wallet with ID: ${user.id}`,
+      signature: `0x${signature.slice(2)}`,
+    });
 
-//     return NextResponse.json({
-//       bindWallet: user.publicMetadata.bindWallet,
-//     });
-//   } catch (error) {
-//     console.error(error);
-//     return NextResponse.json({}, { status: 400 });
-//   }
-// }
+    await AccountsModel.upsertAccount({
+      twitterId: user.id,
+      address,
+      twitterName: user.name,
+    });
+    return NextResponse.json({
+      bindWallet: address,
+    });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json({}, { status: 400 });
+  }
+}

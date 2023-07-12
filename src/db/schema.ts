@@ -2,23 +2,25 @@ import {
   mysqlTable,
   serial,
   varchar,
-  int,
-  datetime,
-  decimal,
-  boolean,
   index,
   timestamp,
-  primaryKey,
-} from "drizzle-orm/mysql-core";
-
-export const supportChains = mysqlTable(
-  "support_chains",
+} from 'drizzle-orm/mysql-core';
+import { sql } from 'drizzle-orm';
+export const accounts = mysqlTable(
+  'accounts',
   {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 255 }),
-    createdAt: timestamp("created_at").notNull().defaultNow(),
+    id: serial('id').primaryKey(),
+    twitterId: varchar('twitter_id', { length: 100 }).unique(),
+    twitterName: varchar('twitter_name', { length: 255 }),
+    address: varchar('address', { length: 42 }),
+    createdAt: timestamp('created_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updateAt: timestamp('updated_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
   },
-  (chain) => ({
-    nameIdx: index("name_idx").on(chain.name),
+  (account) => ({
+    twitterIdIdx: index('twitter_id_idx').on(account.twitterId),
   })
 );
