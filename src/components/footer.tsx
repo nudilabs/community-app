@@ -6,7 +6,7 @@ export function Footer() {
   return (
     <div className="flex py-6 px-8 lg:px-40 justify-between flex-col md:flex-row items-center text-center gap-4">
       <div className="text-sm">
-        Copyright © 2023. RIS3. All rights reserved.
+        Copyright © 2023. 3MPOWER. All rights reserved.
       </div>
       <div className="flex gap-1 items-center">
         <Button variant="ghost" size="icon">

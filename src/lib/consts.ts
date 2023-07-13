@@ -1,2 +1,2 @@
-export const APP_NAME = 'RIS3';
+export const APP_NAME = '3MPOWER';
 export const COOKIE_NAME = 'ris3';

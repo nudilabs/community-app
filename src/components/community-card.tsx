@@ -65,7 +65,9 @@ export function CommunityCard({
       </CardContent>
       <CardFooter className="flex gap-2 justify-between">
         <div className="gap-2 flex">
-          <CollectionDialogue community={community} />
+          <CollectionDialogue community={community}>
+            <Button>View</Button>
+          </CollectionDialogue>
         </div>
         <FilterDialogue community={community} />
       </CardFooter>

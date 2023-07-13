@@ -17,19 +17,29 @@ import { Icons } from './icons';
 
 import { Community } from '@/types/community';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Card, CardContent, CardHeader } from './ui/card';
+import { Card } from './ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './ui/tooltip';
 
-export function CollectionDialogue({ community }: { community: Community }) {
+export function CollectionDialogue({
+  community,
+  children,
+}: {
+  community: Community;
+  children: React.ReactNode;
+}) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button>View</Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <div className="flex relative mb-8">
+          <div className="flex relative mb-10">
             <div
               className="overflow-hidden rounded-md border"
               style={{ height: '100px', width: '100%' }}
@@ -93,7 +103,7 @@ export function CollectionDialogue({ community }: { community: Community }) {
             </TabsList>
             <TabsContent
               value="members"
-              className="h-[240px] overflow-scroll mt-4"
+              className="h-[240px] overflow-scroll mt-6"
             >
               <div className="grid grid-cols-2 gap-4">
                 {membersMock.map((member, index) => (
@@ -148,7 +158,7 @@ export function CollectionDialogue({ community }: { community: Community }) {
             </TabsContent>
             <TabsContent
               value="events"
-              className="min-h-[240px] overflow-scroll mt-4"
+              className="min-h-[240px] overflow-scroll mt-6"
             >
               <div className="grid grid-cols-2 gap-4">
                 {community.events.map((event, index) => (
@@ -168,9 +178,16 @@ export function CollectionDialogue({ community }: { community: Community }) {
                             <span className="text-xs text-gray-400">
                               {`${event.date.from} - ${event.date.to}`}
                             </span>
-                            <h3 className="text-2xl font-semibold">
-                              {event.title}
-                            </h3>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <h3 className="text-2xl font-semibold">
+                                    {event.title.slice(0, 14) + '...'}
+                                  </h3>
+                                </TooltipTrigger>
+                                <TooltipContent>{event.title}</TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
                           </div>
 
                           <Link href="" target="_blank">
