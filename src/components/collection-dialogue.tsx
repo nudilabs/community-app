@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -26,14 +24,61 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from './ui/tooltip';
+import { formatNumber } from '@/lib/utils';
 
-export function CollectionDialogue({
+import { env } from '@/env.mjs';
+
+async function getHolders(contractAddr: string | undefined) {
+  if (!contractAddr) {
+    return 0;
+  }
+  const res = await fetch(
+    `https://eth-mainnet.g.alchemy.com/nft/v2/${env.NEXT_PUBLIC_ALCHEMY_ID}/getOwnersForCollection?contractAddress=${contractAddr}&withTokenBalances=false`
+  );
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+
+  // Recommendation: handle errors
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error('Failed to fetch data');
+  }
+  const data = await res.json();
+  return data.ownerAddresses.length;
+}
+
+async function getFloorData(contractAddr: string | undefined) {
+  if (!contractAddr) {
+    return 0;
+  }
+  const res = await fetch(
+    `https://eth-mainnet.g.alchemy.com/nft/v2/${env.NEXT_PUBLIC_ALCHEMY_ID}/getFloorPrice?contractAddress=${contractAddr}`
+  );
+  // The return value is *not* serialized
+  // You can return Date, Map, Set, etc.
+
+  // Recommendation: handle errors
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error('Failed to fetch data');
+  }
+  const data = await res.json();
+  return data;
+}
+
+export async function CollectionDialogue({
   community,
+
   children,
 }: {
   community: Community;
+
   children: React.ReactNode;
 }) {
+  const [floorPrice, holders] = await Promise.all([
+    getFloorData(community.contractAddr),
+    getHolders(community.contractAddr),
+  ]);
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -68,7 +113,7 @@ export function CollectionDialogue({
                 <div className="px-4 py-2 flex flex-col">
                   <div className="flex items-center">
                     <Icons.holder className="mr-1 h-3 w-3" />
-                    3k
+                    {holders && formatNumber(holders)}
                   </div>
                   <div className="text-xs text-gray-500">Holders</div>
                 </div>
@@ -77,7 +122,8 @@ export function CollectionDialogue({
                 <div className="px-4 py-2 flex flex-col">
                   <div className="flex items-center">
                     <Icons.eth className="mr-1 h-3 w-3" />
-                    1.14
+                    {`${floorPrice?.openSea.floorPrice.toFixed(2)} ${floorPrice
+                      ?.openSea.priceCurrency}`}
                   </div>
                   <div className="text-xs text-gray-500">Floor</div>
                 </div>
@@ -207,7 +253,24 @@ export function CollectionDialogue({
         </div>
         <DialogFooter>
           <div className="flex gap-2 w-full">
-            <Button variant="outline">Follow</Button>
+            <Button
+              onClick={() => {
+                const width = 600;
+                const height = 600;
+                const left = window.screen.width / 2 - width / 2;
+                const top = window.screen.height / 2 - height / 2;
+                const options = `location,status,scrollbars,resizable,width=${width},height=${height},left=${left},top=${top}`;
+
+                window.open(
+                  `https://twitter.com/i/lists/${community.list}`,
+                  'Popup',
+                  options
+                );
+              }}
+              variant="outline"
+            >
+              Follow
+            </Button>
             <Button className="w-full">Join</Button>
           </div>
         </DialogFooter>
