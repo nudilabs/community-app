@@ -9,6 +9,7 @@ export const upsertAccount = async (acc: NewAccount) => {
     .values(acc)
     .onDuplicateKeyUpdate({
       set: {
+        address: acc.address,
         updateAt: sql`NOW()`,
       },
     });

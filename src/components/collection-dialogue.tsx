@@ -22,6 +22,17 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export function CollectionDialogue({ community }: { community: Community }) {
+  const handleJoin = async () => {
+    const res = await fetch('/api/lists/join', {
+      method: 'POST',
+      body: JSON.stringify({
+        twitterListId: community.list,
+      }),
+    });
+    const data = await res.json();
+    console.log(data);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -188,7 +199,9 @@ export function CollectionDialogue({ community }: { community: Community }) {
         <DialogFooter>
           <div className="flex gap-2 w-full">
             <Button variant="outline">Follow</Button>
-            <Button className="w-full">Join</Button>
+            <Button onClick={handleJoin} className="w-full">
+              Join
+            </Button>
           </div>
         </DialogFooter>
       </DialogContent>

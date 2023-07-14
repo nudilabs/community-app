@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "1e0c8795-c431-46b2-acf3-619ff727f547",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "e5d273cc-8cc8-4bfa-9563-0ea7782e322e",
+  "prevId": "1b1723f4-7454-47ac-98e6-124e87c3c1af",
   "tables": {
     "accounts": {
       "name": "accounts",
@@ -16,7 +16,7 @@
         },
         "twitter_id": {
           "name": "twitter_id",
-          "type": "bigint",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -61,30 +61,35 @@
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "accounts_twitter_id_unique": {
+          "name": "accounts_twitter_id_unique",
+          "columns": ["twitter_id"]
+        }
+      }
     },
     "list_members": {
       "name": "list_members",
       "columns": {
         "twitter_list_id": {
           "name": "twitter_list_id",
-          "type": "bigint",
+          "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "twitter_user_id": {
           "name": "twitter_user_id",
-          "type": "bigint",
+          "type": "varchar(255)",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "token_id": {
           "name": "token_id",
           "type": "varchar(100)",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "autoincrement": false
         },
         "joined_at": {
@@ -99,17 +104,16 @@
           "name": "left_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "notNull": false,
+          "autoincrement": false
         }
       },
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {
-        "list_members_twitter_list_id_twitter_user_id": {
-          "name": "list_members_twitter_list_id_twitter_user_id",
-          "columns": ["twitter_list_id", "twitter_user_id"]
+        "list_members_token_id_twitter_list_id": {
+          "name": "list_members_token_id_twitter_list_id",
+          "columns": ["token_id", "twitter_list_id"]
         }
       },
       "uniqueConstraints": {}

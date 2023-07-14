@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "1e0c8795-c431-46b2-acf3-619ff727f547",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "92665f5c-5ac2-4689-9b66-4b4221351daf",
+  "prevId": "1e0c8795-c431-46b2-acf3-619ff727f547",
   "tables": {
     "accounts": {
       "name": "accounts",
@@ -61,7 +61,12 @@
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {
+        "accounts_twitter_id_unique": {
+          "name": "accounts_twitter_id_unique",
+          "columns": ["twitter_id"]
+        }
+      }
     },
     "list_members": {
       "name": "list_members",

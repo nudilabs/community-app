@@ -1,10 +1,18 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import TwitterProvider from 'next-auth/providers/twitter';
+// import { UpstashRedisAdapter } from '@next-auth/upstash-redis-adapter';
+import { twitterClient } from '@/connectors/twitter';
+// import { Redis } from '@upstash/redis';
 import { env } from '@/env.mjs';
 import * as AccountModel from '@/models/Accounts';
+// const redis = new Redis({
+//   url: env.REDIS_URL,
+//   token: env.REDIS_TOKEN,
+// });
 
 // Helper to obtain a new access_token from a refresh token.
 async function refreshAccessToken(token: any) {
+  console.log('refreshAccessToken');
   try {
     const queryParams = new URLSearchParams({
       client_id: env.TWITTER_CLIENT_ID,
@@ -22,6 +30,7 @@ async function refreshAccessToken(token: any) {
       }
     );
     const data = await response.json();
+
     if (response.status !== 200) {
       throw data;
     }
@@ -49,7 +58,9 @@ const authOptions: NextAuthOptions = {
       clientSecret: env.TWITTER_CLIENT_SECRET,
       version: '2.0',
       authorization: {
-        params: { scope: 'tweet.read users.read follows.read offline.access' },
+        params: {
+          scope: 'tweet.read users.read follows.read list.write offline.access',
+        },
       },
     }),
   ],
@@ -57,6 +68,8 @@ const authOptions: NextAuthOptions = {
     async jwt({ token, account }) {
       // Initial sign in
       if (account && account.expires_at) {
+        console.log('case initial sign in');
+        // console.log('jwt', { token, account });
         const accountInfo = await AccountModel.getAccountInfo(
           account.providerAccountId
         );
@@ -76,8 +89,9 @@ const authOptions: NextAuthOptions = {
 
       // Return previous token if the access token has not expired yet
       if (token && Date.now() < Number(token.expires_at) * 1000) {
+        console.log('case not expired');
         const accountInfo = await AccountModel.getAccountInfo(token.user?.id);
-        console.log('jwt', { accountInfo });
+        // console.log('jwt', { accountInfo });
         // console.log('jwt', { token });
         if (accountInfo) {
           return {

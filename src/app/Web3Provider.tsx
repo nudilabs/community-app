@@ -11,7 +11,7 @@ const config = createConfig(
   getDefaultConfig({
     appName: APP_NAME,
     // infuraId: env.NEXT_PUBLIC_INFURA_ID,
-    alchemyId: env.NEXT_PUBLIC_ALCHEMY_ID,
+    // alchemyId: env.NEXT_PUBLIC_ALCHEMY_ID,
     walletConnectProjectId: env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
   })
 );

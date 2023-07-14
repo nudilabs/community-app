@@ -6,15 +6,19 @@ export const env = createEnv({
     DB_HOST: z.string().min(1),
     DB_USERNAME: z.string().min(1),
     DB_PASSWORD: z.string().min(1),
+    REDIS_URL: z.string().min(1),
+    REDIS_TOKEN: z.string().min(1),
     TWITTER_CLIENT_ID: z.string().min(1),
     TWITTER_CLIENT_SECRET: z.string().min(1),
     NEXTAUTH_URL: z.string().min(1),
     NEXTAUTH_SECRET: z.string().min(1),
+    ALCHEMY_KEY: z.string().min(1),
+    OAUTH_OFFICIAL_TWITTER_KEY: z.string().min(1),
   },
   client: {
     NEXT_PUBLIC_PUBLISHABLE_KEY: z.string().min(1),
     NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: z.string().min(1),
-    NEXT_PUBLIC_ALCHEMY_ID: z.string().min(1),
+    // NEXT_PUBLIC_ALCHEMY_ID: z.string().min(1),
   },
   // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
   experimental__runtimeEnv: {
@@ -22,6 +26,6 @@ export const env = createEnv({
 
     NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID:
       process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
-    NEXT_PUBLIC_ALCHEMY_ID: process.env.NEXT_PUBLIC_ALCHEMY_ID,
+    // NEXT_PUBLIC_ALCHEMY_ID: process.env.NEXT_PUBLIC_ALCHEMY_ID,
   },
 });

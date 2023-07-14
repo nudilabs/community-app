@@ -13,6 +13,7 @@ import { Label } from './ui/label';
 import { useSignMessage } from 'wagmi';
 import { useAccount } from 'wagmi';
 import { useSession } from 'next-auth/react';
+import { ITwitterBindingRes } from '@/types/API';
 export function VerifyWalletsDialogue({
   open,
   setOpen,
@@ -32,7 +33,7 @@ export function VerifyWalletsDialogue({
         body: JSON.stringify({ signature: data }),
         headers: { 'Content-Type': 'application/json' },
       });
-      const { bindWallet } = await res.json();
+      const { bindWallet } = (await res.json()) as ITwitterBindingRes;
       setBindWallet(bindWallet);
       setOpen(false);
     },

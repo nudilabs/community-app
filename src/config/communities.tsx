@@ -39,5 +39,25 @@ export const communities: Community[] = [
         },
       },
     ],
+    requireTwiiterFollow: ['3MPOWER'],
+    conditions: [
+      {
+        type: 'balance',
+        contractAddr: '0x000',
+        amount: 10,
+      },
+      {
+        type: 'trait',
+        operator: 'and',
+        traits: [
+          { trait_type: 'METADATA_KEY', value: 'METADATA_VALUE' },
+          { trait_type: 'METADATA_KEY', value: 'METADATA_VALUE' },
+        ],
+      },
+      {
+        type: 'hold_duration',
+        duration: 123456789,
+      },
+    ],
   },
 ];
