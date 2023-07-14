@@ -4,9 +4,12 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { communities } from '@/config/communities';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
 export const FeaturedBanner = () => {
+  const { scrollYProgress, scrollY } = useScroll();
+
   const eventName = '0n1forcesdcc2023';
   const communityName = '0n1force';
   const community = communities.find((c) => c.id === communityName);
@@ -16,9 +19,6 @@ export const FeaturedBanner = () => {
     selectedEvent?.hashtags.join('%20').replaceAll('#', '%23') || '';
 
   const url = `https://twitter.com/search?q=list%3A${community?.list}%20${hashtags}%20%20-filter%3Aretweets%20until%3A${selectedEvent?.date.to}%20since%3A${selectedEvent?.date.from}&src=typed_query&f=live`;
-  console.log('cl: ', community?.list);
-  console.log('hashtags: ', hashtags);
-  const mockUrl = `https://twitter.com/search?q=list%3A1677692164376248321%20%23SDCC2023%20-filter%3Aretweets&src=typed_query&f=live`;
 
   const buttonVariants = {
     initial: {
@@ -36,9 +36,36 @@ export const FeaturedBanner = () => {
     },
   };
 
+  const opacity = useTransform(
+    scrollYProgress,
+    // Map y from these values:
+    [0, 1],
+    // Into these values:
+    [1, 0]
+  );
+
+  const [hidden, setHidden] = useState(false);
+
+  function update() {
+    if (opacity.get() < 0.01) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  }
+
+  useEffect(() => {
+    return scrollY.onChange(() => update());
+  });
+
   return (
     <div className="flex justify-center items-center p-2 md:p-0 w-full md:w-[400px] fixed bottom-0 right-0 md:bottom-6 md:right-8">
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        style={{ opacity }}
+        className={hidden ? 'hidden' : ''}
+      >
         <Card className="w-full bg-gradient-to-b from-slate-950 to-slate-900 border-slate-900 rounded-lg overflow-hidden">
           <div className="flex gap-2">
             <div>

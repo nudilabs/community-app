@@ -9,12 +9,18 @@ import Spline from '@splinetool/react-spline';
 
 import { communities } from '@/config/communities';
 import { FeaturedBanner } from '@/components/featured-banner';
+import { CollectionDialogue } from '@/components/collection-dialogue';
+import Link from 'next/link';
+
+import { env } from '@/env.mjs';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
   return (
     <>
       <div
-        className="h-screen flex justify-center items-center grid grid-cols-12 gap-4 md:px-40 px-8"
+        className="h-screen justify-center items-center grid grid-cols-12 gap-4 md:px-40 px-8"
         style={{ height: 'calc(100vh - 104px)' }}
       >
         <div className="relative z-20 col-span-12 lg:col-span-6">
@@ -24,11 +30,26 @@ export default function Home() {
                 initial={{ opacity: 0, y: -25, x: 100 }} // Initial animation properties
                 whileInView={{ opacity: 1, x: 0, y: 0 }} // Animation properties to animate to
                 transition={{ duration: 1, delay: 0.25 }}
+                style={{
+                  cursor: 'pointer',
+                }}
               >
-                <img
-                  src={communities[0].profile_url}
-                  className="w-12 h-12 rounded-lg top-4 left-2 border"
-                />
+                <motion.div
+                  initial={{ y: 0 }}
+                  transition={{
+                    duration: 0.25,
+                    type: 'spring',
+                    stiffness: 500,
+                  }}
+                  whileHover={{ y: -10 }}
+                >
+                  <CollectionDialogue community={communities[0]}>
+                    <img
+                      src={communities[0].profile_url}
+                      className="w-12 h-12 rounded-lg top-4 left-2 border"
+                    />
+                  </CollectionDialogue>
+                </motion.div>
               </motion.div>
             )}
             {communities[1] && (
@@ -36,11 +57,26 @@ export default function Home() {
                 initial={{ opacity: 0, y: -50, x: 100 }} // Initial animation properties
                 whileInView={{ opacity: 1, x: 0, y: 0 }} // Animation properties to animate to
                 transition={{ duration: 1, delay: 0.5 }}
+                style={{
+                  cursor: 'pointer',
+                }}
               >
-                <img
-                  src={communities[1].profile_url}
-                  className="w-12 h-12 rounded-lg top-4 left-2 border"
-                />
+                <motion.div
+                  initial={{ y: 0 }}
+                  transition={{
+                    duration: 0.25,
+                    type: 'spring',
+                    stiffness: 500,
+                  }}
+                  whileHover={{ y: -10 }}
+                >
+                  <CollectionDialogue community={communities[1]}>
+                    <img
+                      src={communities[1].profile_url}
+                      className="w-12 h-12 rounded-lg top-4 left-2 border"
+                    />
+                  </CollectionDialogue>
+                </motion.div>
               </motion.div>
             )}
             {communities[2] && (
@@ -48,11 +84,26 @@ export default function Home() {
                 initial={{ opacity: 0, y: -75, x: 100 }} // Initial animation properties
                 whileInView={{ opacity: 1, x: 0, y: 0 }} // Animation properties to animate to
                 transition={{ duration: 1, delay: 0.75 }}
+                style={{
+                  cursor: 'pointer',
+                }}
               >
-                <img
-                  src={communities[2].profile_url}
-                  className="w-12 h-12 rounded-lg top-4 left-2 border"
-                />
+                <motion.div
+                  initial={{ y: 0 }}
+                  transition={{
+                    duration: 0.25,
+                    type: 'spring',
+                    stiffness: 500,
+                  }}
+                  whileHover={{ y: -10 }}
+                >
+                  <CollectionDialogue community={communities[2]}>
+                    <img
+                      src={communities[2].profile_url}
+                      className="w-12 h-12 rounded-lg top-4 left-2 border"
+                    />
+                  </CollectionDialogue>
+                </motion.div>
               </motion.div>
             )}
             <motion.div
@@ -69,14 +120,21 @@ export default function Home() {
             EMPOWER YOUR COMMUNITY
           </h1>
           <p className="text-sm md:text-center lg:text-left text-gray-500 mt-4">
-            Connect, engage, and grow your community with RIS3, the modern
+            Connect, engage, and grow your community with 3MPOWER, the modern
             community relationship management platform for creators.
           </p>
           <div className="flex justify-center lg:justify-normal mt-8 gap-4">
-            <Button className="bg-gradient-to-br from-purple-500 to-cyan-500">
+            <Button
+              className="bg-gradient-to-br from-purple-500 to-cyan-500"
+              onClick={() => {
+                router.push('/community');
+              }}
+            >
               Explore
             </Button>
-            <Button variant="outline">Contact</Button>
+            <Link href={env.NEXT_PUBLIC_DISCORD_INVITE_URL} target="_blank">
+              <Button variant="outline">Contact</Button>
+            </Link>
           </div>
         </div>
         <div className="lg:col-span-6 col-span-12 h-full hidden lg:flex">
@@ -175,7 +233,7 @@ export default function Home() {
                 style={{ width: '50%' }} // Add a width style to limit the container width
               >
                 <img
-                  src="/landing/create-list.png"
+                  src="/landing/list.png"
                   className="w-full border rounded-xl absolute" // Change w-1/2 to w-full
                 />
               </motion.div>
@@ -187,7 +245,7 @@ export default function Home() {
                 style={{ width: '50%' }} // Add a width style to limit the container width
               >
                 <img
-                  src="/landing/list.png"
+                  src="/landing/create-list.png"
                   className="w-full border rounded-xl absolute" // Change w-1/2 to w-full
                 />
               </motion.div>

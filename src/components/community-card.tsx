@@ -1,18 +1,11 @@
-import { BellRing, Check, LogIn } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Icons } from './icons';
 import { FilterDialogue } from './filter-dialogue';
+
 import { Community } from '@/types/community';
 import { CollectionDialogue } from './collection-dialogue';
+import { ConditionCarousel } from './condition-carousel';
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -47,26 +40,19 @@ export function CommunityCard({
           <div className="flex gap-2">
             <div className="flex items-center text-sm">
               <Icons.user className="mr-1 h-4 w-4" />
-              1k
+              6.9k
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-[25px_1fr] items-start last:mb-0 last:pb-0">
-          <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
-          <div className="space-y-1">
-            <p className="text-sm font-medium leading-none">
-              {community.condition.type}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {community.condition.value}
-            </p>
-          </div>
-        </div>
+        <ConditionCarousel community={community} />
       </CardContent>
       <CardFooter className="flex gap-2 justify-between">
         <div className="gap-2 flex">
-          <CollectionDialogue community={community} />
+          <CollectionDialogue community={community}>
+            <Button>View</Button>
+          </CollectionDialogue>
         </div>
+
         <FilterDialogue community={community} />
       </CardFooter>
     </Card>

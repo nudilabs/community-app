@@ -83,7 +83,7 @@ export function FilterDialogue({ community }: { community: Community }) {
       ? `since%3A${since}%20until%3A${until}`
       : '';
 
-    const url = `https://twitter.com/search?q=list%3A${community.list}%20${hashtags}%20-filter%3Aretweets%20${dates}&src=typed_query${sorted}`;
+    const url = `https://twitter.com/search?q=list%3A${community.list}%20${hashtags}%20-filter%3Aretweets%20-filter%3Areplies%20${dates}&src=typed_query${sorted}`;
     setSearchUrl(url);
   }, [event, date, sort]);
 
@@ -97,7 +97,7 @@ export function FilterDialogue({ community }: { community: Community }) {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{community.name}</DialogTitle>
-          <DialogDescription>Advanced Timelines</DialogDescription>
+          <DialogDescription>Curated Timelines</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-8">
           {/* <RadioGroup

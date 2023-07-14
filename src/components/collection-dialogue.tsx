@@ -1,5 +1,3 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -17,19 +15,59 @@ import { Icons } from './icons';
 
 import { Community } from '@/types/community';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Card, CardContent, CardHeader } from './ui/card';
+import { Card } from './ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './ui/tooltip';
+import { formatNumber } from '@/lib/utils';
 
-export function CollectionDialogue({ community }: { community: Community }) {
+import { useEffect, useState } from 'react';
+import { FloorPrice } from '@/types/alchemy';
+import { Skeleton } from './skeleton';
+
+export function CollectionDialogue({
+  community,
+  children,
+}: {
+  community: Community;
+  children: React.ReactNode;
+}) {
+  const [floorPrice, setFloorPrice] = useState<FloorPrice>();
+  const [holders, setHolders] = useState<number>();
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await fetch(
+        `/api/nft/contractMetadata?address=${community.contractAddr}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const data = await res.json();
+      setFloorPrice(data.floorPrice);
+      setHolders(data.holders);
+      console.log('useEffect', data);
+    };
+    if (show) getData();
+  }, [show]);
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button>View</Button>
+      <DialogTrigger asChild onClick={() => setShow(true)}>
+        {children}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <div className="flex relative mb-8">
+          <div className="flex relative mb-10">
             <div
               className="overflow-hidden rounded-md border"
               style={{ height: '100px', width: '100%' }}
@@ -58,7 +96,7 @@ export function CollectionDialogue({ community }: { community: Community }) {
                 <div className="px-4 py-2 flex flex-col">
                   <div className="flex items-center">
                     <Icons.holder className="mr-1 h-3 w-3" />
-                    3k
+                    {holders ? formatNumber(holders) : <Skeleton />}
                   </div>
                   <div className="text-xs text-gray-500">Holders</div>
                 </div>
@@ -67,7 +105,12 @@ export function CollectionDialogue({ community }: { community: Community }) {
                 <div className="px-4 py-2 flex flex-col">
                   <div className="flex items-center">
                     <Icons.eth className="mr-1 h-3 w-3" />
-                    1.14
+                    {floorPrice ? (
+                      `${floorPrice?.openSea.floorPrice.toFixed(2)} ${floorPrice
+                        ?.openSea.priceCurrency}`
+                    ) : (
+                      <Skeleton />
+                    )}
                   </div>
                   <div className="text-xs text-gray-500">Floor</div>
                 </div>
@@ -93,7 +136,7 @@ export function CollectionDialogue({ community }: { community: Community }) {
             </TabsList>
             <TabsContent
               value="members"
-              className="h-[240px] overflow-scroll mt-4"
+              className="h-[240px] overflow-scroll mt-6"
             >
               <div className="grid grid-cols-2 gap-4">
                 {membersMock.map((member, index) => (
@@ -148,7 +191,7 @@ export function CollectionDialogue({ community }: { community: Community }) {
             </TabsContent>
             <TabsContent
               value="events"
-              className="min-h-[240px] overflow-scroll mt-4"
+              className="min-h-[240px] overflow-scroll mt-6"
             >
               <div className="grid grid-cols-2 gap-4">
                 {community.events.map((event, index) => (
@@ -168,9 +211,16 @@ export function CollectionDialogue({ community }: { community: Community }) {
                             <span className="text-xs text-gray-400">
                               {`${event.date.from} - ${event.date.to}`}
                             </span>
-                            <h3 className="text-2xl font-semibold">
-                              {event.title}
-                            </h3>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <h3 className="text-2xl font-semibold">
+                                    {event.title.slice(0, 14) + '...'}
+                                  </h3>
+                                </TooltipTrigger>
+                                <TooltipContent>{event.title}</TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
                           </div>
 
                           <Link href="" target="_blank">
@@ -190,7 +240,24 @@ export function CollectionDialogue({ community }: { community: Community }) {
         </div>
         <DialogFooter>
           <div className="flex gap-2 w-full">
-            <Button variant="outline">Follow</Button>
+            <Button
+              onClick={() => {
+                const width = 600;
+                const height = 600;
+                const left = window.screen.width / 2 - width / 2;
+                const top = window.screen.height / 2 - height / 2;
+                const options = `location,status,scrollbars,resizable,width=${width},height=${height},left=${left},top=${top}`;
+
+                window.open(
+                  `https://twitter.com/i/lists/${community.list}`,
+                  'Popup',
+                  options
+                );
+              }}
+              variant="outline"
+            >
+              Follow
+            </Button>
             <Button className="w-full">Join</Button>
           </div>
         </DialogFooter>
