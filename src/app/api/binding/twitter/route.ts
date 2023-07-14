@@ -1,43 +1,36 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { auth, clerkClient } from '@clerk/nextjs';
 import { recoverMessageAddress } from 'viem';
+import { getToken } from 'next-auth/jwt';
+import * as AccountsModel from '@/models/Accounts';
+import { env } from '@/env.mjs';
 import * as z from 'zod';
+
+const schema = z.object({
+  signature: z.string(),
+});
 
 export const runtime = 'edge';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  console.log('POST bilding twitter');
-  // console.log("req", await req.json());
-  const schema = z.object({
-    signature: z.string().min(1),
-  });
+  // console.log('POST bilding twitter');
   try {
-    const { userId } = auth();
-    if (!userId) return NextResponse.redirect('/sign-in');
+    const token = await getToken({ req, secret: env.NEXTAUTH_SECRET });
+    if (!token) return NextResponse.redirect('/sign-in');
+    const { user } = token;
     const body = await req.json();
     const { signature } = schema.parse(body);
-    const userData = await clerkClient.users.getUser(userId);
-    const twitterId = userData.externalAccounts.find(
-      (account) => account.provider === 'oauth_twitter'
-    )?.externalId;
     const address = await recoverMessageAddress({
-      message: `Binding wallet with ID: ${twitterId}`,
+      message: `Binding wallet with ID: ${user.id}`,
       signature: `0x${signature.slice(2)}`,
     });
-    console.log('twitterId', twitterId);
-    console.log('signature', signature);
-    console.log('address', address);
 
-    const param = {
-      publicMetadata: {
-        bindWallet: address,
-      },
-    };
-    const user = await clerkClient.users.updateUser(userId, param);
-    // console.log("Wallet address updated:", user.publicMetadata);
-
+    await AccountsModel.upsertAccount({
+      twitterId: user.id,
+      address,
+      twitterName: user.name,
+    });
     return NextResponse.json({
-      bindWallet: user.publicMetadata.bindWallet,
+      bindWallet: address,
     });
   } catch (error) {
     console.error(error);

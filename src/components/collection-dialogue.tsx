@@ -60,6 +60,18 @@ export function CollectionDialogue({
     };
     if (show) getData();
   }, [show]);
+
+  const handleJoin = async () => {
+    const res = await fetch('/api/lists/join', {
+      method: 'POST',
+      body: JSON.stringify({
+        twitterListId: community.list,
+      }),
+    });
+    const data = await res.json();
+    console.log(data);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild onClick={() => setShow(true)}>
@@ -258,7 +270,10 @@ export function CollectionDialogue({
             >
               Follow
             </Button>
-            <Button className="w-full">Join</Button>
+
+            <Button onClick={handleJoin} className="w-full">
+              Join
+            </Button>
           </div>
         </DialogFooter>
       </DialogContent>

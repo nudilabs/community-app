@@ -4,7 +4,5 @@ import { env } from '@/env.mjs';
 
 export const client = createPublicClient({
   chain: mainnet,
-  transport: http(
-    `https://eth-mainnet.g.alchemy.com/v2/${env.NEXT_PUBLIC_ALCHEMY_ID}`
-  ),
+  transport: http(`https://eth-mainnet.g.alchemy.com/v2/${env.ALCHEMY_KEY}`),
 });
