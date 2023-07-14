@@ -5,3 +5,7 @@ export interface TwitterTokenResponse {
   expires_at: number;
   token_type: string;
 }
+
+export interface ITwitterBindingRes {
+  bindWallet: string;
+}
