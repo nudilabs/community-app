@@ -161,15 +161,7 @@ export default function Home() {
                 className="col-span-12 md:col-span-6 lg:col-span-3"
                 key={index}
               >
-                <CommunityCard community={community}>
-                  <CollectionDialogue
-                    community={community}
-                    // floorPrice={floorPrice}
-                    // holders={holders}
-                  >
-                    <Button>View</Button>
-                  </CollectionDialogue>
-                </CommunityCard>
+                <CommunityCard community={community} />
               </div>
             ))}
           </div>

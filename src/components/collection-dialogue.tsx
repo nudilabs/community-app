@@ -26,62 +26,45 @@ import {
 } from './ui/tooltip';
 import { formatNumber } from '@/lib/utils';
 
-import { env } from '@/env.mjs';
+import { useEffect, useState } from 'react';
+import { FloorPrice } from '@/types/alchemy';
+import { Skeleton } from './skeleton';
 
-async function getHolders(contractAddr: string | undefined) {
-  if (!contractAddr) {
-    return 0;
-  }
-  const res = await fetch(
-    `https://eth-mainnet.g.alchemy.com/nft/v2/${env.NEXT_PUBLIC_ALCHEMY_ID}/getOwnersForCollection?contractAddress=${contractAddr}&withTokenBalances=false`
-  );
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
-
-  // Recommendation: handle errors
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data');
-  }
-  const data = await res.json();
-  return data.ownerAddresses.length;
-}
-
-async function getFloorData(contractAddr: string | undefined) {
-  if (!contractAddr) {
-    return 0;
-  }
-  const res = await fetch(
-    `https://eth-mainnet.g.alchemy.com/nft/v2/${env.NEXT_PUBLIC_ALCHEMY_ID}/getFloorPrice?contractAddress=${contractAddr}`
-  );
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
-
-  // Recommendation: handle errors
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data');
-  }
-  const data = await res.json();
-  return data;
-}
-
-export async function CollectionDialogue({
+export function CollectionDialogue({
   community,
-
   children,
 }: {
   community: Community;
-
   children: React.ReactNode;
 }) {
-  const [floorPrice, holders] = await Promise.all([
-    getFloorData(community.contractAddr),
-    getHolders(community.contractAddr),
-  ]);
+  const [floorPrice, setFloorPrice] = useState<FloorPrice>();
+  const [holders, setHolders] = useState<number>();
+  const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await fetch(
+        `/api/nft/contractMetadata?address=${community.contractAddr}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      const data = await res.json();
+      setFloorPrice(data.floorPrice);
+      setHolders(data.holders);
+      console.log('useEffect', data);
+    };
+    if (show) getData();
+  }, [show]);
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger asChild onClick={() => setShow(true)}>
+        {children}
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <div className="flex relative mb-10">
@@ -113,7 +96,7 @@ export async function CollectionDialogue({
                 <div className="px-4 py-2 flex flex-col">
                   <div className="flex items-center">
                     <Icons.holder className="mr-1 h-3 w-3" />
-                    {holders && formatNumber(holders)}
+                    {holders ? formatNumber(holders) : <Skeleton />}
                   </div>
                   <div className="text-xs text-gray-500">Holders</div>
                 </div>
@@ -122,8 +105,12 @@ export async function CollectionDialogue({
                 <div className="px-4 py-2 flex flex-col">
                   <div className="flex items-center">
                     <Icons.eth className="mr-1 h-3 w-3" />
-                    {`${floorPrice?.openSea.floorPrice.toFixed(2)} ${floorPrice
-                      ?.openSea.priceCurrency}`}
+                    {floorPrice ? (
+                      `${floorPrice?.openSea.floorPrice.toFixed(2)} ${floorPrice
+                        ?.openSea.priceCurrency}`
+                    ) : (
+                      <Skeleton />
+                    )}
                   </div>
                   <div className="text-xs text-gray-500">Floor</div>
                 </div>

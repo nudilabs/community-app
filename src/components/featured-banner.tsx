@@ -16,9 +16,6 @@ export const FeaturedBanner = () => {
     selectedEvent?.hashtags.join('%20').replaceAll('#', '%23') || '';
 
   const url = `https://twitter.com/search?q=list%3A${community?.list}%20${hashtags}%20%20-filter%3Aretweets%20until%3A${selectedEvent?.date.to}%20since%3A${selectedEvent?.date.from}&src=typed_query&f=live`;
-  console.log('cl: ', community?.list);
-  console.log('hashtags: ', hashtags);
-  const mockUrl = `https://twitter.com/search?q=list%3A1677692164376248321%20%23SDCC2023%20-filter%3Aretweets&src=typed_query&f=live`;
 
   const buttonVariants = {
     initial: {
