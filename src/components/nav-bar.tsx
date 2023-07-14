@@ -111,13 +111,7 @@ export default function NavBar() {
       </div>
       <div className="w-full flex justify-end gap-4 items-center">
         <MobileNav />
-        <Link href={'/contact'} legacyBehavior passHref>
-          <span className="font-medium cursor-pointer text-sm hidden lg:block">
-            Contact
-          </span>
-        </Link>
         {!session ? <Signin /> : <UserNav />}
-        {/* <Signin /> */}
       </div>
     </div>
   );
