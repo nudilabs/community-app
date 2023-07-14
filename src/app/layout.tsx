@@ -9,6 +9,15 @@ type RootLayoutProps = {
   children: React.ReactNode;
 };
 
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    template: '%s | 3MPOWER',
+    default: '3MPOWER',
+  },
+};
+
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>

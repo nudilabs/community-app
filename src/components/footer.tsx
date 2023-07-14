@@ -1,6 +1,9 @@
+'use client';
+import Link from 'next/link';
 import { Icons } from './icons';
 import { Button } from './ui/button';
-import { Separator } from './ui/separator';
+
+import { env } from '@/env.mjs';
 
 export function Footer() {
   return (
@@ -9,12 +12,19 @@ export function Footer() {
         Copyright © 2023. 3MPOWER. All rights reserved.
       </div>
       <div className="flex gap-1 items-center">
-        <Button variant="ghost" size="icon">
-          <Icons.twitter className="h-6 w-6" />
-        </Button>
-        <Button variant="ghost" size="icon">
-          <Icons.discord className="h-6 w-6" />
-        </Button>
+        <Link
+          href={`http://twitter.com/${env.NEXT_PUBLIC_TWITTER_USERNAME}`}
+          target="_blank"
+        >
+          <Button variant="ghost" size="icon">
+            <Icons.twitter className="h-6 w-6" />
+          </Button>
+        </Link>
+        <Link href={env.NEXT_PUBLIC_DISCORD_INVITE_URL} target="_blank">
+          <Button variant="ghost" size="icon">
+            <Icons.discord className="h-6 w-6" />
+          </Button>
+        </Link>
       </div>
     </div>
   );

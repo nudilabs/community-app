@@ -12,6 +12,8 @@ export const env = createEnv({
     // NEXT_PUBLIC_INFURA_ID: z.string().min(1),
     NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: z.string().min(1),
     NEXT_PUBLIC_ALCHEMY_ID: z.string().min(1),
+    NEXT_PUBLIC_TWITTER_USERNAME: z.string().min(1),
+    NEXT_PUBLIC_DISCORD_INVITE_URL: z.string().url().min(1),
   },
   // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
   experimental__runtimeEnv: {
@@ -23,6 +25,8 @@ export const env = createEnv({
     NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID:
       process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
     NEXT_PUBLIC_ALCHEMY_ID: process.env.NEXT_PUBLIC_ALCHEMY_ID,
+    NEXT_PUBLIC_TWITTER_USERNAME: process.env.NEXT_PUBLIC_TWITTER_USERNAME,
+    NEXT_PUBLIC_DISCORD_INVITE_URL: process.env.NEXT_PUBLIC_DISCORD_INVITE_URL,
   },
   // For Next.js >= 13.4.4, you only need to destructure client variables:
   // experimental__runtimeEnv: {

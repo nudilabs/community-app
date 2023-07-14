@@ -10,12 +10,17 @@ import Spline from '@splinetool/react-spline';
 import { communities } from '@/config/communities';
 import { FeaturedBanner } from '@/components/featured-banner';
 import { CollectionDialogue } from '@/components/collection-dialogue';
+import Link from 'next/link';
+
+import { env } from '@/env.mjs';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
   return (
     <>
       <div
-        className="h-screen flex justify-center items-center grid grid-cols-12 gap-4 md:px-40 px-8"
+        className="h-screen justify-center items-center grid grid-cols-12 gap-4 md:px-40 px-8"
         style={{ height: 'calc(100vh - 104px)' }}
       >
         <div className="relative z-20 col-span-12 lg:col-span-6">
@@ -119,10 +124,17 @@ export default function Home() {
             community relationship management platform for creators.
           </p>
           <div className="flex justify-center lg:justify-normal mt-8 gap-4">
-            <Button className="bg-gradient-to-br from-purple-500 to-cyan-500">
+            <Button
+              className="bg-gradient-to-br from-purple-500 to-cyan-500"
+              onClick={() => {
+                router.push('/community');
+              }}
+            >
               Explore
             </Button>
-            <Button variant="outline">Contact</Button>
+            <Link href={env.NEXT_PUBLIC_DISCORD_INVITE_URL} target="_blank">
+              <Button variant="outline">Contact</Button>
+            </Link>
           </div>
         </div>
         <div className="lg:col-span-6 col-span-12 h-full hidden lg:flex">
