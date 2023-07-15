@@ -8,6 +8,7 @@ import {
 } from '@/types/community';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getConditionTitleAndValue } from '@/lib/utils';
 
 export function ConditionCarousel({ community }: { community: Community }) {
   const conditionsLength = community.conditions.length;
@@ -51,32 +52,3 @@ export function ConditionCarousel({ community }: { community: Community }) {
     </div>
   );
 }
-
-const getConditionTitleAndValue = (
-  condition: BalanceType | TraitType | HoldDurationType
-) => {
-  switch (condition.type) {
-    case 'balance':
-      return {
-        title: 'Token Gated',
-        value: `Hold at least ${condition.amount} token`,
-      };
-    case 'trait':
-      return {
-        title: 'Trait Gated',
-        value: condition.traits
-          .map((trait) => `${trait.trait_type}:${trait.value}`)
-          .join(', '),
-      };
-    case 'hold_duration':
-      return {
-        title: 'Held since',
-        value: `${new Date(condition.timestamp * 1000).toLocaleDateString()}`,
-      };
-    default:
-      return {
-        title: '',
-        value: '',
-      };
-  }
-};

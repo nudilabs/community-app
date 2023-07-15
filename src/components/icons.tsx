@@ -1,4 +1,11 @@
-import { CalendarCheck, CircleDashed, Coins, Diamond, Gem } from 'lucide-react';
+import {
+  CalendarCheck,
+  CircleDashed,
+  Coins,
+  Diamond,
+  Gem,
+  ListChecks,
+} from 'lucide-react';
 import {
   AlertTriangle,
   ArrowRight,
@@ -132,6 +139,7 @@ export const Icons = {
       />
     </svg>
   ),
+  conditions: ListChecks,
   holder: Gem,
   quest: ScrollText,
   community: HeartHandshake,

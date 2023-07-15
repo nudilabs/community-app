@@ -1,4 +1,6 @@
+import { BalanceType, HoldDurationType, TraitType } from '@/types/community';
 import { type ClassValue, clsx } from 'clsx';
+import { E } from 'drizzle-orm/column.d-aa4e525d';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -26,3 +28,32 @@ export function formatNumber(number: number) {
     return number.toString();
   }
 }
+
+export const getConditionTitleAndValue = (
+  condition: BalanceType | TraitType | HoldDurationType
+) => {
+  switch (condition.type) {
+    case 'balance':
+      return {
+        title: 'Token Gated',
+        value: `Hold at least ${condition.amount} token`,
+      };
+    case 'trait':
+      return {
+        title: 'Trait Gated',
+        value: condition.traits
+          .map((trait) => `${trait.trait_type}:${trait.value}`)
+          .join(', '),
+      };
+    case 'hold_duration':
+      return {
+        title: 'Held since',
+        value: `${new Date(condition.timestamp * 1000).toLocaleDateString()}`,
+      };
+    default:
+      return {
+        title: '',
+        value: '',
+      };
+  }
+};

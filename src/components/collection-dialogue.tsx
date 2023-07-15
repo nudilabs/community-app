@@ -25,7 +25,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from './ui/tooltip';
-import { formatNumber } from '@/lib/utils';
+import { formatNumber, getConditionTitleAndValue } from '@/lib/utils';
 
 import { useEffect, useState } from 'react';
 import { FloorPrice } from '@/types/alchemy';
@@ -39,6 +39,11 @@ import { StepperH } from './stepper';
 import { Label } from './ui/label';
 import { Switch } from './ui/switch';
 
+import { motion } from 'framer-motion';
+import { useAccount } from 'wagmi';
+import { useModal } from 'connectkit';
+import { VerifyWalletsDialogue } from './verify-wallets-dialogue';
+
 export function CollectionDialogue({
   community,
   children,
@@ -46,13 +51,27 @@ export function CollectionDialogue({
   community: Community;
   children: React.ReactNode;
 }) {
-  const { data: session } = useSession();
-
   const [floorPrice, setFloorPrice] = useState<FloorPrice>();
   const [holders, setHolders] = useState<number>();
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  const [verifyWalletsOpen, setVerifyWalletsOpen] = useState(false);
+  const { data: session, status } = useSession();
+  const { address, isConnected } = useAccount();
+  const { openProfile } = useModal({
+    onConnect: () => {
+      setVerifyWalletsOpen(true);
+    },
+  });
+  const [bindWallet, setBindWallet] = useState('');
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      setBindWallet(session?.user?.bindWallet);
+    }
+  }, [status]);
 
   useEffect(() => {
     const getData = async () => {
@@ -107,6 +126,13 @@ export function CollectionDialogue({
   };
 
   const handleJoin = async () => {
+    if (!isConnected && !session?.user?.bindWallet) {
+      openProfile();
+      return;
+    } else if (!session?.user?.bindWallet) {
+      setVerifyWalletsOpen(true);
+      return;
+    }
     setLoading(true);
     const res = await fetch('/api/lists/join', {
       method: 'POST',
@@ -207,10 +233,14 @@ export function CollectionDialogue({
         </DialogHeader>
         <div className="flex flex-col gap-8 justify-between">
           <Tabs defaultValue="members" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="members" className="gap-2 items-center">
                 <Icons.community className="w-4 h-4" />
                 Members
+              </TabsTrigger>
+              <TabsTrigger value="conditions" className="gap-2 items-center">
+                <Icons.conditions className="w-4 h-4" />
+                Conditions
               </TabsTrigger>
               <TabsTrigger value="events" className="gap-2 items-center">
                 <Icons.event className="w-4 h-4" />
@@ -265,6 +295,41 @@ export function CollectionDialogue({
                   </div>
                 ))}
               </div>
+            </TabsContent>
+            <TabsContent
+              value="conditions"
+              className="min-h-[240px] overflow-scroll mt-6 gap-4"
+            >
+              {community.conditions.map((condition, index) => {
+                const { title, value } = getConditionTitleAndValue(condition);
+                return (
+                  <motion.div
+                    key={index}
+                    className="grid grid-cols-[25px_1fr] items-start last:mb-0 last:pb-0 absolute"
+                    initial={{ y: 100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    {/* Display the current condition */}
+                    <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
+                    <div className="flex flex-col gap-1">
+                      <p className="font-medium leading-none">{title}</p>
+                      {condition.type === 'balance' ? (
+                        <Link
+                          href={`https://etherscan.io/address/${condition.contractAddr}`}
+                          target={'_blank'}
+                        >
+                          <p className="text-sm text-muted-foreground underline">
+                            {value}
+                          </p>
+                        </Link>
+                      ) : (
+                        <p className="text-sm text-muted-foreground">{value}</p>
+                      )}
+                    </div>
+                  </motion.div>
+                );
+              })}
             </TabsContent>
             <TabsContent
               value="events"
@@ -329,6 +394,11 @@ export function CollectionDialogue({
           </div>
         </DialogFooter>
       </DialogContent>
+      <VerifyWalletsDialogue
+        open={verifyWalletsOpen}
+        setOpen={setVerifyWalletsOpen}
+        setBindWallet={setBindWallet}
+      />
     </Dialog>
   );
 }
