@@ -111,7 +111,8 @@ export default function NavBar() {
       </div>
       <div className="w-full flex justify-end gap-4 items-center">
         <MobileNav />
-        {!session ? <Signin /> : <UserNav />}
+        {/* {!session ? <Signin /> : <UserNav />} */}
+        <UserNav />
       </div>
     </div>
   );

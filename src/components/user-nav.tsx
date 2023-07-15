@@ -9,7 +9,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { VerifyWalletsDialogue } from './verify-wallets-dialogue';
@@ -28,9 +27,7 @@ export function UserNav() {
     },
   });
   const { data: session, status } = useSession();
-
   const [bindWallet, setBindWallet] = useState('');
-  console.log('session', session);
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -43,13 +40,20 @@ export function UserNav() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-            <Avatar className="h-8 w-8">
-              <AvatarImage
-                src={String(session?.user?.image)}
-                alt={`@${session?.user?.name}`}
-              />
-              <AvatarFallback>RS</AvatarFallback>
-            </Avatar>
+            <div className="relative">
+              <Avatar className="h-8 w-8">
+                <AvatarImage
+                  src={String(session?.user?.image)}
+                  alt={`@${session?.user?.name}`}
+                />
+                <AvatarFallback>3M</AvatarFallback>
+              </Avatar>
+              {!bindWallet && (
+                <div className="absolute bottom-0 right-0">
+                  <Link2Off className="ml-1 h-3 w-3 text-red-400" />
+                </div>
+              )}
+            </div>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
