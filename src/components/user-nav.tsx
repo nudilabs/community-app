@@ -49,9 +49,9 @@ export function UserNav() {
                 />
                 <AvatarFallback>3M</AvatarFallback>
               </Avatar>
-              {!bindWallet && (
-                <div className="absolute bottom-0 right-0">
-                  <Link2Off className="ml-1 h-3 w-3 text-red-400" />
+              {!(bindWallet === String(address)) && (
+                <div className="absolute -bottom-1 -right-1 bg-red-400 rounded-full p-0.5">
+                  <Link2Off className="h-3 w-3 text-red-900" />
                 </div>
               )}
             </div>
@@ -86,7 +86,7 @@ export function UserNav() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            {!bindWallet && (
+            {!(bindWallet === String(address)) && (
               <DropdownMenuItem
                 onClick={() => {
                   setVerifyWalletsOpen(true);
