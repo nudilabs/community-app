@@ -36,6 +36,8 @@ import { ButtonLoading } from './button-loading';
 import { useSession } from 'next-auth/react';
 import { SigninNav } from './signin-nav';
 import { StepperH } from './stepper';
+import { Label } from './ui/label';
+import { Switch } from './ui/switch';
 
 export function CollectionDialogue({
   community,
@@ -50,7 +52,7 @@ export function CollectionDialogue({
   const [holders, setHolders] = useState<number>();
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(1);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const getData = async () => {
@@ -218,9 +220,15 @@ export function CollectionDialogue({
             </TabsList>
             <TabsContent
               value="members"
-              className="h-[240px] overflow-scroll mt-6"
+              className="h-[240px] overflow-scroll mt-6 gap-4"
             >
-              <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center justify-between space-x-2">
+                <Label htmlFor="necessary" className="flex flex-col space-y-1">
+                  <span>Show Recently Joined Members</span>
+                </Label>
+                <Switch id="necessary" />
+              </div>
+              <div className="grid grid-cols-2 gap-4 mt-6">
                 {membersMock.map((member, index) => (
                   <div
                     className="flex col-span-2 lg:col-span-1 gap-2 items-center justify-between"
@@ -261,7 +269,7 @@ export function CollectionDialogue({
             </TabsContent>
             <TabsContent
               value="events"
-              className="min-h-[240px] overflow-scroll mt-6"
+              className="min-h-[240px] overflow-scroll mt-6 gap-4"
             >
               <div className="grid grid-cols-2 gap-4">
                 {community.events.map((event, index) => (

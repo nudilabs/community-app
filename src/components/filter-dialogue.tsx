@@ -100,41 +100,9 @@ export function FilterDialogue({ community }: { community: Community }) {
           <DialogDescription>Curated Timelines</DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-8">
-          {/* <RadioGroup
-            defaultValue={event}
-            className="grid grid-cols-3 gap-4"
-            onValueChange={handleEventChange}
-          >
-            <Label
-              htmlFor="none"
-              className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary"
-            >
-              <RadioGroupItem value="none" id="none" className="sr-only" />
-              <Icons.none className="mb-3 h-6 w-6" />
-              None
-            </Label>
-            {community.events &&
-              community.events.length > 0 &&
-              community.events.map((event, index) => (
-                <Label
-                  htmlFor={event.id}
-                  className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary"
-                  key={index}
-                >
-                  <RadioGroupItem
-                    value={event.id}
-                    id={event.id}
-                    className="sr-only"
-                  />
-                  <Icons.event className="mb-3 h-6 w-6" />
-                  {event.title}
-                </Label>
-              ))}
-          </RadioGroup>
-          <Separator /> */}
           <div className="grid gap-2">
             <Label htmlFor="area">Date</Label>
-            {/* <DatePickerWithRange date={date} setDate={setDate} /> */}
+
             <RadioGroup
               defaultValue="all"
               className="grid grid-cols-3 gap-4"
