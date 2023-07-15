@@ -1,3 +1,4 @@
+'use client';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -32,6 +33,9 @@ import { Skeleton } from './skeleton';
 import { toast } from './ui/use-toast';
 import { ToastAction } from './ui/toast';
 import { ButtonLoading } from './button-loading';
+import { useSession } from 'next-auth/react';
+import { SigninNav } from './signin-nav';
+import { StepperH } from './stepper';
 
 export function CollectionDialogue({
   community,
@@ -40,10 +44,13 @@ export function CollectionDialogue({
   community: Community;
   children: React.ReactNode;
 }) {
+  const { data: session } = useSession();
+
   const [floorPrice, setFloorPrice] = useState<FloorPrice>();
   const [holders, setHolders] = useState<number>();
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(1);
 
   useEffect(() => {
     const getData = async () => {
@@ -126,6 +133,7 @@ export function CollectionDialogue({
     }
     setLoading(false);
   };
+  console.log('status: ', status);
 
   return (
     <Dialog>
@@ -184,10 +192,17 @@ export function CollectionDialogue({
               </Card>
             </div>
           </div>
-          <DialogTitle className="text-left">{community.name}</DialogTitle>
-          <DialogDescription className="text-left">
-            Join this token-gated list to empower the community.
-          </DialogDescription>
+          <div className="flex justify-between items-center">
+            <div className="flex flex-col gap-2">
+              <DialogTitle className="text-left">{community.name}</DialogTitle>
+              <DialogDescription className="text-left">
+                Join this token-gated list to empower the community.
+              </DialogDescription>
+            </div>
+            <Button onClick={handleFollowList} variant="outline">
+              Follow
+            </Button>
+          </div>
         </DialogHeader>
         <div className="flex flex-col gap-8 justify-between">
           <Tabs defaultValue="members" className="w-full">
@@ -295,15 +310,14 @@ export function CollectionDialogue({
         </div>
         <DialogFooter>
           <div className="flex gap-2 w-full">
-            <Button onClick={handleFollowList} variant="outline">
-              Follow
-            </Button>
-            {!loading ? (
-              <Button onClick={handleJoin} className="w-full">
-                Register
-              </Button>
+            {!session ? (
+              <SigninNav text="Sign in to continue" className="w-full" />
             ) : (
-              <ButtonLoading />
+              <RegisterProcess
+                loading={loading}
+                progress={progress}
+                handleJoin={handleJoin}
+              />
             )}
           </div>
         </DialogFooter>
@@ -311,6 +325,45 @@ export function CollectionDialogue({
     </Dialog>
   );
 }
+
+const RegisterProcess = ({
+  loading,
+  progress,
+  handleJoin,
+}: {
+  loading: boolean;
+  progress: number;
+  handleJoin: () => void;
+}) => {
+  switch (progress) {
+    case 0:
+      return (
+        <>
+          {!loading ? (
+            <Button onClick={handleJoin} className="w-full">
+              Register
+            </Button>
+          ) : (
+            <ButtonLoading />
+          )}
+        </>
+      );
+    case 1:
+      return <StepperH />;
+    default:
+      return (
+        <>
+          {!loading ? (
+            <Button onClick={handleJoin} className="w-full">
+              Register
+            </Button>
+          ) : (
+            <ButtonLoading />
+          )}
+        </>
+      );
+  }
+};
 
 const membersMock = [
   {

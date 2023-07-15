@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/sheet';
 import { Signin } from './signin-button';
 import { useSession } from 'next-auth/react';
+import { SigninNav } from './signin-nav';
 
 const navItems: { title: string; href: string }[] = [
   {
@@ -46,6 +47,7 @@ export default function NavBar() {
     return pathName === url;
   };
   const { data: session } = useSession();
+  const router = useRouter();
   // const { isLoaded, userId, sessionId, getToken } = useAuth();
 
   return (
@@ -111,7 +113,7 @@ export default function NavBar() {
       </div>
       <div className="w-full flex justify-end gap-4 items-center">
         <MobileNav />
-        {!session ? <Signin /> : <UserNav />}
+        {!session ? <SigninNav /> : <UserNav />}
       </div>
     </div>
   );
