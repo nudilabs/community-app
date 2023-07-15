@@ -106,7 +106,7 @@ export function CollectionDialogue({
       }),
     });
     const data = await res.json();
-    if (data.status === 200) {
+    if (res.ok) {
       await toast({
         title: 'Success',
         description: data.msg,
