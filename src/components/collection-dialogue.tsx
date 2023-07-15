@@ -29,6 +29,8 @@ import { formatNumber } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 import { FloorPrice } from '@/types/alchemy';
 import { Skeleton } from './skeleton';
+import { toast } from './ui/use-toast';
+import { ToastAction } from './ui/toast';
 
 export function CollectionDialogue({
   community,
@@ -69,7 +71,23 @@ export function CollectionDialogue({
       }),
     });
     const data = await res.json();
-    console.log(data);
+    if (data.status === 200) {
+      await toast({
+        title: 'Success',
+        description: data.msg,
+      });
+      setShow(false);
+    } else {
+      await toast({
+        title: 'Uh oh! Something went wrong.',
+        description: data.msg,
+        action: (
+          <ToastAction altText="Try again" onClick={() => setShow(true)}>
+            Try again
+          </ToastAction>
+        ),
+      });
+    }
   };
 
   return (
