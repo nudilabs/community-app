@@ -33,6 +33,11 @@ export function UserNav() {
   useEffect(() => {
     if (status === 'authenticated') {
       setBindWallet(session?.user?.bindWallet);
+      if (!isConnected && !session?.user?.bindWallet) {
+        openProfile();
+      } else if (!session?.user?.bindWallet) {
+        setVerifyWalletsOpen(true);
+      }
     }
   }, [status]);
 
