@@ -111,7 +111,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       env.OAUTH_OFFICIAL_TWITTER_KEY
     );
 
-    if (!twitterToken) return resBuilder('Something when wrong', 400);
+    if (!twitterToken) return resBuilder('Something went wrong', 400);
 
     const twitterClient = await getTwitterClient(twitterToken);
     if (tokenId) {
@@ -126,7 +126,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
           prevMember.twitterUserId
         );
         console.log('res', { res });
-        if (res.errors) return resBuilder('Something when wrong', 400);
+        if (res.errors) return resBuilder('Something went wrong', 400);
       }
       // else {
       // }
@@ -136,13 +136,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         communityInfo.list,
         user.id
       );
-      if (res.errors) return resBuilder('Something when wrong', 400);
+      if (res.errors) return resBuilder('Something went wrong', 400);
       await ListMembersModel.upsertMember(communityInfo.list, user.id, tokenId);
     }
 
-    return resBuilder('You are in the list', 200);
+    return resBuilder(
+      'Your application has been received, the process may take a while.',
+      200
+    );
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ data: 'Something when wrong' }, { status: 400 });
+    return NextResponse.json({ data: 'Something went wrong' }, { status: 400 });
   }
 }

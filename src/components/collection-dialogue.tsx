@@ -120,12 +120,8 @@ export function CollectionDialogue({
     } else {
       await toast({
         title: 'Uh oh! Something went wrong.',
-        description: data.msg,
-        action: (
-          <ToastAction altText="Try again" onClick={() => setShow(true)}>
-            Try again
-          </ToastAction>
-        ),
+        description: data.msg || 'Please try again later.',
+        variant: 'destructive',
       });
     }
     setLoading(false);
@@ -304,7 +300,7 @@ export function CollectionDialogue({
             </Button>
             {!loading ? (
               <Button onClick={handleJoin} className="w-full">
-                Join
+                Register
               </Button>
             ) : (
               <ButtonLoading />

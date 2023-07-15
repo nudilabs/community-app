@@ -9,6 +9,7 @@ type RootLayoutProps = {
 };
 
 import { Metadata } from 'next';
+import { Toaster } from '@/components/ui/toaster';
 
 export const metadata: Metadata = {
   title: {
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 <NavBar />
                 {children}
                 <Footer />
+                <Toaster />
               </div>
             </ClientLayout>
           </ThemeProvider>
