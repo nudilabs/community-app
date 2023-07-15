@@ -31,6 +31,7 @@ import { FloorPrice } from '@/types/alchemy';
 import { Skeleton } from './skeleton';
 import { toast } from './ui/use-toast';
 import { ToastAction } from './ui/toast';
+import { ButtonLoading } from './button-loading';
 
 export function CollectionDialogue({
   community,
@@ -42,6 +43,7 @@ export function CollectionDialogue({
   const [floorPrice, setFloorPrice] = useState<FloorPrice>();
   const [holders, setHolders] = useState<number>();
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -63,7 +65,40 @@ export function CollectionDialogue({
     if (show) getData();
   }, [show]);
 
+  const handleFollowList = () => {
+    const width = 600;
+    const height = 600;
+    const left = window.screen.width / 2 - width / 2;
+    const top = window.screen.height / 2 - height / 2;
+    const options = `location,status,scrollbars,resizable,width=${width},height=${height},left=${left},top=${top}`;
+
+    window.open(
+      `https://twitter.com/i/lists/${community.list}`,
+      'Popup',
+      options
+    );
+  };
+
+  const handleFollowUser = (member: {
+    username: string;
+    name: string;
+    avatar: string;
+  }) => {
+    const width = 600;
+    const height = 600;
+    const left = window.screen.width / 2 - width / 2;
+    const top = window.screen.height / 2 - height / 2;
+    const options = `location,status,scrollbars,resizable,width=${width},height=${height},left=${left},top=${top}`;
+
+    window.open(
+      `https://twitter.com/intent/follow?screen_name=${member.username}`,
+      'Popup',
+      options
+    );
+  };
+
   const handleJoin = async () => {
+    setLoading(true);
     const res = await fetch('/api/lists/join', {
       method: 'POST',
       body: JSON.stringify({
@@ -75,6 +110,11 @@ export function CollectionDialogue({
       await toast({
         title: 'Success',
         description: data.msg,
+        action: (
+          <ToastAction altText="Follow list" onClick={handleFollowList}>
+            Follow list
+          </ToastAction>
+        ),
       });
       setShow(false);
     } else {
@@ -88,6 +128,7 @@ export function CollectionDialogue({
         ),
       });
     }
+    setLoading(false);
   };
 
   return (
@@ -198,19 +239,7 @@ export function CollectionDialogue({
                       <Button
                         size="xs"
                         variant="outline"
-                        onClick={() => {
-                          const width = 600;
-                          const height = 600;
-                          const left = window.screen.width / 2 - width / 2;
-                          const top = window.screen.height / 2 - height / 2;
-                          const options = `location,status,scrollbars,resizable,width=${width},height=${height},left=${left},top=${top}`;
-
-                          window.open(
-                            `https://twitter.com/intent/follow?screen_name=${member.username}`,
-                            'Popup',
-                            options
-                          );
-                        }}
+                        onClick={() => handleFollowUser(member)}
                       >
                         Follow
                       </Button>
@@ -270,28 +299,16 @@ export function CollectionDialogue({
         </div>
         <DialogFooter>
           <div className="flex gap-2 w-full">
-            <Button
-              onClick={() => {
-                const width = 600;
-                const height = 600;
-                const left = window.screen.width / 2 - width / 2;
-                const top = window.screen.height / 2 - height / 2;
-                const options = `location,status,scrollbars,resizable,width=${width},height=${height},left=${left},top=${top}`;
-
-                window.open(
-                  `https://twitter.com/i/lists/${community.list}`,
-                  'Popup',
-                  options
-                );
-              }}
-              variant="outline"
-            >
+            <Button onClick={handleFollowList} variant="outline">
               Follow
             </Button>
-
-            <Button onClick={handleJoin} className="w-full">
-              Join
-            </Button>
+            {!loading ? (
+              <Button onClick={handleJoin} className="w-full">
+                Join
+              </Button>
+            ) : (
+              <ButtonLoading />
+            )}
           </div>
         </DialogFooter>
       </DialogContent>
