@@ -17,6 +17,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { useModal } from 'connectkit';
 import { useAccount } from 'wagmi';
 import { truncatedAddr } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 export function UserNav() {
   const [verifyWalletsOpen, setVerifyWalletsOpen] = useState(false);
@@ -85,6 +86,30 @@ export function UserNav() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
+            {!bindWallet && (
+              <DropdownMenuItem
+                onClick={() => {
+                  setVerifyWalletsOpen(true);
+                }}
+              >
+                <motion.div
+                  className="flex items-center"
+                  animate={{
+                    x: [0, 20, 0],
+                  }}
+                  transition={{
+                    duration: 1,
+                    ease: 'easeOut',
+                    times: [0, 0.2, 0.5, 0.8, 1],
+                    repeat: Infinity,
+                    repeatDelay: 1,
+                  }}
+                >
+                  <Link2 className="mr-2 h-4 w-4" />
+                  <span>Bind Wallet</span>
+                </motion.div>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem onClick={openProfile}>
               {isConnected ? (
                 <>
@@ -98,9 +123,6 @@ export function UserNav() {
                 </>
               )}
             </DropdownMenuItem>
-            {/* <DropdownMenuItem>
-              <ConnectButton />
-            </DropdownMenuItem> */}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => signOut()}>
