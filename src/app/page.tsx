@@ -1,17 +1,11 @@
 import { CommunityCard } from '@/components/community-card';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
 
-import Spline from '@splinetool/react-spline';
-
-// import { communities } from '@/config/communities';
 import { FeaturedBanner } from '@/components/featured-banner';
-import { CollectionDialogue } from '@/components/collection-dialogue';
 import Link from 'next/link';
 
 import { env } from '@/env.mjs';
-import { useRouter } from 'next/navigation';
 
 import { get } from '@vercel/edge-config';
 import { Community } from '@/types/community';

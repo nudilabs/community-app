@@ -135,7 +135,6 @@ export function CollectionDialogue({
     }
     setLoading(false);
   };
-  console.log('status: ', status);
 
   return (
     <Dialog>
