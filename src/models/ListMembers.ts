@@ -1,15 +1,39 @@
-import { eq, and, sql, isNull, or, gt } from 'drizzle-orm';
+import { eq, desc, and, sql, isNull, or, gt } from 'drizzle-orm';
 import { listMembers } from '@/db/schema';
 // import { NewAccount } from '@/types/DB';
 import { db } from '@/db/';
 import { aw } from 'drizzle-orm/column.d-aa4e525d';
 
-export const getMembersFromList = async (twitterListId: string) => {
+export const getMembersFromList = async (
+  twitterListId: string,
+  limit: number
+) => {
+  const members: any[] = await db
+    .select()
+    .from(listMembers)
+    .where(eq(listMembers.twitterListId, twitterListId))
+    .limit(limit);
+
+  return members;
+};
+
+export const getRecentMembersFromList = async (
+  twitterListId: string,
+  limit: number
+) => {
+  const members: any[] = await db
+    .select()
+    .from(listMembers)
+    .where(eq(listMembers.twitterListId, twitterListId))
+    .orderBy(desc(listMembers.updatedAt))
+    .limit(limit);
+  return members;
+};
+
+export const getMembersCountFromList = async (twitterListId: string) => {
   const members: any[] = await db
     .select({
-      twitterId: listMembers.twitterUserId,
-      tokenId: listMembers.tokenId,
-      updatedAt: listMembers.updatedAt,
+      count: sql<number>`count(twitter_user_id)`,
     })
     .from(listMembers)
     .where(eq(listMembers.twitterListId, twitterListId));

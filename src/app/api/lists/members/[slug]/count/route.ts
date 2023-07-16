@@ -19,12 +19,11 @@ export async function GET(
     return resBuilder('Missing list id', 400);
   }
 
-  const members = await ListMembersModel.getMembersFromList(listId, 6);
-  const countData = await ListMembersModel.getMembersCountFromList(listId);
+  const data = await ListMembersModel.getMembersCountFromList(listId);
 
-  if (!members || members.length === 0) {
-    return resBuilder({ members: [], count: 0 });
+  if (!data) {
+    return resBuilder({ count: 0 });
   }
 
-  return resBuilder({ members, count: countData[0].count });
+  return resBuilder({ count: data[0].count });
 }

@@ -38,7 +38,6 @@ import {
   ArrowLeft,
   ScrollText,
   Search,
-  Filter,
   ListFilterIcon,
 } from 'lucide-react';
 
@@ -90,6 +89,7 @@ export const Icons = {
       />
     </svg>
   ),
+  search: Search,
   none: CircleDashed,
   event: CalendarCheck,
   filter: ListFilterIcon,

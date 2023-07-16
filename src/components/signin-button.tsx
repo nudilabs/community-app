@@ -2,13 +2,12 @@
 import { signIn, useSession } from 'next-auth/react';
 import { Button } from './ui/button';
 import { useState } from 'react';
-import { ButtonLoading } from './button-loading';
 import { Icons } from './icons';
 import { useRouter } from 'next/navigation';
 
 export function Signin() {
   const [loading, setLoading] = useState(false);
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const router = useRouter();
 
   const handleSignin = async () => {

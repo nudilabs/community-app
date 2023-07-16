@@ -22,9 +22,7 @@ export function CommunityCard({
   const [count, setCount] = useState(0);
   useEffect(() => {
     const getCount = async () => {
-      const res = await fetch(
-        `/api/lists/members/${community.list}?countOnly=yes`
-      );
+      const res = await fetch(`/api/lists/members/${community.list}/count`);
       const { count } = await res.json();
       setCount(count);
     };

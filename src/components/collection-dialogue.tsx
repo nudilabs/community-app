@@ -29,7 +29,7 @@ import { formatNumber, getConditionTitleAndValue } from '@/lib/utils';
 
 import { useEffect, useState } from 'react';
 import { FloorPrice } from '@/types/alchemy';
-import { Skeleton } from './skeleton';
+import { Skeleton, SkeletonUser } from './skeleton';
 import { toast } from './ui/use-toast';
 import { ToastAction } from './ui/toast';
 import { ButtonLoading } from './button-loading';
@@ -59,15 +59,13 @@ export function CollectionDialogue({
 
   const [randomMembers, setRandomMembers] = useState<any[]>([]);
   const [recentMembers, setRecentMembers] = useState<any[]>([]);
+  const [showRecentMembers, setShowRecentMembers] = useState(false);
+  const [membersCount, setMembersCount] = useState();
 
   const [verifyWalletsOpen, setVerifyWalletsOpen] = useState(false);
   const { data: session, status } = useSession();
   const { address, isConnected } = useAccount();
-  const { openProfile } = useModal({
-    onConnect: () => {
-      setVerifyWalletsOpen(true);
-    },
-  });
+  const { openProfile } = useModal();
   const [bindWallet, setBindWallet] = useState('');
 
   useEffect(() => {
@@ -75,6 +73,39 @@ export function CollectionDialogue({
       setBindWallet(session?.user?.bindWallet);
     }
   }, [status]);
+
+  useEffect(() => {
+    const getRecentMembers = async () => {
+      const res = await fetch(`/api/lists/members/${community.list}/recent`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await res.json();
+
+      const memberPromises = data.members.map(async (member: any) => {
+        const res = await fetch(
+          `/api/nft/${community.contractAddr}/${member.tokenId}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        const token = await res.json();
+        return { ...member, media: token.media };
+      });
+      const members = await Promise.all(memberPromises);
+      await setRecentMembers(members);
+    };
+
+    if (showRecentMembers) {
+      getRecentMembers();
+    }
+  }, [showRecentMembers]);
 
   useEffect(() => {
     const getContractMetadata = async () => {
@@ -91,25 +122,17 @@ export function CollectionDialogue({
       const data = await res.json();
       setFloorPrice(data.floorPrice);
       setHolders(data.holders);
-      console.log('useEffect', data);
     };
     const getMembers = async () => {
-      const getRandomMembers = async (members: any[], count: number) => {
-        const shuffledMembers = members.sort(() => Math.random() - 0.5);
-        return shuffledMembers.slice(0, count);
-      };
       const res = await fetch(`/api/lists/members/${community.list}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      console.log('res: ', res);
+
       const data = await res.json();
-      console.log('data: ', data);
-      const randMembers = await getRandomMembers(data.members, 6);
-      console.log('randMembers: ', randMembers);
-      const memberPromises = randMembers.map(async (member: any) => {
+      const memberPromises = data.members.map(async (member: any) => {
         const res = await fetch(
           `/api/nft/${community.contractAddr}/${member.tokenId}`,
           {
@@ -120,16 +143,26 @@ export function CollectionDialogue({
           }
         );
         const token = await res.json();
-        return { ...member, media: token.media };
+        return { ...member, media: token.media, tokenId: token.tokenId };
       });
       const members = await Promise.all(memberPromises);
-      console.log('members: ', members);
       await setRandomMembers(members);
+    };
+    const getMembersCount = async () => {
+      const res = await fetch(`/api/lists/members/${community.list}/count`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await res.json();
+      setMembersCount(data.count);
     };
 
     if (show) {
       getContractMetadata();
       getMembers();
+      getMembersCount();
     }
   }, [show]);
 
@@ -148,8 +181,7 @@ export function CollectionDialogue({
   };
 
   const handleFollowUser = (member: {
-    username: string;
-    name: string;
+    twitterName: string;
     avatar: string;
   }) => {
     const width = 600;
@@ -159,7 +191,10 @@ export function CollectionDialogue({
     const options = `location,status,scrollbars,resizable,width=${width},height=${height},left=${left},top=${top}`;
 
     window.open(
-      `https://twitter.com/intent/follow?screen_name=${member.username}`,
+      `https://twitter.com/search?q=${member.twitterName.replaceAll(
+        ' ',
+        '%20'
+      )}&src=typed_query&f=user`,
       'Popup',
       options
     );
@@ -202,6 +237,17 @@ export function CollectionDialogue({
     setLoading(false);
   };
 
+  const renderSkeletonUsers = () => {
+    const skeletonCount = 6;
+    const skeletons = [];
+
+    for (let i = 0; i < skeletonCount; i++) {
+      skeletons.push(<SkeletonUser key={i} />);
+    }
+
+    return skeletons;
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild onClick={() => setShow(true)}>
@@ -229,7 +275,7 @@ export function CollectionDialogue({
                 <div className="px-4 py-2 flex flex-col">
                   <div className="flex items-center">
                     <Icons.user className="mr-1 h-3 w-3" />
-                    2k
+                    {membersCount ? formatNumber(membersCount) : <Skeleton />}
                   </div>
                   <div className="text-xs text-gray-500">Members</div>
                 </div>
@@ -295,44 +341,120 @@ export function CollectionDialogue({
                 <Label htmlFor="necessary" className="flex flex-col space-y-1">
                   <span>Show Recently Joined Members</span>
                 </Label>
-                <Switch id="necessary" />
+                <Switch
+                  id="necessary"
+                  onCheckedChange={() =>
+                    setShowRecentMembers(!showRecentMembers)
+                  }
+                />
               </div>
-              <div className="grid grid-cols-2 gap-4 mt-6">
-                {randomMembers.map((member, index) => (
-                  <div
-                    className="flex col-span-2 lg:col-span-1 gap-2 items-center justify-between"
-                    key={index}
-                  >
-                    <div className="flex gap-2 items-center">
-                      <Button
-                        variant="ghost"
-                        className="relative h-10 w-10 rounded-full"
-                      >
-                        <Avatar className="h-10 w-10">
-                          <AvatarImage
-                            src={member?.media[0]?.thumbnail}
-                            alt={`@${member.twitterId}`}
-                          />
-                          <AvatarFallback>3M</AvatarFallback>
-                        </Avatar>
-                      </Button>
-                      <div className="flex flex-col">
-                        <div>{member.accountInfo.twitterName}</div>
-                        <div className="text-sm text-gray-500">@johndoe</div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <Button
-                        size="xs"
-                        variant="outline"
-                        onClick={() => handleFollowUser(member)}
-                      >
-                        Follow
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              {showRecentMembers ? (
+                <div className="grid grid-cols-2 gap-4 mt-6">
+                  {recentMembers.length > 0 ? (
+                    <>
+                      {recentMembers.map((member, index) => (
+                        <div
+                          className="flex col-span-2 lg:col-span-1 gap-2 items-center justify-between"
+                          key={index}
+                        >
+                          <div className="flex gap-2 items-center">
+                            <Button
+                              variant="ghost"
+                              className="relative h-10 w-10 rounded-full"
+                            >
+                              <Avatar className="h-10 w-10">
+                                <AvatarImage
+                                  src={member?.media[0]?.thumbnail}
+                                  alt={`@${member.twitterId}`}
+                                />
+                                <AvatarFallback>3M</AvatarFallback>
+                              </Avatar>
+                            </Button>
+                            <div className="flex flex-col">
+                              <div>{member.twitterName}</div>
+                              <div className="text-sm text-gray-500">
+                                #{member.tokenId}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex flex-col">
+                            <Button
+                              size="xs"
+                              variant="outline"
+                              onClick={() => handleFollowUser(member)}
+                            >
+                              Find
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {membersCount == 0 ? (
+                        <div className="text-gray-500 text-sm">
+                          No members yet
+                        </div>
+                      ) : (
+                        renderSkeletonUsers()
+                      )}
+                    </>
+                  )}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4 mt-6">
+                  {randomMembers.length > 0 ? (
+                    <>
+                      {randomMembers.map((member, index) => (
+                        <div
+                          className="flex col-span-2 lg:col-span-1 gap-2 items-center justify-between"
+                          key={index}
+                        >
+                          <div className="flex gap-2 items-center">
+                            <Button
+                              variant="ghost"
+                              className="relative h-10 w-10 rounded-full"
+                            >
+                              <Avatar className="h-10 w-10">
+                                <AvatarImage
+                                  src={member?.media[0]?.thumbnail}
+                                  alt={`@${member.twitterId}`}
+                                />
+                                <AvatarFallback>3M</AvatarFallback>
+                              </Avatar>
+                            </Button>
+                            <div className="flex flex-col">
+                              <div>{member.twitterName}</div>
+                              <div className="text-sm text-gray-500">
+                                #{member.tokenId}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex flex-col">
+                            <Button
+                              size="xs"
+                              variant="outline"
+                              onClick={() => handleFollowUser(member)}
+                            >
+                              Find
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      {membersCount == 0 ? (
+                        <div className="text-gray-500 text-sm">
+                          No members yet
+                        </div>
+                      ) : (
+                        renderSkeletonUsers()
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
             </TabsContent>
             <TabsContent
               value="conditions"
@@ -479,42 +601,3 @@ const RegisterProcess = ({
       );
   }
 };
-
-const membersMock = [
-  {
-    username: 'auksorn_',
-    name: 'auksorn 👹',
-    avatar:
-      'https://pbs.twimg.com/profile_images/1573243420667060225/6eVWkn7r_400x400.jpg',
-  },
-  {
-    username: 'auksorn_',
-    name: 'auksorn 👹',
-    avatar:
-      'https://pbs.twimg.com/profile_images/1573243420667060225/6eVWkn7r_400x400.jpg',
-  },
-  {
-    username: 'auksorn_',
-    name: 'auksorn 👹',
-    avatar:
-      'https://pbs.twimg.com/profile_images/1573243420667060225/6eVWkn7r_400x400.jpg',
-  },
-  {
-    username: 'auksorn_',
-    name: 'auksorn 👹',
-    avatar:
-      'https://pbs.twimg.com/profile_images/1573243420667060225/6eVWkn7r_400x400.jpg',
-  },
-  {
-    username: 'auksorn_',
-    name: 'auksorn 👹',
-    avatar:
-      'https://pbs.twimg.com/profile_images/1573243420667060225/6eVWkn7r_400x400.jpg',
-  },
-  {
-    username: 'auksorn_',
-    name: 'auksorn 👹',
-    avatar:
-      'https://pbs.twimg.com/profile_images/1573243420667060225/6eVWkn7r_400x400.jpg',
-  },
-];

@@ -49,7 +49,7 @@ export const FeaturedBanner = () => {
   const [hidden, setHidden] = useState(false);
 
   function update() {
-    if (opacity.get() < 0.01) {
+    if (opacity.get() < 0.05) {
       setHidden(true);
     } else {
       setHidden(false);
