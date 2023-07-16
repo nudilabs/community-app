@@ -57,6 +57,9 @@ export function CollectionDialogue({
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  const [randomMembers, setRandomMembers] = useState<any[]>([]);
+  const [recentMembers, setRecentMembers] = useState<any[]>([]);
+
   const [verifyWalletsOpen, setVerifyWalletsOpen] = useState(false);
   const { data: session, status } = useSession();
   const { address, isConnected } = useAccount();
@@ -74,7 +77,7 @@ export function CollectionDialogue({
   }, [status]);
 
   useEffect(() => {
-    const getData = async () => {
+    const getContractMetadata = async () => {
       const res = await fetch(
         `/api/nft/contractMetadata?address=${community.contractAddr}`,
         {
@@ -90,7 +93,44 @@ export function CollectionDialogue({
       setHolders(data.holders);
       console.log('useEffect', data);
     };
-    if (show) getData();
+    const getMembers = async () => {
+      const getRandomMembers = async (members: any[], count: number) => {
+        const shuffledMembers = members.sort(() => Math.random() - 0.5);
+        return shuffledMembers.slice(0, count);
+      };
+      const res = await fetch(`/api/lists/members/${community.list}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('res: ', res);
+      const data = await res.json();
+      console.log('data: ', data);
+      const randMembers = await getRandomMembers(data.members, 6);
+      console.log('randMembers: ', randMembers);
+      const memberPromises = randMembers.map(async (member: any) => {
+        const res = await fetch(
+          `/api/nft/${community.contractAddr}/${member.tokenId}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+        const token = await res.json();
+        return { ...member, media: token.media };
+      });
+      const members = await Promise.all(memberPromises);
+      console.log('members: ', members);
+      await setRandomMembers(members);
+    };
+
+    if (show) {
+      getContractMetadata();
+      getMembers();
+    }
   }, [show]);
 
   const handleFollowList = () => {
@@ -258,7 +298,7 @@ export function CollectionDialogue({
                 <Switch id="necessary" />
               </div>
               <div className="grid grid-cols-2 gap-4 mt-6">
-                {membersMock.map((member, index) => (
+                {randomMembers.map((member, index) => (
                   <div
                     className="flex col-span-2 lg:col-span-1 gap-2 items-center justify-between"
                     key={index}
@@ -270,17 +310,15 @@ export function CollectionDialogue({
                       >
                         <Avatar className="h-10 w-10">
                           <AvatarImage
-                            src={member.avatar}
-                            alt={`@${member.username}`}
+                            src={member?.media[0]?.thumbnail}
+                            alt={`@${member.twitterId}`}
                           />
-                          <AvatarFallback>RS</AvatarFallback>
+                          <AvatarFallback>3M</AvatarFallback>
                         </Avatar>
                       </Button>
                       <div className="flex flex-col">
-                        <div>{member.name}</div>
-                        <div className="text-sm text-gray-500">
-                          @{member.username}
-                        </div>
+                        <div>{member.accountInfo.twitterName}</div>
+                        <div className="text-sm text-gray-500">@johndoe</div>
                       </div>
                     </div>
                     <div className="flex flex-col">

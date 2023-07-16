@@ -4,6 +4,19 @@ import { listMembers } from '@/db/schema';
 import { db } from '@/db/';
 import { aw } from 'drizzle-orm/column.d-aa4e525d';
 
+export const getMembersFromList = async (twitterListId: string) => {
+  const members: any[] = await db
+    .select({
+      twitterId: listMembers.twitterUserId,
+      tokenId: listMembers.tokenId,
+      updatedAt: listMembers.updatedAt,
+    })
+    .from(listMembers)
+    .where(eq(listMembers.twitterListId, twitterListId));
+
+  return members;
+};
+
 export const getMemberInfo = async (
   twitterListId: string,
   twitterId: string
