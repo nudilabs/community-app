@@ -1,6 +1,6 @@
 import { BalanceType, TraitType, HoldDurationType } from '@/types/community';
 import { Alchemy, Network } from 'alchemy-sdk';
-import { fromHex, formatEther, hexToNumber } from 'viem';
+import { fromHex, formatEther, hexToBigInt } from 'viem';
 import { balanceValid } from '@/types/Validate';
 import { env } from '@/env.mjs';
 
@@ -28,11 +28,10 @@ const balanceValidator = async (
           contractAddresses: [conditions.contractAddr],
         });
         const tokenBal = nftBalance.totalCount;
+
         return {
           pass: tokenBal >= conditions.amount,
-          tokenId: hexToNumber(
-            `0x${nftBalance.ownedNfts[0].tokenId}`
-          ).toString(),
+          tokenId: nftBalance.ownedNfts[0].tokenId,
         };
       case 'ERC1155':
         //not supported yet

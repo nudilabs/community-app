@@ -40,6 +40,7 @@ export const getMemberInfoByTokenId = async (
 export const upsertMember = async (
   twitterListId: string,
   twitterId: string,
+  twitterName: string,
   tokenId: string
 ) => {
   await db
@@ -47,11 +48,13 @@ export const upsertMember = async (
     .values({
       twitterListId,
       twitterUserId: twitterId,
+      twitterName,
       tokenId,
     })
     .onDuplicateKeyUpdate({
       set: {
         twitterUserId: twitterId,
+        twitterName: twitterName,
         updatedAt: sql`NOW()`,
       },
     });
