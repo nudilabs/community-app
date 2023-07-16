@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Icons } from './icons';
@@ -6,6 +8,7 @@ import { FilterDialogue } from './filter-dialogue';
 import { Community } from '@/types/community';
 import { CollectionDialogue } from './collection-dialogue';
 import { ConditionCarousel } from './condition-carousel';
+import { useEffect, useState } from 'react';
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -16,6 +19,18 @@ export function CommunityCard({
 }: CardProps & {
   community: Community;
 }) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    const getCount = async () => {
+      const res = await fetch(
+        `/api/lists/members/${community.list}?countOnly=yes`
+      );
+      const { count } = await res.json();
+      setCount(count);
+    };
+    getCount();
+  }, [community]);
+
   return (
     <Card {...props}>
       <CardContent className="grid gap-4">
@@ -40,7 +55,7 @@ export function CommunityCard({
           <div className="flex gap-2">
             <div className="flex items-center text-sm">
               <Icons.user className="mr-1 h-4 w-4" />
-              6.9k
+              {count}
             </div>
           </div>
         </div>
