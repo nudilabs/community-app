@@ -13,6 +13,8 @@ export async function GET(
   request: Request,
   { params }: { params: { slug: string } }
 ) {
+  const { searchParams } = new URL(request.url);
+  const count = searchParams.get('countOnly');
   const listId = params.slug;
 
   if (!listId) {
@@ -31,6 +33,9 @@ export async function GET(
   });
 
   const membersWithAccountInfo = await Promise.all(accountInfoPromises);
-
+  console.log('count:', count);
+  if (count) {
+    return resBuilder({ count: members.length });
+  }
   return resBuilder({ members: membersWithAccountInfo, count: members.length });
 }
