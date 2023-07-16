@@ -12,7 +12,6 @@ export const accounts = mysqlTable(
   {
     id: serial('id').primaryKey(),
     twitterId: varchar('twitter_id', { length: 255 }).unique(),
-    twitterName: varchar('twitter_name', { length: 255 }),
     address: varchar('address', { length: 42 }),
     createdAt: timestamp('created_at')
       .notNull()
@@ -31,6 +30,7 @@ export const listMembers = mysqlTable(
   {
     twitterListId: varchar('twitter_list_id', { length: 255 }),
     twitterUserId: varchar('twitter_user_id', { length: 255 }),
+    twitterName: varchar('twitter_name', { length: 255 }),
     tokenId: varchar('token_id', { length: 100 }),
     createdAt: timestamp('created_at')
       .notNull()

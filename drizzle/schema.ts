@@ -24,6 +24,7 @@ export const listMembers = mysqlTable(
   {
     twitterListId: bigint('twitter_list_id', { mode: 'number' }).notNull(),
     twitterUserId: bigint('twitter_user_id', { mode: 'number' }).notNull(),
+    twitterName: varchar('twitter_name', { length: 255 }),
     tokenId: varchar('token_id', { length: 100 }),
     joinedAt: timestamp('joined_at', { mode: 'string' }).defaultNow().notNull(),
     leftAt: timestamp('left_at', { mode: 'string' }).defaultNow().notNull(),

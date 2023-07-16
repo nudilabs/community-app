@@ -46,7 +46,7 @@ const getTwitterClient = async (twiiterToken: TwitterTokenResponse) => {
       })
     );
   } else {
-    console.log('twitterClient access token', twiiterToken.access_token);
+    // console.log('twitterClient access token', twiiterToken.access_token);
     twitterClient = new TwitterApi(twiiterToken.access_token);
   }
   return twitterClient;
@@ -137,7 +137,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         user.id
       );
       if (res.errors) return resBuilder('Something went wrong', 400);
-      await ListMembersModel.upsertMember(communityInfo.list, user.id, tokenId);
+      await ListMembersModel.upsertMember(
+        communityInfo.list,
+        user.id,
+        user.name,
+        tokenId
+      );
     }
 
     return resBuilder(
