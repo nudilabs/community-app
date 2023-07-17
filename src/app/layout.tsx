@@ -3,6 +3,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import NavBar from '@/components/nav-bar';
 import { Footer } from '@/components/footer';
 import ClientLayout from './Web3Provider';
+import { Analytics } from '@vercel/analytics/react';
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 {children}
                 <Footer />
                 <Toaster />
+                <Analytics />
               </div>
             </ClientLayout>
           </ThemeProvider>
