@@ -278,7 +278,7 @@ export function CollectionDialogue({
                   <div className="text-xs text-gray-500">Members</div>
                 </div>
               </Card>
-              <Card>
+              <Card className="hidden md:inline-block">
                 <div className="px-4 py-2 flex flex-col">
                   <div className="flex items-center">
                     <Icons.holder className="mr-1 h-3 w-3" />
