@@ -50,8 +50,8 @@ export default function NavBar() {
 
   return (
     <div className="py-8 px-8 lg:px-40 flex items-center">
-      <Link href={'/'}>
-        <div className="flex gap-2 items-center w-full">
+      <Link href={'/'} className="w-full">
+        <div className="flex gap-2 items-center">
           <Icons.logo className="h-8 w-8" />
           <div className="gap-1 md:flex hidden">
             <span className="font-extrabold">3MPOWER</span>
