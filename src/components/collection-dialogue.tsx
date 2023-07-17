@@ -182,6 +182,7 @@ export function CollectionDialogue({
 
   const handleFollowUser = (member: {
     twitterName: string;
+    twitterUserId: string;
     avatar: string;
   }) => {
     const width = 600;
@@ -191,10 +192,7 @@ export function CollectionDialogue({
     const options = `location,status,scrollbars,resizable,width=${width},height=${height},left=${left},top=${top}`;
 
     window.open(
-      `https://twitter.com/search?q=${member.twitterName.replaceAll(
-        ' ',
-        '%20'
-      )}&src=typed_query&f=user`,
+      `https://twitter.com/intent/user?user_id=${member.twitterUserId}`,
       'Popup',
       options
     );
@@ -383,7 +381,7 @@ export function CollectionDialogue({
                               variant="outline"
                               onClick={() => handleFollowUser(member)}
                             >
-                              Find
+                              Follow
                             </Button>
                           </div>
                         </div>
@@ -436,7 +434,7 @@ export function CollectionDialogue({
                               variant="outline"
                               onClick={() => handleFollowUser(member)}
                             >
-                              Find
+                              Follow
                             </Button>
                           </div>
                         </div>
@@ -476,7 +474,7 @@ export function CollectionDialogue({
                       <p className="font-medium leading-none">{title}</p>
                       {condition.type === 'balance' ? (
                         <Link
-                          href={`https://etherscan.io/address/${condition.contractAddr}`}
+                          href={`https://opensea.io/assets/ethereum/${condition.contractAddr}`}
                           target={'_blank'}
                         >
                           <p className="text-sm text-muted-foreground underline">
