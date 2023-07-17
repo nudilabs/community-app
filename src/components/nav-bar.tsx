@@ -30,7 +30,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { Signin } from './signin-button';
 import { useSession } from 'next-auth/react';
 import { SigninNav } from './signin-nav';
 
@@ -48,20 +47,19 @@ export default function NavBar() {
   };
   const { data: session } = useSession();
   const router = useRouter();
-  // const { isLoaded, userId, sessionId, getToken } = useAuth();
 
   return (
     <div className="py-8 px-8 lg:px-40 flex items-center">
-      <div className="flex gap-2 items-center w-full">
-        <Icons.logo className="h-8 w-8" />
-        <Link href={'/'}>
+      <Link href={'/'}>
+        <div className="flex gap-2 items-center w-full">
+          <Icons.logo className="h-8 w-8" />
           <div className="gap-1 md:flex hidden">
             <span className="font-extrabold">3MPOWER</span>
           </div>
-        </Link>
-        <Badge>Beta</Badge>
-      </div>
-      <div className="w-full flex justify-center hidden lg:flex">
+          <Badge>Beta</Badge>
+        </div>
+      </Link>
+      <div className="w-full justify-center hidden lg:flex">
         <NavigationMenu>
           <NavigationMenuList>
             {navItems.map((item, index) => (
@@ -122,13 +120,15 @@ export default function NavBar() {
 }
 
 const MobileNav = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
   const router = useRouter();
   const handleMobileClick = () => {
     router.push('/community');
+    setIsOpen(false);
   };
   return (
-    <Sheet>
-      <SheetTrigger asChild>
+    <Sheet open={isOpen}>
+      <SheetTrigger asChild onClick={() => setIsOpen(!isOpen)}>
         <Button variant="outline" size="icon" className="lg:hidden">
           <Menu className="h-4 w-4" />
         </Button>
@@ -138,7 +138,7 @@ const MobileNav = () => {
           <SheetTitle>
             <div className="flex gap-2 items-center w-full">
               <Icons.logo className="h-8 w-8" />
-              <Link href={'/'}>
+              <Link href={'/'} onClick={() => setIsOpen(false)}>
                 <div className="gap-1 flex">
                   <span className="font-extrabold">3MPOWER</span>
                 </div>
