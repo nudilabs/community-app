@@ -61,7 +61,7 @@ export const FeaturedBanner = () => {
   });
 
   return (
-    <div className="flex justify-center items-center p-2 md:p-0 w-full md:w-[400px] fixed bottom-0 right-0 md:bottom-6 md:right-8">
+    <div className="flex justify-center items-center p-2 md:p-0 w-full md:w-[400px] fixed bottom-0 right-0 md:bottom-6 md:right-8 z-50">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
