@@ -67,10 +67,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const token = await getToken({ req, secret: env.NEXTAUTH_SECRET });
     // console.log('token', token);
-    if (!token) return NextResponse.redirect(getBaseUrl() + '/signin');
+    if (!token) {
+      const loginUrl = new URL('/signin', req.url);
+      loginUrl.searchParams.set('from', req.nextUrl.pathname);
+      return NextResponse.redirect(loginUrl);
+    }
     const { user, expires_at, access_token } = token;
-    if (Number(expires_at) * 1000 < Date.now())
-      return NextResponse.redirect(getBaseUrl() + '/signin');
+    if (Number(expires_at) * 1000 < Date.now()) {
+      const loginUrl = new URL('/signin', req.url);
+      loginUrl.searchParams.set('from', req.nextUrl.pathname);
+      return NextResponse.redirect(loginUrl);
+    }
 
     const account = await AccountsModel.getAccountInfo(user.id);
 
