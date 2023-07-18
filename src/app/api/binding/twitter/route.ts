@@ -15,7 +15,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   // console.log('POST bilding twitter');
   try {
     const token = await getToken({ req, secret: env.NEXTAUTH_SECRET });
-    if (!token) return NextResponse.redirect('/sign-in');
+    if (!token) return NextResponse.redirect('/signin');
     const { user } = token;
     const body = await req.json();
     const { signature } = schema.parse(body);
