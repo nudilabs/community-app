@@ -43,6 +43,7 @@ import { motion } from 'framer-motion';
 import { useAccount } from 'wagmi';
 import { useModal } from 'connectkit';
 import { VerifyWalletsDialogue } from './verify-wallets-dialogue';
+import { EventsBanner } from './events-banner';
 
 export function CollectionDialogue({
   community,
@@ -240,7 +241,11 @@ export function CollectionDialogue({
     const skeletons = [];
 
     for (let i = 0; i < skeletonCount; i++) {
-      skeletons.push(<SkeletonUser key={i} />);
+      skeletons.push(
+        <div className="col-span-2 lg:col-span-1 gap-2">
+          <SkeletonUser key={i} />
+        </div>
+      );
     }
 
     return skeletons;
@@ -496,42 +501,7 @@ export function CollectionDialogue({
               <div className="grid grid-cols-2 gap-4">
                 {community.events.map((event, index) => (
                   <div className="col-span-2" key={index}>
-                    <Card className="w-full bg-gradient-to-b from-slate-950 to-slate-900 border-slate-900 rounded-lg overflow-hidden">
-                      <div className="flex gap-2">
-                        <div>
-                          <Image
-                            src="https://i.imgur.com/8IZw7Md.png"
-                            width={110}
-                            height={110}
-                            alt="0n1force"
-                          />
-                        </div>
-                        <div className="flex p-4 items-center gap-4 justify-between w-full">
-                          <div className="flex flex-col gap-2">
-                            <span className="text-xs text-gray-400">
-                              {`${event.date.from} - ${event.date.to}`}
-                            </span>
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger>
-                                  <h3 className="text-2xl font-semibold">
-                                    {event.title.slice(0, 14) + '...'}
-                                  </h3>
-                                </TooltipTrigger>
-                                <TooltipContent>{event.title}</TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </div>
-
-                          <Link href="" target="_blank">
-                            <Button>
-                              View
-                              <Icons.arrowRight className="w-4 h-4 ml-2" />
-                            </Button>
-                          </Link>
-                        </div>
-                      </div>
-                    </Card>
+                    <EventsBanner event={event} community={community} />
                   </div>
                 ))}
               </div>

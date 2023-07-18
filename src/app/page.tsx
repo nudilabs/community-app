@@ -17,7 +17,7 @@ import ShowCase from '@/components/showcase';
 export default async function Home() {
   const communities: Community[] = (await get('communities')) || [];
   return (
-    <>
+    <div>
       <div
         className="h-screen justify-center items-center grid grid-cols-12 gap-4 md:px-40 px-8"
         style={{ height: 'calc(100vh - 104px)' }}
@@ -121,6 +121,6 @@ export default async function Home() {
         </div>
       </div>
       <FeaturedBanner />
-    </>
+    </div>
   );
 }
