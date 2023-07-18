@@ -10,7 +10,6 @@ import { Redis } from '@upstash/redis';
 import * as AccountsModel from '@/models/Accounts';
 import * as ListMembersModel from '@/models/ListMembers';
 import * as z from 'zod';
-import { getBaseUrl } from '@/lib/utils';
 
 // export const runtime = 'edge';
 
@@ -68,15 +67,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const token = await getToken({ req, secret: env.NEXTAUTH_SECRET });
     // console.log('token', token);
     if (!token) {
-      const loginUrl = new URL('/signin', req.url);
-      loginUrl.searchParams.set('from', req.nextUrl.pathname);
-      return NextResponse.redirect(loginUrl);
+      return NextResponse.redirect(new URL('/signin', req.url));
     }
+
     const { user, expires_at, access_token } = token;
     if (Number(expires_at) * 1000 < Date.now()) {
-      const loginUrl = new URL('/signin', req.url);
-      loginUrl.searchParams.set('from', req.nextUrl.pathname);
-      return NextResponse.redirect(loginUrl);
+      return NextResponse.redirect(new URL('/signin', req.url));
     }
 
     const account = await AccountsModel.getAccountInfo(user.id);

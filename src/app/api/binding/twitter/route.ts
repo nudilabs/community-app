@@ -4,7 +4,6 @@ import { getToken } from 'next-auth/jwt';
 import * as AccountsModel from '@/models/Accounts';
 import { env } from '@/env.mjs';
 import * as z from 'zod';
-import { getBaseUrl } from '@/lib/utils';
 
 const schema = z.object({
   signature: z.string(),
@@ -17,9 +16,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const token = await getToken({ req, secret: env.NEXTAUTH_SECRET });
     if (!token) {
-      const loginUrl = new URL('/signin', req.url);
-      loginUrl.searchParams.set('from', req.nextUrl.pathname);
-      return NextResponse.redirect(loginUrl);
+      return NextResponse.redirect(new URL('/signin', req.url));
     }
     const { user } = token;
     const body = await req.json();
