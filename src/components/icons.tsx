@@ -4,6 +4,7 @@ import {
   Coins,
   Diamond,
   Gem,
+  History,
   ListChecks,
 } from 'lucide-react';
 import {
@@ -139,6 +140,7 @@ export const Icons = {
       />
     </svg>
   ),
+  history: History,
   conditions: ListChecks,
   holder: Gem,
   quest: ScrollText,

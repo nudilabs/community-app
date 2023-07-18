@@ -26,17 +26,37 @@ import { Community } from '@/types/community';
 
 export function FilterDialogue({ community }: { community: Community }) {
   const [searchUrl, setSearchUrl] = useState('');
-  const [event, setEvent] = useState('none');
   const [sort, setSort] = useState(false);
 
   const today = new Date();
   const [date, setDate] = useState<DateRange | undefined>({
-    from: today,
-    to: addDays(today, 1),
+    from: addDays(today, -7),
+    to: today,
   });
 
-  const handleEventChange = (event: string) => {
-    setEvent(event);
+  const handleSortChange = (event: boolean) => {
+    setSort(event);
+  };
+
+  const handleToday = () => {
+    setDate({
+      from: today,
+      to: addDays(today, 1),
+    });
+  };
+
+  const handleYesterday = () => {
+    setDate({
+      from: addDays(today, -1),
+      to: today,
+    });
+  };
+
+  const handleWeek = () => {
+    setDate({
+      from: addDays(today, -7),
+      to: today,
+    });
   };
 
   const handleDateChange = (event: string) => {
@@ -45,53 +65,26 @@ export function FilterDialogue({ community }: { community: Community }) {
     } else if (event === 'yesterday') {
       handleYesterday();
     } else {
-      setDate(undefined);
+      handleWeek();
     }
   };
 
-  const handleSortChange = (event: boolean) => {
-    setSort(event);
-  };
-
-  const handleToday = () => {
-    setDate({
-      from: addDays(today, 0),
-      to: addDays(today, 1),
-    });
-  };
-
-  const handleYesterday = () => {
-    setDate({
-      from: addDays(today, -1),
-      to: addDays(today, 0),
-    });
-  };
-
   useEffect(() => {
-    const selectedEvent = community?.events?.find((e) => e.id === event);
-
-    const hashtags =
-      selectedEvent?.hashtags.join('%20').replace('#', '%23') || '';
-
-    const sorted = sort ? '' : '&f=live';
+    const sorted = sort ? '&f=live' : '';
 
     const since = date?.from ? format(date.from, 'yyyy-MM-dd') : '';
     const until = date?.to ? format(date.to, 'yyyy-MM-dd') : '';
-    const dates = selectedEvent
-      ? `since%3A${selectedEvent.date.from}%20until%3A${selectedEvent.date.to}`
-      : date
-      ? `since%3A${since}%20until%3A${until}`
-      : '';
+    const dates = `since%3A${since}%20until%3A${until}`;
 
-    const url = `https://twitter.com/search?q=list%3A${community.list}%20${hashtags}%20-filter%3Aretweets%20-filter%3Areplies%20${dates}&src=typed_query${sorted}`;
+    const url = `https://twitter.com/search?q=list%3A${community.list}%20-filter%3Aretweets%20-filter%3Areplies%20${dates}&src=typed_query${sorted}`;
     setSearchUrl(url);
-  }, [event, date, sort]);
+  }, [date, sort]);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button size="icon" variant="ghost">
-          <Icons.filter className="w-4 h-4" />
+          <Icons.history className="w-4 h-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -104,16 +97,16 @@ export function FilterDialogue({ community }: { community: Community }) {
             <Label htmlFor="area">Date</Label>
 
             <RadioGroup
-              defaultValue="all"
+              defaultValue="week"
               className="grid grid-cols-3 gap-4"
-              onValueChange={handleDateChange}
+              onValueChange={(value) => handleDateChange(value)}
             >
               <Label
-                htmlFor="all"
+                htmlFor="week"
                 className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-primary"
               >
-                <RadioGroupItem value="all" id="all" className="sr-only" />
-                All
+                <RadioGroupItem value="week" id="week" className="sr-only" />
+                Week
               </Label>
               <Label
                 htmlFor="today"
@@ -137,9 +130,9 @@ export function FilterDialogue({ community }: { community: Community }) {
           </div>
           <div className="flex items-center justify-between space-x-2">
             <Label htmlFor="necessary" className="flex flex-col space-y-1">
-              <span>Top Tweets</span>
+              <span>Recent Tweets</span>
               <span className="font-normal leading-snug text-muted-foreground">
-                Sort by top tweets to see the most relevant tweets first
+                Sort by recent tweets to see what’s happening now
               </span>
             </Label>
             <Switch id="necessary" onCheckedChange={handleSortChange} />
