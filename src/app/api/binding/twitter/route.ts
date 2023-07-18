@@ -4,6 +4,7 @@ import { getToken } from 'next-auth/jwt';
 import * as AccountsModel from '@/models/Accounts';
 import { env } from '@/env.mjs';
 import * as z from 'zod';
+import { getBaseUrl } from '@/lib/utils';
 
 const schema = z.object({
   signature: z.string(),
@@ -15,7 +16,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   // console.log('POST bilding twitter');
   try {
     const token = await getToken({ req, secret: env.NEXTAUTH_SECRET });
-    if (!token) return NextResponse.redirect('/signin');
+    if (!token) return NextResponse.redirect(getBaseUrl() + '/signin');
     const { user } = token;
     const body = await req.json();
     const { signature } = schema.parse(body);
