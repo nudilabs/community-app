@@ -546,7 +546,7 @@ const RegisterProcess = ({
         <>
           {!loading ? (
             <Button onClick={handleJoin} className="w-full">
-              Register
+              Join List
             </Button>
           ) : (
             <ButtonLoading />
@@ -560,7 +560,7 @@ const RegisterProcess = ({
         <>
           {!loading ? (
             <Button onClick={handleJoin} className="w-full">
-              Register
+              Join List
             </Button>
           ) : (
             <ButtonLoading />
