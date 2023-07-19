@@ -34,6 +34,23 @@ export const getQueue = async (
   return queue[0];
 };
 
+export const getDequeued = async (
+  twitterListId: string,
+  twitterUserId: string
+) => {
+  const queue = await db
+    .select()
+    .from(joinQueue)
+    .where(
+      and(
+        eq(joinQueue.twitterListId, twitterListId),
+        eq(joinQueue.twitterUserId, twitterUserId),
+        eq(joinQueue.isEnqueued, true)
+      )
+    );
+  return queue[0];
+};
+
 export const getQueueSize = async () => {
   const queue = await db
     .select({

@@ -17,14 +17,8 @@ import { Icons } from './icons';
 import { Community } from '@/types/community';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Card } from './ui/card';
-import Image from 'next/image';
+
 import Link from 'next/link';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from './ui/tooltip';
 import { formatNumber, getConditionTitleAndValue } from '@/lib/utils';
 
 import { useEffect, useState } from 'react';
@@ -35,7 +29,7 @@ import { ToastAction } from './ui/toast';
 import { ButtonLoading } from './button-loading';
 import { useSession } from 'next-auth/react';
 import { SigninNav } from './signin-nav';
-import { StepperH } from './stepper';
+
 import { Label } from './ui/label';
 import { Switch } from './ui/switch';
 
@@ -56,7 +50,9 @@ export function CollectionDialogue({
   const [holders, setHolders] = useState<number>();
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState<
+    'not-joined' | 'joined' | 'processing'
+  >('not-joined');
 
   const [randomMembers, setRandomMembers] = useState<any[]>([]);
   const [recentMembers, setRecentMembers] = useState<any[]>([]);
@@ -68,6 +64,39 @@ export function CollectionDialogue({
   const { address, isConnected } = useAccount();
   const { openProfile } = useModal();
   const [bindWallet, setBindWallet] = useState('');
+
+  useEffect(() => {
+    const getQueue = async () => {
+      const res = await fetch(
+        `/api/lists/members/${community.list}/${session?.user.id}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      const data = await res.json();
+
+      if (!data.member) {
+        const res = await fetch(`/api/lists/queue/${community.list}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        const data = await res.json();
+        if (data.queue) {
+          setProgress('processing');
+        } else {
+          setProgress('not-joined');
+        }
+      } else {
+        setProgress('joined');
+      }
+    };
+    getQueue();
+  }, []);
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -537,11 +566,11 @@ const RegisterProcess = ({
   handleJoin,
 }: {
   loading: boolean;
-  progress: number;
+  progress: 'not-joined' | 'joined' | 'processing';
   handleJoin: () => void;
 }) => {
   switch (progress) {
-    case 0:
+    case 'not-joined':
       return (
         <>
           {!loading ? (
@@ -553,19 +582,24 @@ const RegisterProcess = ({
           )}
         </>
       );
-    case 1:
-      return <StepperH />;
+    case 'joined':
+      return (
+        <Button
+          onClick={handleJoin}
+          className="w-full"
+          variant="outline"
+          disabled
+        >
+          Joined
+        </Button>
+      );
+    case 'processing':
+      return (
+        <Button onClick={handleJoin} className="w-full" disabled>
+          Processing
+        </Button>
+      );
     default:
-      return (
-        <>
-          {!loading ? (
-            <Button onClick={handleJoin} className="w-full">
-              Join List
-            </Button>
-          ) : (
-            <ButtonLoading />
-          )}
-        </>
-      );
+      return null;
   }
 };

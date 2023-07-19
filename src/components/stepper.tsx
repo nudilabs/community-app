@@ -96,15 +96,15 @@ export const StepperH = () => {
         >
           <path
             stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="m7 9 4-4-4-4M1 9l4-4-4-4"
           />
         </svg>
       </li>
-      <li className="flex items-center">
-        <span className="flex items-center justify-center w-5 h-5 mr-2 text-xs border border-gray-500 rounded-full shrink-0 dark:border-gray-400">
+      <li className="flex items-center text-cyan-500">
+        <span className="flex items-center justify-center w-5 h-5 mr-2 text-xs border border-cyan-500 rounded-full shrink-0">
           2
         </span>
         Processing
@@ -117,9 +117,9 @@ export const StepperH = () => {
         >
           <path
             stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="m7 9 4-4-4-4M1 9l4-4-4-4"
           />
         </svg>
