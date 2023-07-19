@@ -37,7 +37,6 @@ export const getTwitterClient = async () => {
       })
     );
   } else {
-    // console.log('twitterClient access token', twiiterToken.access_token);
     twitterClient = new TwitterApi(twitterToken.access_token);
   }
   return twitterClient;

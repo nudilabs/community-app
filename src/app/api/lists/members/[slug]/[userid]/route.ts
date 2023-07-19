@@ -15,16 +15,12 @@ export async function GET(
 ) {
   const listId = params.slug;
   const userId = params.userid;
-  console.log('list id: ', listId);
-  console.log('user id: ', userId);
 
   if (!listId || !userId) {
     return resBuilder('Missing list id or user id', 400);
   }
 
   const member = await ListMembersModel.getMemberInfo(listId, userId);
-
-  console.log('member: ', member);
 
   if (!member) {
     return resBuilder('User not found', 404);

@@ -23,7 +23,6 @@ const joinWebhook = async (
 
     const response = await axios.post(webhookURL, template);
 
-    console.log('Webhook response:', response.data);
     return response.data;
   } catch (error) {
     console.error('Failed to send webhook:', error);
@@ -54,7 +53,6 @@ const errorWebhook = async (
 
     const response = await axios.post(webhookURL, template);
 
-    console.log('Webhook response:', response.data);
     return response.data;
   } catch (error) {
     console.error('Failed to send webhook:', error);

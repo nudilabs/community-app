@@ -12,7 +12,6 @@ const schema = z.object({
 export const runtime = 'edge';
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  // console.log('POST bilding twitter');
   try {
     const token = await getToken({ req, secret: env.NEXTAUTH_SECRET });
     if (!token) {
