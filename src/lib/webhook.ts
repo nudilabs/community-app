@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-export const joinWebhook = async (
+const joinWebhook = async (
   list: string,
   user: { name: string; twitterUserId: string }
 ) => {
@@ -9,10 +9,7 @@ export const joinWebhook = async (
     embeds: [
       {
         color: 5814783,
-        author: {
-          name: `${user.name} has queued for list ${list}`,
-          url: `https://twitter.com/intent/user?user_id=${user.twitterUserId}`,
-        },
+        description: `[${user.name}](https://twitter.com/intent/user?user_id=${user.twitterUserId}) has queued for list [${list}](https://twitter.com/i/lists/${user.twitterUserId})`,
       },
     ],
     username: '3MPOWER Join Queue',
@@ -34,7 +31,7 @@ export const joinWebhook = async (
   }
 };
 
-export const errorWebhook = async (
+const errorWebhook = async (
   list: string,
   user: { name: string; twitterUserId: string }
 ) => {
@@ -43,10 +40,7 @@ export const errorWebhook = async (
     embeds: [
       {
         color: 5814783,
-        author: {
-          name: `🚨 ${user.name} has queued for list ${list} and encountered an error 🚨`,
-          url: `https://twitter.com/intent/user?user_id=${user.twitterUserId}`,
-        },
+        description: `🚨 [${user.name}](https://twitter.com/intent/user?user_id=${user.twitterUserId}) has queued for list [${list}](https://twitter.com/i/lists/${user.twitterUserId}) and encountered an error 🚨`,
       },
     ],
     username: '3MPOWER Join Queue',
