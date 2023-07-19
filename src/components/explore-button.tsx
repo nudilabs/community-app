@@ -17,7 +17,7 @@ export default function ExploreButton() {
       ) : (
         <Link href={'/signin'}>
           <Button className="bg-gradient-to-br from-purple-500 to-cyan-500">
-            Sign in
+            Sign in with Twitter
           </Button>
         </Link>
       )}
