@@ -114,7 +114,7 @@ export default async function Home() {
           </div>
         </div>
       </div>
-      <FeaturedBanner />
+      <FeaturedBanner communities={communities} />
     </div>
   );
 }

@@ -4,14 +4,18 @@ import Link from 'next/link';
 import { Icons } from './icons';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
-import { communities } from '@/config/communities';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import { Community } from '@/types/community';
 
-export const FeaturedBanner = () => {
+export const FeaturedBanner = ({
+  communities,
+}: {
+  communities: Community[];
+}) => {
   const { scrollYProgress, scrollY } = useScroll();
-
+  // TODO: Update to edge config or env variable
   const eventName = '0n1forcesdcc2023';
   const communityName = '0n1force';
   const community = communities.find((c) => c.id === communityName);
