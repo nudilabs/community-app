@@ -6,15 +6,18 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-export default function Sort() {
+export default function Sort({ setSort }: { setSort: (sort: string) => void }) {
+  const handleSortChange = (sort: string) => {
+    setSort(sort);
+  };
+
   return (
-    <Select defaultValue="members-1">
+    <Select defaultValue="top" onValueChange={handleSortChange}>
       <SelectTrigger className="w-[200px]">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="members-1">Members high to low</SelectItem>
-        <SelectItem value="members-2">Members low to high</SelectItem>
+        <SelectItem value="top">Members high to low</SelectItem>
         <SelectItem value="recent">Recently Added</SelectItem>
       </SelectContent>
     </Select>

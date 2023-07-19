@@ -13,6 +13,7 @@ import FeaturedCollections from '@/components/featured-collections';
 import SplineArt from '@/components/spline-art';
 import ScrollDownIndicator from '@/components/scroll-down';
 import ShowCase from '@/components/showcase';
+import TopCommunities from '@/components/top-communities';
 
 export default async function Home() {
   const communities: Community[] = (await get('communities')) || [];
@@ -57,14 +58,7 @@ export default async function Home() {
             </h1>
           </div>
           <div className="grid grid-cols-12 gap-4 mt-8">
-            {communities.slice(0, 4).map((community, index) => (
-              <div
-                className="col-span-12 md:col-span-6 lg:col-span-3"
-                key={index}
-              >
-                <CommunityCard community={community} />
-              </div>
-            ))}
+            <TopCommunities communities={communities} />
           </div>
         </div>
         <div className="flex flex-col">
