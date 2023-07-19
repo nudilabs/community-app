@@ -38,6 +38,7 @@ import { useAccount } from 'wagmi';
 import { useModal } from 'connectkit';
 import { VerifyWalletsDialogue } from './verify-wallets-dialogue';
 import { EventsBanner } from './events-banner';
+import CollectionMenu from './collection-menu';
 
 export function CollectionDialogue({
   community,
@@ -342,15 +343,14 @@ export function CollectionDialogue({
             </div>
           </div>
           <div className="flex justify-between items-center">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 w-3/4">
               <DialogTitle className="text-left">{community.name}</DialogTitle>
               <DialogDescription className="text-left">
-                Join this token-gated list to empower the community.
+                Join this token-gated Twitter list to get added to the custom
+                feed to easier support each other.
               </DialogDescription>
             </div>
-            <Button onClick={handleFollowList} variant="outline">
-              Follow
-            </Button>
+            <CollectionMenu community={community} />
           </div>
         </DialogHeader>
         <div className="flex flex-col gap-8 justify-between">

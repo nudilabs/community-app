@@ -14,6 +14,7 @@ import SplineArt from '@/components/spline-art';
 import ScrollDownIndicator from '@/components/scroll-down';
 import ShowCase from '@/components/showcase';
 import TopCommunities from '@/components/top-communities';
+import ExploreButton from '@/components/explore-button';
 
 export default async function Home() {
   const communities: Community[] = (await get('communities')) || [];
@@ -29,15 +30,12 @@ export default async function Home() {
             EMPOWER YOUR COMMUNITY
           </h1>
           <p className="text-sm md:text-center lg:text-left text-gray-500 mt-4">
-            Connect, engage, and grow your community with 3MPOWER, the modern
-            community relationship management platform for creators.
+            Connect, engage, and grow your community, start by simply signing in
+            with Twitter, connect your wallet and join token-gate Twitter lists
+            below.
           </p>
           <div className="flex justify-center lg:justify-normal mt-8 gap-4">
-            <Link href={'/community'}>
-              <Button className="bg-gradient-to-br from-purple-500 to-cyan-500">
-                Explore
-              </Button>
-            </Link>
+            <ExploreButton />
             <Link href={env.NEXT_PUBLIC_DISCORD_INVITE_URL} target="_blank">
               <Button variant="outline">Contact</Button>
             </Link>
@@ -62,7 +60,7 @@ export default async function Home() {
           </div>
         </div>
         <div className="flex flex-col">
-          <div className="w-full flex flex-col text-center gap-4">
+          <div className="w-full flex flex-col text-center gap-4" id="educate">
             <h1 className="md:text-3xl text-2xl font-extrabold bg-gradient-to-br from-purple-500 to-cyan-500 bg-clip-text text-transparent">
               Connect
             </h1>
