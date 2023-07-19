@@ -18,29 +18,56 @@ export default function Client({ communities }: { communities: Community[] }) {
       const res = await fetch(`/api/lists/top`);
       const { lists } = await res.json();
 
-      const mergedCommunities = lists.map((list: any) => {
-        const matchingCommunity = communities.find(
-          (community: Community) => community.list === list.twitterListId
-        );
-        return { ...list, ...matchingCommunity };
-      });
+      if (!lists) {
+        setSortedCommunities(communities);
+      } else {
+        const mergedCommunities = lists.map((list: any) => {
+          const matchingCommunity = communities.find(
+            (community: Community) => community.list === list.twitterListId
+          );
+          return { ...list, ...matchingCommunity };
+        });
 
-      setSortedCommunities(mergedCommunities);
+        const remainingCommunities = communities.filter(
+          (community: Community) =>
+            !mergedCommunities.find((c: Community) => c.list === community.list)
+        );
+
+        const sortedCommunities = [
+          ...mergedCommunities,
+          ...remainingCommunities,
+        ];
+        setSortedCommunities(sortedCommunities);
+      }
     };
 
     const getRecent = async () => {
       const res = await fetch(`/api/lists/recent`);
       const { lists } = await res.json();
 
-      const mergedCommunities = lists.map((list: any) => {
-        const matchingCommunity = communities.find(
-          (community: Community) => community.list === list.twitterListId
-        );
-        return { ...list, ...matchingCommunity };
-      });
+      if (!lists) {
+        setSortedCommunities(communities);
+      } else {
+        const mergedCommunities = lists.map((list: any) => {
+          const matchingCommunity = communities.find(
+            (community: Community) => community.list === list.twitterListId
+          );
+          return { ...list, ...matchingCommunity };
+        });
 
-      setSortedCommunities(mergedCommunities);
+        const remainingCommunities = communities.filter(
+          (community: Community) =>
+            !mergedCommunities.find((c: Community) => c.list === community.list)
+        );
+
+        const sortedCommunities = [
+          ...mergedCommunities,
+          ...remainingCommunities,
+        ];
+        setSortedCommunities(sortedCommunities);
+      }
     };
+
     if (sort === 'recent') {
       getRecent();
     } else {
