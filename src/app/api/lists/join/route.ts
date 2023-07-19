@@ -1,14 +1,15 @@
 import { NextResponse, NextRequest } from 'next/server';
-import { TwitterApi } from 'twitter-api-v2';
+import { getTwitterClient } from '@/lib/client';
 import { Community } from '@/types/community';
 import { TwitterTokenResponse } from '@/types/API';
 import { getToken } from 'next-auth/jwt';
 import { conditionsValidator } from '@/lib/validate';
 import { env } from '@/env.mjs';
 import { get } from '@vercel/edge-config';
-import { Redis } from '@upstash/redis';
+import { redisClient } from '@/connectors/redis';
 import * as AccountsModel from '@/models/Accounts';
 import * as ListMembersModel from '@/models/ListMembers';
+import * as JoinQueueModel from '@/models/joinQueue';
 import * as z from 'zod';
 
 // export const runtime = 'edge';
@@ -21,41 +22,6 @@ const resBuilder = (msg: string, status: number = 200) => {
     { status }
   );
 };
-const getTwitterClient = async (twiiterToken: TwitterTokenResponse) => {
-  let twitterClient = new TwitterApi({
-    clientId: env.TWITTER_CLIENT_ID,
-    clientSecret: env.TWITTER_CLIENT_SECRET,
-  });
-  if (twiiterToken.expires_at * 1000 < Date.now()) {
-    const {
-      client: refreshedClient,
-      accessToken,
-      refreshToken: newRefreshToken,
-      expiresIn,
-    } = await twitterClient.refreshOAuth2Token(twiiterToken.refresh_token);
-    twitterClient = refreshedClient;
-    // await redis.set(env.OAUTH_OFFICIAL_TWITTER_KEY, {
-    await redis.json.set(
-      env.OAUTH_OFFICIAL_TWITTER_KEY,
-      '$',
-      JSON.stringify({
-        twitter_id: twiiterToken.twitter_id,
-        expires_at: Date.now() / 1000 + expiresIn,
-        access_token: accessToken,
-        refresh_token: newRefreshToken,
-      })
-    );
-  } else {
-    // console.log('twitterClient access token', twiiterToken.access_token);
-    twitterClient = new TwitterApi(twiiterToken.access_token);
-  }
-  return twitterClient;
-};
-
-const redis = new Redis({
-  url: env.REDIS_URL,
-  token: env.REDIS_TOKEN,
-});
 
 const schema = z.object({
   twitterListId: z.string(),
@@ -107,42 +73,87 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       }
     }
     // get access token from redis
-    const twitterToken: TwitterTokenResponse = await redis.json.get(
+    const twitterToken: TwitterTokenResponse = await redisClient.json.get(
       env.OAUTH_OFFICIAL_TWITTER_KEY
     );
 
     if (!twitterToken) return resBuilder('Something went wrong', 400);
 
-    const twitterClient = await getTwitterClient(twitterToken);
     if (tokenId) {
-      const prevMember = await ListMembersModel.getMemberInfoByTokenId(
-        communityInfo.list,
-        tokenId
-      );
+      const queueSize = await JoinQueueModel.getQueueSize();
 
-      if (prevMember && prevMember.twitterUserId) {
-        const res = await twitterClient.v2.removeListMember(
-          communityInfo.list,
-          prevMember.twitterUserId
+      //case has queue
+      if (queueSize > 0) {
+        console.log('case has queue');
+        await JoinQueueModel.enqueued({
+          twitterListId: communityInfo.list,
+          twitterUserId: user.id,
+          twitterName: user.name,
+          tokenId,
+        });
+        return resBuilder(
+          'Your already in queue, the process may take a while',
+          200
         );
-        console.log('res', { res });
-        if (res.errors) return resBuilder('Something went wrong', 400);
-      }
-      // else {
-      // }
-      // //TODO CASE ERC20:insert with out token id
+      } else {
+        const rateLimitCount = await redisClient.get<number>(
+          env.RATE_LIMIT_COUNT
+        );
+        // console.log('rateLimitCount', rateLimitCount);
 
-      const res = await twitterClient.v2.addListMember(
-        communityInfo.list,
-        user.id
-      );
-      if (res.errors) return resBuilder('Something went wrong', 400);
-      await ListMembersModel.upsertMember(
-        communityInfo.list,
-        user.id,
-        user.name,
-        tokenId
-      );
+        //case has no queue and hit rate limit
+        if (rateLimitCount && rateLimitCount >= env.QUEUE_LIMIT) {
+          console.log('case has no queue and hit rate limit');
+          await JoinQueueModel.enqueued({
+            twitterListId: communityInfo.list,
+            twitterUserId: user.id,
+            twitterName: user.name,
+            tokenId,
+          });
+          return resBuilder(
+            'Your already in queue, the process may take a while',
+            200
+          );
+        } else if (
+          rateLimitCount !== null &&
+          rateLimitCount < env.QUEUE_LIMIT
+        ) {
+          //case has no queue and not hit rate limit
+          console.log('case has no queue and not hit rate limit');
+          const twitterClient = await getTwitterClient();
+          const prevMember = await ListMembersModel.getMemberInfoByTokenId(
+            communityInfo.list,
+            tokenId
+          );
+
+          if (prevMember && prevMember.twitterUserId) {
+            const res = await twitterClient.v2.removeListMember(
+              communityInfo.list,
+              prevMember.twitterUserId
+            );
+            if (res.errors) return resBuilder('Something went wrong', 400);
+          }
+          // else {
+          // }
+          // //TODO CASE ERC20:insert with out token id
+
+          const res = await twitterClient.v2.addListMember(
+            communityInfo.list,
+            user.id
+          );
+          if (res.errors) return resBuilder('Something went wrong', 400);
+          await ListMembersModel.upsertMembers([
+            {
+              twitterUserId: user.id,
+              twitterName: user.name,
+              twitterListId: communityInfo.list,
+              tokenId,
+            },
+          ]);
+          //increase rate limit count +1
+          await redisClient.incr(env.RATE_LIMIT_COUNT);
+        }
+      }
     }
 
     return resBuilder(

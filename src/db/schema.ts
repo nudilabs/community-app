@@ -2,6 +2,7 @@ import {
   mysqlTable,
   serial,
   varchar,
+  boolean,
   index,
   timestamp,
   primaryKey,
@@ -45,3 +46,27 @@ export const listMembers = mysqlTable(
 );
 
 //TODO::add new schema for erc20 token and erc1155 token
+
+export const joinQueue = mysqlTable(
+  'join_queue',
+  {
+    id: serial('id').primaryKey(),
+    twitterListId: varchar('twitter_list_id', { length: 255 }).notNull(),
+    twitterUserId: varchar('twitter_user_id', { length: 255 }).notNull(),
+    twitterName: varchar('twitter_name', { length: 255 }).notNull(),
+    tokenId: varchar('token_id', { length: 100 }).notNull(),
+    isEnqueued: boolean('is_enqueued').default(false),
+    createdAt: timestamp('created_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: timestamp('updated_at')
+      .notNull()
+      .default(sql`CURRENT_TIMESTAMP`),
+  },
+  (lq) => ({
+    tuidIdx: index('twitter_list_user_id_idx').on(
+      lq.twitterListId,
+      lq.twitterUserId
+    ),
+  })
+);

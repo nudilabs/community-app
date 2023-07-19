@@ -1,45 +1,29 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import TwitterProvider from 'next-auth/providers/twitter';
-// import { UpstashRedisAdapter } from '@next-auth/upstash-redis-adapter';
-import { twitterClient } from '@/connectors/twitter';
-// import { Redis } from '@upstash/redis';
+import { TwitterApi } from 'twitter-api-v2';
 import { env } from '@/env.mjs';
 import * as AccountModel from '@/models/Accounts';
-// const redis = new Redis({
-//   url: env.REDIS_URL,
-//   token: env.REDIS_TOKEN,
-// });
 
 // Helper to obtain a new access_token from a refresh token.
 async function refreshAccessToken(token: any) {
   console.log('refreshAccessToken');
   try {
-    const queryParams = new URLSearchParams({
-      client_id: env.TWITTER_CLIENT_ID,
-      grant_type: 'refresh_token',
-      refresh_token: token.refreshToken,
+    let twitterClient = new TwitterApi({
+      clientId: env.TWITTER_CLIENT_ID,
+      clientSecret: env.TWITTER_CLIENT_SECRET,
     });
 
-    const response = await fetch(
-      'https://api.twitter.com/oauth2/token?' + queryParams,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      }
-    );
-    const data = await response.json();
+    const {
+      accessToken,
+      refreshToken: newRefreshToken,
+      expiresIn,
+    } = await twitterClient.refreshOAuth2Token(token.refresh_token);
 
-    if (response.status !== 200) {
-      throw data;
-    }
-    const refreshedTokens = data;
     return {
       ...token,
-      accessToken: refreshedTokens.access_token,
-      accessTokenExpires: refreshedTokens.expires_at,
-      refreshToken: refreshedTokens.refresh_token ?? token.refresh_token, // Fall back to old refresh token
+      access_token: accessToken,
+      expires_at: Date.now() / 1000 + expiresIn,
+      refresh_token: newRefreshToken,
     };
   } catch (error) {
     console.log(error);

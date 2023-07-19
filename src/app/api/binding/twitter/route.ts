@@ -27,7 +27,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     await AccountsModel.upsertAccount({
       twitterId: user.id,
       address,
-      twitterName: user.name,
     });
     return NextResponse.json({
       bindWallet: address,
