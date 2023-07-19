@@ -16,16 +16,40 @@ export const getMembersFromList = async (
   return members;
 };
 
-export const getTopLists = async (limit: number) => {
-  const lists = await db
+export const getTopLists = async (limit?: number) => {
+  let query = db
     .select({
       twitterListId: listMembers.twitterListId,
       memberCount: sql<number>`COUNT(*)`,
     })
     .from(listMembers)
     .groupBy(listMembers.twitterListId)
-    .orderBy(desc(sql`2`))
-    .limit(limit);
+    .orderBy(desc(sql`2`));
+
+  if (limit) {
+    query = query.limit(limit);
+  }
+
+  const lists = await query;
+
+  return lists;
+};
+
+export const getRecentLists = async (limit?: number) => {
+  let query = db
+    .select({
+      twitterListId: listMembers.twitterListId,
+      createdAt: sql`MAX(${listMembers.createdAt})`,
+    })
+    .from(listMembers)
+    .groupBy(listMembers.twitterListId)
+    .orderBy(desc(sql`MAX(${listMembers.createdAt})`));
+
+  if (limit) {
+    query = query.limit(limit);
+  }
+
+  const lists = await query;
 
   return lists;
 };

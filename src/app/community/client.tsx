@@ -7,27 +7,67 @@ import { useEffect, useState } from 'react';
 
 export default function Client({ communities }: { communities: Community[] }) {
   const [search, setSearch] = useState('');
-  const [filteredCommunities, setCommunities] = useState(communities);
+  const [sortedCommunities, setSortedCommunities] = useState<Community[]>([]);
+  const [filteredCommunities, setFilteredCommunities] = useState<Community[]>(
+    []
+  );
+  const [sort, setSort] = useState('top');
 
   useEffect(() => {
-    setCommunities(
-      communities.filter((community) =>
-        community.name.toLowerCase().includes(search.toLowerCase())
-      )
+    const getTop = async () => {
+      const res = await fetch(`/api/lists/top`);
+      const { lists } = await res.json();
+
+      const mergedCommunities = lists.map((list: any) => {
+        const matchingCommunity = communities.find(
+          (community: Community) => community.list === list.twitterListId
+        );
+        return { ...list, ...matchingCommunity };
+      });
+
+      setSortedCommunities(mergedCommunities);
+    };
+
+    const getRecent = async () => {
+      const res = await fetch(`/api/lists/recent`);
+      const { lists } = await res.json();
+
+      const mergedCommunities = lists.map((list: any) => {
+        const matchingCommunity = communities.find(
+          (community: Community) => community.list === list.twitterListId
+        );
+        return { ...list, ...matchingCommunity };
+      });
+
+      setSortedCommunities(mergedCommunities);
+    };
+    if (sort === 'recent') {
+      getRecent();
+    } else {
+      getTop();
+    }
+  }, [sort]);
+
+  useEffect(() => {
+    const filtered = sortedCommunities.filter((community) =>
+      community.name.toLowerCase().includes(search.toLowerCase())
     );
-  }, [search]);
+
+    setFilteredCommunities(filtered);
+  }, [search, sortedCommunities]);
+
   return (
-    <div className="min-w:h-screen flex flex-col lg:px-40 px-8 py-4 gap-24">
+    <div className="min-w-screen flex flex-col lg:px-40 px-8 py-4 gap-24">
       <div className="flex flex-col">
         <div className="w-full flex flex-col md:flex-row gap-4 justify-between">
           <div className="flex gap-4 items-center">
             <h1 className="text-xl md:text-3xl font-extrabold">Communities</h1>
-            <p className="text-gray-400">{communities.length}</p>
+            <p className="text-gray-400">{filteredCommunities.length}</p>
           </div>
           <div className="flex gap-2">
-            {/* <div className="hidden md:block">
-              <Sort />
-            </div> */}
+            <div className="hidden md:block">
+              <Sort setSort={setSort} />
+            </div>
             <div className="w-full md:w-auto">
               <Search setSearch={setSearch} />
             </div>

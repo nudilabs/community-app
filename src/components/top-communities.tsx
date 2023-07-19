@@ -11,7 +11,7 @@ export default function TopCommunities({
   const [topCommunities, setTopCommunities] = useState<any[]>([]);
   useEffect(() => {
     const getTop = async () => {
-      const res = await fetch(`/api/lists/top`);
+      const res = await fetch(`/api/lists/top?limit=4`);
       const { lists } = await res.json();
 
       const mergedCommunities = lists.map((list: any) => {
