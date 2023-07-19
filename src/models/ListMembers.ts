@@ -1,8 +1,7 @@
-import { eq, desc, and, sql, isNull, or, gt } from 'drizzle-orm';
+import { eq, desc, and, sql } from 'drizzle-orm';
 import { listMembers } from '@/db/schema';
 // import { NewAccount } from '@/types/DB';
 import { db } from '@/db/';
-import { aw } from 'drizzle-orm/column.d-aa4e525d';
 
 export const getMembersFromList = async (
   twitterListId: string,
@@ -15,6 +14,20 @@ export const getMembersFromList = async (
     .limit(limit);
 
   return members;
+};
+
+export const getTopLists = async (limit: number) => {
+  const lists = await db
+    .select({
+      twitterListId: listMembers.twitterListId,
+      memberCount: sql<number>`COUNT(*)`,
+    })
+    .from(listMembers)
+    .groupBy(listMembers.twitterListId)
+    .orderBy(desc(sql`2`))
+    .limit(limit);
+
+  return lists;
 };
 
 export const getRecentMembersFromList = async (
