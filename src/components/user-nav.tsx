@@ -22,11 +22,7 @@ import { motion } from 'framer-motion';
 export function UserNav() {
   const [verifyWalletsOpen, setVerifyWalletsOpen] = useState(false);
   const { address, isConnected } = useAccount();
-  const { openProfile } = useModal({
-    onConnect: () => {
-      setVerifyWalletsOpen(true);
-    },
-  });
+  const { openProfile } = useModal();
   const { data: session, status } = useSession();
   const [bindWallet, setBindWallet] = useState('');
 
@@ -35,9 +31,10 @@ export function UserNav() {
       setBindWallet(session?.user?.bindWallet);
       if (!isConnected && !session?.user?.bindWallet) {
         openProfile();
-      } else if (!session?.user?.bindWallet) {
-        setVerifyWalletsOpen(true);
       }
+      // else if (!session?.user?.bindWallet) {
+      //   setVerifyWalletsOpen(true);
+      // }
     }
   }, [status]);
 

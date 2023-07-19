@@ -546,11 +546,23 @@ export function CollectionDialogue({
             {!session ? (
               <SigninNav text="Sign in to join list" className="w-full" />
             ) : (
-              <RegisterProcess
-                loading={loading}
-                progress={progress}
-                handleJoin={handleJoin}
-              />
+              <>
+                {!isConnected ? (
+                  <Button onClick={handleJoin} className="w-full">
+                    Connect Wallet
+                  </Button>
+                ) : !bindWallet ? (
+                  <Button onClick={handleJoin} className="w-full">
+                    Sign Message
+                  </Button>
+                ) : (
+                  <RegisterProcess
+                    loading={loading}
+                    progress={progress}
+                    handleJoin={handleJoin}
+                  />
+                )}
+              </>
             )}
           </div>
         </DialogFooter>

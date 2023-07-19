@@ -34,6 +34,7 @@ export function VerifyWalletsDialogue({
         headers: { 'Content-Type': 'application/json' },
       });
       const { bindWallet } = (await res.json()) as ITwitterBindingRes;
+
       setBindWallet(bindWallet);
       setOpen(false);
     },
