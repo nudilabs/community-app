@@ -14,15 +14,20 @@ export default function TopCommunities({
       const res = await fetch(`/api/lists/top?limit=4`);
       const { lists } = await res.json();
 
-      const mergedCommunities = lists.map((list: any) => {
-        const matchingCommunity = communities.find(
-          (community: Community) => community.list === list.twitterListId
-        );
-        return { ...list, ...matchingCommunity };
-      });
+      if (!lists) {
+        setTopCommunities(communities.slice(0, 4));
+      } else {
+        const mergedCommunities = lists.map((list: any) => {
+          const matchingCommunity = communities.find(
+            (community: Community) => community.list === list.twitterListId
+          );
+          return { ...list, ...matchingCommunity };
+        });
 
-      setTopCommunities(mergedCommunities);
+        setTopCommunities(mergedCommunities);
+      }
     };
+
     getTop();
   }, []);
 
