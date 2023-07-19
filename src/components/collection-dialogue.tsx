@@ -64,6 +64,7 @@ export function CollectionDialogue({
   const { address, isConnected } = useAccount();
   const { openProfile } = useModal();
   const [bindWallet, setBindWallet] = useState('');
+  const [joined, setJoined] = useState(false);
 
   useEffect(() => {
     const getQueue = async () => {
@@ -79,12 +80,15 @@ export function CollectionDialogue({
       const data = await res.json();
 
       if (!data.member) {
-        const res = await fetch(`/api/lists/queue/${community.list}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        const res = await fetch(
+          `/api/lists/queue/${community.list}/${session?.user.id}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
         const data = await res.json();
         if (data.queue) {
           setProgress('processing');
@@ -96,7 +100,7 @@ export function CollectionDialogue({
       }
     };
     getQueue();
-  }, []);
+  }, [joined]);
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -263,6 +267,7 @@ export function CollectionDialogue({
       });
     }
     setLoading(false);
+    setJoined(true);
   };
 
   const renderSkeletonUsers = () => {
