@@ -64,7 +64,6 @@ export function CollectionDialogue({
   const { address, isConnected } = useAccount();
   const { openProfile } = useModal();
   const [bindWallet, setBindWallet] = useState('');
-  const [joined, setJoined] = useState(false);
 
   useEffect(() => {
     const getQueue = async () => {
@@ -100,7 +99,7 @@ export function CollectionDialogue({
       }
     };
     getQueue();
-  }, [joined]);
+  }, []);
 
   useEffect(() => {
     if (status === 'authenticated') {
@@ -267,7 +266,7 @@ export function CollectionDialogue({
       });
     }
     setLoading(false);
-    setJoined(true);
+    setProgress('processing');
   };
 
   const renderSkeletonUsers = () => {
@@ -545,7 +544,7 @@ export function CollectionDialogue({
         <DialogFooter>
           <div className="flex gap-2 w-full">
             {!session ? (
-              <SigninNav text="Sign in to continue" className="w-full" />
+              <SigninNav text="Sign in to join list" className="w-full" />
             ) : (
               <RegisterProcess
                 loading={loading}
