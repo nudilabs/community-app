@@ -1,6 +1,6 @@
 import { eq, desc, and, sql } from 'drizzle-orm';
 import { listMembers } from '@/db/schema';
-// import { NewAccount } from '@/types/DB';
+import { newMember } from '@/types/DB';
 import { db } from '@/db/';
 
 export const getMembersFromList = async (
@@ -111,24 +111,14 @@ export const getMemberInfoByTokenId = async (
   return member[0];
 };
 
-export const upsertMember = async (
-  twitterListId: string,
-  twitterId: string,
-  twitterName: string,
-  tokenId: string
-) => {
+export const upsertMembers = async (members: newMember[]) => {
   await db
     .insert(listMembers)
-    .values({
-      twitterListId,
-      twitterUserId: twitterId,
-      twitterName,
-      tokenId,
-    })
+    .values(members)
     .onDuplicateKeyUpdate({
       set: {
-        twitterUserId: twitterId,
-        twitterName: twitterName,
+        twitterUserId: sql`VALUES(twitter_user_id)`,
+        twitterName: sql`VALUES(twitter_name)`,
         updatedAt: sql`NOW()`,
       },
     });

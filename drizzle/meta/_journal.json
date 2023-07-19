@@ -71,6 +71,13 @@
       "when": 1689491243921,
       "tag": "0009_far_sabra",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1689762456286,
+      "tag": "0010_little_mole_man",
+      "breakpoints": true
     }
   ]
 }
