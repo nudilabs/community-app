@@ -233,10 +233,10 @@ export function CollectionDialogue({
   };
 
   const handleJoin = async () => {
-    if (!isConnected && !session?.user?.bindWallet) {
+    if (!isConnected && !bindWallet) {
       openProfile();
       return;
-    } else if (!session?.user?.bindWallet) {
+    } else if (!bindWallet) {
       setVerifyWalletsOpen(true);
       return;
     }
