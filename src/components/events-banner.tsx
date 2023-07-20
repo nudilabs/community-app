@@ -21,7 +21,7 @@ export const EventsBanner = ({
 }) => {
   const hashtags = event.hashtags.join('%20').replaceAll('#', '%23') || '';
 
-  const url = `https://twitter.com/search?q=list%3A${community?.list}%20${hashtags}%20%20-filter%3Aretweets%20until%3A${event.date.to}%20since%3A${event.date.from}&src=typed_query&f=live`;
+  const url = `https://twitter.com/search?q=list%3A${community?.list}%20${hashtags}%20-filter:replies%20-filter%3Aretweets%20until%3A${event.date.to}%20since%3A${event.date.from}&src=typed_query&f=live`;
 
   return (
     <Link href={url} target="_blank">
