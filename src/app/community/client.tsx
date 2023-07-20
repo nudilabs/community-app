@@ -18,56 +18,29 @@ export default function Client({ communities }: { communities: Community[] }) {
       const res = await fetch(`/api/lists/top`);
       const { lists } = await res.json();
 
-      if (!lists) {
-        setSortedCommunities(communities);
-      } else {
-        const mergedCommunities = lists.map((list: any) => {
-          const matchingCommunity = communities.find(
-            (community: Community) => community.list === list.twitterListId
-          );
-          return { ...list, ...matchingCommunity };
-        });
-
-        const remainingCommunities = communities.filter(
-          (community: Community) =>
-            !mergedCommunities.find((c: Community) => c.list === community.list)
+      const mergedCommunities = lists.map((list: any) => {
+        const matchingCommunity = communities.find(
+          (community: Community) => community.list === list.twitterListId
         );
+        return { ...list, ...matchingCommunity };
+      });
 
-        const sortedCommunities = [
-          ...mergedCommunities,
-          ...remainingCommunities,
-        ];
-        setSortedCommunities(sortedCommunities);
-      }
+      setSortedCommunities(mergedCommunities);
     };
 
     const getRecent = async () => {
       const res = await fetch(`/api/lists/recent`);
       const { lists } = await res.json();
 
-      if (!lists) {
-        setSortedCommunities(communities);
-      } else {
-        const mergedCommunities = lists.map((list: any) => {
-          const matchingCommunity = communities.find(
-            (community: Community) => community.list === list.twitterListId
-          );
-          return { ...list, ...matchingCommunity };
-        });
-
-        const remainingCommunities = communities.filter(
-          (community: Community) =>
-            !mergedCommunities.find((c: Community) => c.list === community.list)
+      const mergedCommunities = lists.map((list: any) => {
+        const matchingCommunity = communities.find(
+          (community: Community) => community.list === list.twitterListId
         );
+        return { ...list, ...matchingCommunity };
+      });
 
-        const sortedCommunities = [
-          ...mergedCommunities,
-          ...remainingCommunities,
-        ];
-        setSortedCommunities(sortedCommunities);
-      }
+      setSortedCommunities(mergedCommunities);
     };
-
     if (sort === 'recent') {
       getRecent();
     } else {
