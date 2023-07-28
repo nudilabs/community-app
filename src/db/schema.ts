@@ -3,6 +3,7 @@ import {
   serial,
   varchar,
   boolean,
+  int,
   index,
   timestamp,
   primaryKey,
@@ -68,5 +69,21 @@ export const joinQueue = mysqlTable(
       lq.twitterListId,
       lq.twitterUserId
     ),
+  })
+);
+
+export const userStats = mysqlTable(
+  'user_stats',
+  {
+    twitterUserId: varchar('twitter_user_id', { length: 255 }).notNull(),
+    twitterName: varchar('twitter_name', { length: 255 }).notNull(),
+    twitterListId: varchar('twitter_list_id', { length: 255 }).notNull(),
+    tweetId: varchar('tweet_id', { length: 255 }).notNull(),
+    points: int('points').default(0),
+    createdAt: timestamp('created_at'),
+    updatedAt: timestamp('updated_at'),
+  },
+  (us) => ({
+    pk: primaryKey(us.twitterUserId, us.twitterListId, us.tweetId),
   })
 );
